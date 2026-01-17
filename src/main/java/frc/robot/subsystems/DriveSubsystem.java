@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -76,8 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
                 driveRobotRelative(speeds);
               }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                      new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                      new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+                      new PIDConstants(0.5, 0.0, 0.0) // Rotation PID constants
               ),
               config, // The robot configuration
               () -> {
@@ -112,6 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle());
   }
 
   /**
@@ -158,7 +160,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(m_gyro.getAngle()))
+                Rotation2d.fromDegrees(-m_gyro.getAngle())) //this invert is not in original rev template
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
