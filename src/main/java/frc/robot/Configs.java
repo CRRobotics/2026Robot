@@ -48,7 +48,7 @@ public final class Configs {
 
             turningConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                    // These are example gains you may need to them for your own robot!
+                    // These are    example gains you may need to them for your own robot!
                     .pid(0.5, 0, 0)
                     .outputRange(-1, 1)
                     // Enable PID wrap around for the turning motor. This will allow the PID

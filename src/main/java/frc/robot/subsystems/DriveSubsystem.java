@@ -66,6 +66,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     field = new Field2d();
+    this.zeroHeading();
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     RobotConfig config;
@@ -80,8 +81,8 @@ public class DriveSubsystem extends SubsystemBase {
                 driveRobotRelative(speeds);
               }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
-                      new PIDConstants(0.25, 0.0, 0.0) // Rotation PID constants
+                      new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                      new PIDConstants(3, 0.0, 0.0) // Rotation PID constants
               ),
               config, // The robot configuration
               () -> {
@@ -136,6 +137,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetPose(Pose2d pose) {
+    m_gyro.reset();
+    m_gyro.setAngleAdjustment(pose.getRotation().getDegrees());
     m_odometry.resetPosition(
         pose.getRotation(),
         new SwerveModulePosition[] {
