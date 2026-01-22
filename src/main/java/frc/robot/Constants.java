@@ -58,6 +58,11 @@ public final class Constants {
 
     //"are your gyro angles clockwise positive? if so you should negate them" - wpilib troubleshooting docs
     public static final boolean kGyroReversed = true;
+
+    public static final double stateTrans = 0.1;
+    public static final double stateTheta = 0.1;
+    public static final double visionTrans = 0.5;
+    public static final double visionTheta = 0.5;
   }
 
   public static final class ModuleConstants {       

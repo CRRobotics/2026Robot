@@ -13,6 +13,8 @@ import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -23,6 +25,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -51,6 +54,21 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);;
+
+  // Copied from 2025 Robot
+  SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+        Constants.DriveConstants.kDriveKinematics, // kinematics
+        Rotation2d.fromDegrees(-m_gyro.getAngle()), // initial angle
+        new SwerveModulePosition[] { // initial module positions
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        new Pose2d(0, 0, Rotation2d.fromRadians(Math.PI)), // initial pose
+        VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
+        VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
+    );
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -117,6 +135,18 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    for(VisionPose visPose : poseReports){
+            poseEstimator.addVisionMeasurement(visPose.getPose(), visPose.getTimestamp());
+        }
+        poseEstimator.update(
+            Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)), //#todo make sure gyro is correct
+            new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+            }
+        );
     SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0));
     SmartDashboard.putData("Field",field);
     field.setRobotPose(m_odometry.getPoseMeters());
@@ -128,7 +158,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    //return m_odometry.getPoseMeters(); switched to kalman filter
+    return poseEstimator.getEstimatedPosition();
   }
 
   /**
@@ -137,6 +168,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetPose(Pose2d pose) {
+    //Gyro specific reset, needs to be commented out? For when robot is placed in unexpected orientation on field
     m_gyro.reset();
     m_gyro.setAngleAdjustment(pose.getRotation().getDegrees());
     m_odometry.resetPosition(
@@ -148,6 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
+    poseEstimator.resetPose(pose);
   }
 
   /**
@@ -218,11 +251,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   /**
    * Returns the heading of the robot.
-   *
+   * 
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)).getDegrees();
+    //return Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)).getDegrees(); Switched to Kalman filter
+    return poseEstimator.getEstimatedPosition().getRotation().getDegrees();
   }
 
   /**
