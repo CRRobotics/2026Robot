@@ -87,6 +87,15 @@ public final class Constants {
     public static final double kDriveDeadband = 0.025;
   }
 
+public static interface ShooterConstants{
+  //change these IDs to fit actual motor
+  public static final int LeaderDeviceID = 1;
+  public static final int FollowerDeviceID = 2;
+  public static final int kLeaderMotorPort = 1;
+  public static final int kFollowerMotorPort = 2;
+  public static final double LeadingMotorSpeed = 1;
+}
+
   //Not actually used for pathplanner
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
