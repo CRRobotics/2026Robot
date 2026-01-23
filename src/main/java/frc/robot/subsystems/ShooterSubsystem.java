@@ -32,6 +32,9 @@ public class ShooterSubsystem extends SubsystemBase implements Constants.Shooter
         // Initialize motors and set device IDs
         TalonFX m_shooterMotorLeader = new TalonFX(kLeaderMotorPort);
         TalonFX m_shooterMotorFollower = new TalonFX(kLeaderMotorPort);
+
+        m_shooterMotorLeader.set(0);
+        m_shooterMotorFollower.set(0);
     }
 
 
@@ -45,9 +48,9 @@ public class ShooterSubsystem extends SubsystemBase implements Constants.Shooter
      * Sets the speed of the shooter motors.
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
-    public void setSpeed(double LeadingMotorSpeed) {
-        m_shooterMotorLeader.set(LeadingMotorSpeed);
-        m_shooterMotorFollower.set(LeadingMotorSpeed);
+    public void setSpeed() {
+        m_shooterMotorLeader.set(leadingMotorSpeed);
+        m_shooterMotorFollower.set(leadingMotorSpeed);
     }
     
 

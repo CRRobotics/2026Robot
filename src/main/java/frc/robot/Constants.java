@@ -58,11 +58,6 @@ public final class Constants {
 
     //"are your gyro angles clockwise positive? if so you should negate them" - wpilib troubleshooting docs
     public static final boolean kGyroReversed = true;
-
-    public static final double stateTrans = 0.1;
-    public static final double stateTheta = 0.1;
-    public static final double visionTrans = 0.5;
-    public static final double visionTheta = 0.5;
   }
 
   public static final class ModuleConstants {       
@@ -93,7 +88,7 @@ public static interface ShooterConstants{
   public static final int FollowerDeviceID = 2;
   public static final int kLeaderMotorPort = 1;
   public static final int kFollowerMotorPort = 2;
-  public static final double LeadingMotorSpeed = 1;
+  public static final double leadingMotorSpeed = 1;
 }
 
   //Not actually used for pathplanner
