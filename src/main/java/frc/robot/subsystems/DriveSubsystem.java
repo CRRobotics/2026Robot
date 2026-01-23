@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -27,10 +29,13 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.visions.Vision;
+import frc.robot.visions.VisionPose;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Field2d field;
+  Vision vision;
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -69,6 +74,8 @@ public class DriveSubsystem extends SubsystemBase {
         VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
         VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
     );
+    
+  List<VisionPose> poseReports = vision.getAprilTagResultsPhotonPose();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
