@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Field2d field;
-  Vision vision;
+  Vision vision = new Vision();
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -74,8 +74,6 @@ public class DriveSubsystem extends SubsystemBase {
         VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
         VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
     );
-    
-  List<VisionPose> poseReports = vision.getAprilTagResultsPhotonPose();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -133,6 +131,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    List<VisionPose> poseReports = vision.getAprilTagResultsPhotonPose();
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)),
@@ -156,7 +155,7 @@ public class DriveSubsystem extends SubsystemBase {
         );
     SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0));
     SmartDashboard.putData("Field",field);
-    field.setRobotPose(m_odometry.getPoseMeters());
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
 
   /**

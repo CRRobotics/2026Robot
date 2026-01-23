@@ -10,9 +10,14 @@ public class KrakenTest extends SubsystemBase{
     public KrakenTest(){
         motor = new TalonFX(0);
     }
-
-    public void run(){
-        motor.set(0.1);
+    
+    /**
+   * Runs the kraken motor.
+   *
+   * @param speed input from -1 to 1.
+   */
+    public void run(double speed){
+        motor.set(speed);
     }
     
 }
