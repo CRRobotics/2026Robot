@@ -82,6 +82,14 @@ public final class Constants {
     public static final double kDriveDeadband = 0.025;
   }
 
+  public static final class ShooterConstants {
+    // Change
+    public static final int leftMotorPort = 1;
+    public static final int rightMotorPort = 2;
+
+    public static final double talonControllerAcceleration = 1;
+  }
+
   //Not actually used for pathplanner
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
