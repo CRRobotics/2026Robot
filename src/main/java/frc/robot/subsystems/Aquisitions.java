@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -24,9 +23,9 @@ public class Aquisitions extends SubsystemBase {
 
     private final SparkClosedLoopController armPIDLeft;
 
-    private final AbsoluteEncoder aquisitionEncoder;
-    private SparkMaxConfig aquisitionConfigLeft;
-    private SparkMaxConfig aquisitionConfigRight;
+    private final AbsoluteEncoder armEncoder;
+    private SparkMaxConfig armConfigLeft;
+    private SparkMaxConfig armConfigRight;
 
     private double aP;
     private double aI;
@@ -38,34 +37,39 @@ public class Aquisitions extends SubsystemBase {
             armMotorLeft = new SparkMax(3, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             armMotorRight = new SparkMax(4, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             
-            aquisitionEncoder = armMotorRight.getAbsoluteEncoder();
-            aquisitionConfigLeft = new SparkMaxConfig();
-            aquisitionConfigRight = new SparkMaxConfig();
+            armEncoder = armMotorRight.getAbsoluteEncoder();
+            armConfigLeft = new SparkMaxConfig();
+            armConfigRight = new SparkMaxConfig();
 
-            armMotorLeft.configure(aquisitionConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            armMotorLeft.configure(armConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-            aquisitionConfigLeft.closedLoop.p(aP);
-            aquisitionConfigLeft.closedLoop.p(aI);
-            aquisitionConfigLeft.closedLoop.p(aD);
-            aquisitionConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+            armConfigLeft.closedLoop.p(aP);
+            armConfigLeft.closedLoop.p(aI);
+            armConfigLeft.closedLoop.p(aD);
+            armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
-            aquisitionConfigRight.follow(0,true);
+            armConfigRight.follow(3,true); //follows armMotorLeft
 
             armPIDLeft = armMotorLeft.getClosedLoopController();
         }
 
-
+        public void stop(){
+            spinMotorLeft.set(0);
+            spinMotorRight.set(0);
+        }
 
         public void intake() {
             spinMotorRight.set(intakeSpeed);
             spinMotorLeft.set(-intakeSpeed);
         }
 
+         public void eject() {
+            spinMotorRight.set(-intakeSpeed);
+            spinMotorLeft.set(intakeSpeed);
+        }
+        // #todo angle has intended units of degrees, unsure what kind of units position control uses
         public void armTurnTo (double angle) {
             armPIDLeft.setSetpoint(angle/360,ControlType.kPosition);
-
-            System.out.println(armMotorRight.getAppliedOutput());
-            System.out.println(armMotorLeft.getAppliedOutput());
 
         }
 
@@ -74,7 +78,7 @@ public class Aquisitions extends SubsystemBase {
         }
 
         public double getArmAngle(){
-            return aquisitionEncoder.getPosition() * 360;
+            return armEncoder.getPosition() * 360;
         }
 
 
