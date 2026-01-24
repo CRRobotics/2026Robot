@@ -55,7 +55,8 @@ public class AprilCamera {
         this.photonCamera = new PhotonCamera(name);
         this.robotToCam = new Transform3d(new Translation3d(x, y, z), new Rotation3d(pitch, yaw, roll)); // Pitch, yaw, and roll's order may need to change
         
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        //AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //Default apriltag field
+        AprilTagFieldLayout customLayout = new AprilTagFieldLayout(Path.of(AprilTagCalibration.json)); //Calibration apriltag field
         this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, robotToCam);
         this.resultsCache = null;
     }
