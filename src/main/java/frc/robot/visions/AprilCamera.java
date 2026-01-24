@@ -3,6 +3,7 @@ package frc.robot.visions;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,22 @@ public class AprilCamera {
         this.robotToCam = new Transform3d(new Translation3d(x, y, z), new Rotation3d(pitch, yaw, roll)); // Pitch, yaw, and roll's order may need to change
         
         //AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //Default apriltag field
-        AprilTagFieldLayout customLayout = new AprilTagFieldLayout(Path.of(AprilTagCalibration.json)); //Calibration apriltag field
-        this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, robotToCam);
+
+
+        AprilTagFieldLayout customLayout = null;
+        File theFile = new File(Filesystem.getDeployDirectory(), "AprilTagCalibration.json");
+        
+        try {
+            String p = theFile.getAbsolutePath();
+            customLayout = new AprilTagFieldLayout(theFile.getAbsolutePath()); //Calibration apriltag field
+            System.out.print("Found " + p + "\n");
+        } catch (IOException e) {
+            System.out.print("Failed to load custom field layout" + e + "\n"); 
+        }
+
+        //AprilTagFieldLayout customLayout = AprilTagFieldLayout.loadFromResource("src/ApriltagCalibration.json");
+
+        this.photonPoseEstimator = new PhotonPoseEstimator(customLayout, robotToCam);
         this.resultsCache = null;
     }
 
