@@ -30,11 +30,11 @@ public class Hopper extends SubsystemBase {
 
         //Puts balls into feeder
         public void loadFeeder() {
-            motor.set(Constants.IndexerConstants.hopperSpeed);
+            motor.set(Constants.HopperConstants.hopperSpeed);
         }
 
         public double getSpeed(){
-            return Constants.IndexerConstants.hopperSpeed;
+            return Constants.HopperConstants.hopperSpeed;
         }
 
 }

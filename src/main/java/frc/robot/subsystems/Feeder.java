@@ -29,11 +29,11 @@ public class Feeder extends SubsystemBase {
 
         //Puts balls into feeder
         public void outtake() {
-            motor.set(Constants.IndexerConstants.feederSpeed);
+            motor.set(Constants.FeederConstants.feederSpeed);
         }
 
         public double getSpeed(){
-            return Constants.IndexerConstants.feederSpeed;
+            return Constants.FeederConstants.feederSpeed;
         }
 
 }
