@@ -1,16 +1,12 @@
-package frc.robot.commands.AquisitionEject;
+package frc.robot.commands.Aquisition;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeEndEffector;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Elevator;
-import frc.robot.util.Constants;
-
+import frc.robot.subsystems.Aquisitions;
 public class AquisitionEject extends Command{
     Aquisitions aquisition;
 
-    public Aquisition(Aquisition aquisition){
+    public AquisitionEject(Aquisitions aquisition){
         
         this.aquisition = aquisition;
         //addRequirements();
