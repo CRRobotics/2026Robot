@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -64,7 +65,7 @@ public final class Constants {
     public static final double visionTrans = 0.5;
     public static final double visionTheta = 0.5;
   }
-
+  
   public static final class ModuleConstants {       
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
@@ -80,6 +81,31 @@ public final class Constants {
     public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
+  }
+
+  public static final class TalonSwerveConstants{
+
+    public static final double driveKS = 0;
+    public static final double driveKV = 0;
+    public static final double driveKA = 0;
+    public static final String wheelCircumference = null;
+
+  }
+
+  public final class TalonModuleConstants {
+
+    public Rotation2d angleOffset;
+    public int cancoderID;
+    public int angleMotorID;
+    public int driveMotorID;
+
+    public void talonModuleConstants(Rotation2d angleOffset, int cancoderID, int angleMotorID, int driveMotorID){
+      this.angleOffset = angleOffset;
+      this.cancoderID = cancoderID;
+      this.angleMotorID = angleMotorID;
+      this.driveMotorID = driveMotorID;
+    }
+
   }
 
   public static final class OIConstants {
