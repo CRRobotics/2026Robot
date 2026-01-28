@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
 
         //Puts balls into feeder
         public void runIndexer() {
-            hopperMotor.set(Constants.IndexerConstants.feederSpeed);
+            hopperMotor.set(Constants.IndexerConstants.hopperSpeed);
             feederMotor.set(Constants.IndexerConstants.feederSpeed);
         }
 
