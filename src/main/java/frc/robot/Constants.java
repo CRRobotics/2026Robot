@@ -65,12 +65,15 @@ public final class Constants {
     public static final double visionTheta = 0.5;
   }
 
-  public static final class FeederConstants {
+  public static final class IndexerConstants {
+    //Hopper and Feeder Motor Speeds
     public static final double feederSpeed = 1;
-  }
-
-  public static final class HopperConstants {
     public static final double hopperSpeed = 1;
+    //Hopper and Feeder CAN ID
+    public static int feederMotorCANID = 1;
+    public static int hopperMotorCANID = 2;
+
+
   }
   public static final class ModuleConstants {       
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
