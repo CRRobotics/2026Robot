@@ -32,7 +32,6 @@ public class ShooterSubsystem extends SubsystemBase implements Constants.Shooter
         // Initialize motors and set device IDs
         TalonFX m_shooterMotorLeader = new TalonFX(kLeaderMotorPort);
         TalonFX m_shooterMotorFollower = new TalonFX(kLeaderMotorPort);
-
         m_shooterMotorLeader.set(0);
         m_shooterMotorFollower.set(0);
     }
