@@ -70,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        new Pose2d(0, 0, Rotation2d.fromRadians(Math.PI)), // initial pose
+        new Pose2d(0, 0, Rotation2d.fromRadians(0)), // initial pose Changed 1/28/2026
         VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
         VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
     );

@@ -65,6 +65,10 @@ public final class Constants {
     public static final double visionTheta = 0.5;
   }
 
+  public static final class TurretConstants {
+    public static final int turretID = 0;
+  }
+
   public static final class IndexerConstants {
     //Hopper and Feeder Motor Speeds
     public static final double feederSpeed = 1;
@@ -115,5 +119,10 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class FieldConstants {
+    public static final double hubX = 0;
+    public static final double hubY = 0;
   }
 }
