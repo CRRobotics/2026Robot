@@ -51,7 +51,7 @@ public class ShooterSubsystem extends SubsystemBase implements Constants.Shooter
         m_shooterMotorLeader.set(leadingMotorSpeed);
         m_shooterMotorFollower.set(leadingMotorSpeed);
     }
-    
+     
 
     /**
      * Stops the shooter motors.
