@@ -25,8 +25,13 @@ public class TurnToAlliance extends Command{
 
     @Override
     public void execute(){
+        Pose2d curPose = pose.get();
+
         //#todo NOT DONE
-        turret.turnTo(0);
+        // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
+        // turn to angle alpha = 180 degrees - theta, clockwise negitive
+        // 180 degrees becuase turret needs to point 180 degrees, field relative
+        turret.turnTo(180 - curPose.getRotation().getDegrees());
     }
 
     @Override 
