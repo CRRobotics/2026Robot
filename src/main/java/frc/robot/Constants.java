@@ -138,4 +138,9 @@ public final class Constants {
     public static final double hubX = 0;
     public static final double hubY = 0;
   }
+
+  public static final class ShooterConstants {
+    public static final int kLeaderMotorPort = 1;
+    public static final double leadingMotorSpeed = 0.5;
+  }
 }

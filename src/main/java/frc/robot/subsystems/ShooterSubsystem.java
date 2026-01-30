@@ -21,17 +21,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 
 
 
-public class ShooterSubsystem extends SubsystemBase implements Constants.ShooterConstants {
+public class ShooterSubsystem extends SubsystemBase {
     TalonFX m_shooterMotorFollower;
     TalonFX m_shooterMotorLeader;
     CANcoder m_shooterEncoder;
     public ShooterSubsystem(){
         // Initialize motors and set device IDs
-        TalonFX m_shooterMotorLeader = new TalonFX(kLeaderMotorPort);
-        TalonFX m_shooterMotorFollower = new TalonFX(kLeaderMotorPort);
+        TalonFX m_shooterMotorLeader = new TalonFX(ShooterConstants.kLeaderMotorPort);
+        TalonFX m_shooterMotorFollower = new TalonFX(ShooterConstants.kLeaderMotorPort);
         m_shooterMotorLeader.set(0);
         m_shooterMotorFollower.set(0);
     }
@@ -48,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase implements Constants.Shooter
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
     public void setSpeed() {
-        m_shooterMotorLeader.set(leadingMotorSpeed);
-        m_shooterMotorFollower.set(leadingMotorSpeed);
+        m_shooterMotorLeader.set(ShooterConstants.leadingMotorSpeed);
+        m_shooterMotorFollower.set(ShooterConstants.leadingMotorSpeed);
     }
      
 
