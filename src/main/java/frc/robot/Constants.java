@@ -59,6 +59,12 @@ public final class Constants {
 
     //"are your gyro angles clockwise positive? if so you should negate them" - wpilib troubleshooting docs
     public static final boolean kGyroReversed = true;
+
+    public static final double stateTrans = 0.1;
+    public static final double visionTrans = 0.1;
+    public static final double stateTheta = 0.5;
+    public static final double visionTheta = 0.5;
+
   }
   
   public static final class ModuleConstants {       
@@ -107,15 +113,6 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.025;
   }
-
-public static interface ShooterConstants{
-  //change these IDs to fit actual motor
-  public static final int LeaderDeviceID = 1;
-  public static final int FollowerDeviceID = 2;
-  public static final int kLeaderMotorPort = 1;
-  public static final int kFollowerMotorPort = 2;
-  public static final double leadingMotorSpeed = 1;
-}
 
   //Not actually used for pathplanner
   public static final class AutoConstants {
