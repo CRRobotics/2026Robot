@@ -8,7 +8,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.Constants;
+import frc.robot.Constants.TurretConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,24 +19,17 @@ public class Turret extends SubsystemBase {
     private SparkMaxConfig turretConfig;
     private AbsoluteEncoder turretEncoder;
 
-    private double tP;
-    private double tI;
-    private double tD;
-
         public Turret() {
-            turretMotor = new SparkMax(Constants.TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            turretMotor = new SparkMax(TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             
             turretEncoder = turretMotor.getAbsoluteEncoder();
             turretConfig = new SparkMaxConfig();
 
             turretMotor.configure(turretConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-            tP = 1;
-            tI = 0;
-            tD = 0;
-            turretConfig.closedLoop.p(tP);
-            turretConfig.closedLoop.p(tI);
-            turretConfig.closedLoop.p(tD);
+            turretConfig.closedLoop.p(TurretConstants.p);
+            turretConfig.closedLoop.p(TurretConstants.i);
+            turretConfig.closedLoop.p(TurretConstants.d);
             turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
             turretPID = turretMotor.getClosedLoopController();

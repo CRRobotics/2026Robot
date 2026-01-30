@@ -65,8 +65,21 @@ public final class Constants {
     public static final double visionTheta = 0.5;
   }
 
+  public static final class AquisitionsConstants {
+    public static final int aqSpinID = 0;
+    public static final int aqArmLeftID = 0;
+    public static final int aqArmRightID = 0;
+    public static final int aqIntakeSpeed = 0;
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
+  }
+
   public static final class TurretConstants {
     public static final int turretID = 0;
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
   }
 
   public static final class IndexerConstants {

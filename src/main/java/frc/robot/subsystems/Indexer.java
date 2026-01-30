@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.IndexerConstants;
 
 public class Indexer extends SubsystemBase {
 
@@ -17,8 +17,8 @@ public class Indexer extends SubsystemBase {
 
 
         public Indexer () {
-            hopperMotor = new SparkMax(Constants.IndexerConstants.hopperMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            feederMotor = new SparkMax(Constants.IndexerConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            hopperMotor = new SparkMax(IndexerConstants.hopperMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            feederMotor = new SparkMax(IndexerConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
             configIndexer = new SparkMaxConfig();
 
@@ -35,16 +35,16 @@ public class Indexer extends SubsystemBase {
 
         //Puts balls into feeder
         public void runIndexer() {
-            hopperMotor.set(Constants.IndexerConstants.hopperSpeed);
-            feederMotor.set(Constants.IndexerConstants.feederSpeed);
+            hopperMotor.set(IndexerConstants.hopperSpeed);
+            feederMotor.set(IndexerConstants.feederSpeed);
         }
 
         public double getFeederSpeed(){
-            return Constants.IndexerConstants.feederSpeed;
+            return IndexerConstants.feederSpeed;
         }
 
         public double getHopperSpeed(){
-            return Constants.IndexerConstants.hopperSpeed;
+            return IndexerConstants.hopperSpeed;
         }
 
 }

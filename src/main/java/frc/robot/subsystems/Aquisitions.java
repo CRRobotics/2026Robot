@@ -9,17 +9,17 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import frc.robot.Constants.AquisitionsConstants;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Aquisitions extends SubsystemBase {
 
-    private final SparkMax spinMotorLeft;
-    private final SparkMax spinMotorRight;
+    // only 1 spin
+    private final SparkMax spinMotor;
 
     private final SparkMax armMotorLeft;
     private final SparkMax armMotorRight;
-
-    private double intakeSpeed;
 
     private final SparkClosedLoopController armPIDLeft;
 
@@ -27,15 +27,10 @@ public class Aquisitions extends SubsystemBase {
     private SparkMaxConfig armConfigLeft;
     private SparkMaxConfig armConfigRight;
 
-    private double aP;
-    private double aI;
-    private double aD;
-
         public Aquisitions () {
-            spinMotorLeft = new SparkMax(1, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            spinMotorRight = new SparkMax(2, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            armMotorLeft = new SparkMax(3, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            armMotorRight = new SparkMax(4, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            spinMotor = new SparkMax(AquisitionsConstants.aqSpinID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            armMotorLeft = new SparkMax(AquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            armMotorRight = new SparkMax(AquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             
             armEncoder = armMotorRight.getAbsoluteEncoder();
             armConfigLeft = new SparkMaxConfig();
@@ -43,29 +38,26 @@ public class Aquisitions extends SubsystemBase {
 
             armMotorLeft.configure(armConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-            armConfigLeft.closedLoop.p(aP);
-            armConfigLeft.closedLoop.p(aI);
-            armConfigLeft.closedLoop.p(aD);
+            armConfigLeft.closedLoop.p(AquisitionsConstants.p);
+            armConfigLeft.closedLoop.p(AquisitionsConstants.i);
+            armConfigLeft.closedLoop.p(AquisitionsConstants.d);
             armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
-            armConfigRight.follow(3,true); //follows armMotorLeft
+            armConfigRight.follow(AquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
 
             armPIDLeft = armMotorLeft.getClosedLoopController();
         }
 
         public void stop(){
-            spinMotorLeft.set(0);
-            spinMotorRight.set(0);
+            spinMotor.set(0);
         }
 
         public void intake() {
-            spinMotorRight.set(intakeSpeed);
-            spinMotorLeft.set(-intakeSpeed);
+            spinMotor.set(-AquisitionsConstants.aqIntakeSpeed);
         }
 
          public void eject() {
-            spinMotorRight.set(-intakeSpeed);
-            spinMotorLeft.set(intakeSpeed);
+            spinMotor.set(AquisitionsConstants.aqIntakeSpeed);
         }
         // #todo angle has intended units of degrees, unsure what kind of units position control uses
         public void armTurnTo (double angle) {
@@ -74,7 +66,7 @@ public class Aquisitions extends SubsystemBase {
         }
 
         public double getSpeed(){
-            return intakeSpeed;
+            return AquisitionsConstants.aqIntakeSpeed;
         }
 
         public double getArmAngle(){

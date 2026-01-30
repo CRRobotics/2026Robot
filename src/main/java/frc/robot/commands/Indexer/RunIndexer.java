@@ -9,7 +9,7 @@ public class RunIndexer extends Command{
     public RunIndexer(Indexer indexer){
         
         this.indexer = indexer;
-        //addRequirements();
+        addRequirements(indexer);
     }
 
     @Override
