@@ -63,23 +63,23 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Copied from 2025 Robot
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-        Constants.DriveConstants.kDriveKinematics, // kinematics
-        Rotation2d.fromDegrees(-m_gyro.getAngle()), // initial angle
-        new SwerveModulePosition[] { // initial module positions
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
-        new Pose2d(0, 0, Rotation2d.fromRadians(Math.PI)), // initial pose
-        VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
-        VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
+            Constants.DriveConstants.kDriveKinematics, // kinematics
+            Rotation2d.fromDegrees(DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? 180 : 0), // initial angle, used to use the angle of the gyro, now alliance dependent
+            new SwerveModulePosition[] { // initial module positions
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_rearLeft.getPosition(),
+                m_rearRight.getPosition()
+            },
+            new Pose2d(0, 0, Rotation2d.fromDegrees(180)), // initial pose
+            VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
+            VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
     );
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0)),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -91,6 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     field = new Field2d();
     this.zeroHeading();
+
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     RobotConfig config;
@@ -187,7 +188,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
-    poseEstimator.resetPose(pose);
+    poseEstimator.resetPose(pose);  
   }
 
   /**
@@ -254,6 +255,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
     m_gyro.setAngleAdjustment(0);
+    poseEstimator.resetRotation(Rotation2d.fromDegrees(0));
   }
 
   /**
