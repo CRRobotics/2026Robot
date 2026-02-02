@@ -14,12 +14,8 @@ public class AquisitionEject extends Command{
 
     @Override
     public void initialize(){
-
-    }
-
-    @Override
-    public void execute(){
         aquisition.eject();
+
     }
 
     @Override 
