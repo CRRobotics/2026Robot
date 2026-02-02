@@ -25,9 +25,10 @@ public class Turret extends SubsystemBase {
 
         public Turret() {
             turretMotor = new SparkMax(Constants.TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            
-            turretEncoder = turretMotor.getAbsoluteEncoder();
+
             turretConfig = new SparkMaxConfig();
+
+            turretEncoder = turretMotor.getAbsoluteEncoder();
 
             turretMotor.configure(turretConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
