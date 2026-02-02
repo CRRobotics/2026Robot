@@ -65,7 +65,7 @@ public final class Constants {
     public static final double visionTheta = 0.5;
   }
 
-  public static final class AquisitionsConstants {
+  public static final class AcquisitionsConstants {
     public static final int aqSpinID = 0;
     public static final int aqArmLeftID = 0;
     public static final int aqArmRightID = 0;

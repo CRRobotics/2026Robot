@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Aquisitions;
+import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.KrakenTest;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,7 +42,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive;
   private final KrakenTest krakenTest;
-  private final Aquisitions aquisition;
+  private final Acquisitions aquisition;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -56,7 +56,7 @@ public class RobotContainer {
 
     m_robotDrive = new DriveSubsystem();
     krakenTest = new KrakenTest();
-    aquisition = new Aquisitions();
+    aquisition = new Acquisitions();
 
     // Configure the button bindings
     configureButtonBindings();
