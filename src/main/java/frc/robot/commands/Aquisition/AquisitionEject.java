@@ -9,7 +9,7 @@ public class AquisitionEject extends Command{
     public AquisitionEject(Aquisitions aquisition){
         
         this.aquisition = aquisition;
-        //addRequirements();
+        addRequirements(aquisition);
     }
 
     @Override

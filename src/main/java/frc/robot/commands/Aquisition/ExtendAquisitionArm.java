@@ -10,7 +10,7 @@ public class ExtendAquisitionArm extends Command{
     public ExtendAquisitionArm(Aquisitions aquisition){
         
         this.aquisition = aquisition;
-        //addRequirements();
+        addRequirements(aquisition);
     }
 
     @Override

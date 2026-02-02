@@ -10,7 +10,7 @@ public class RetractAquisitionArm extends Command{
     public RetractAquisitionArm(Aquisitions aquisition){
         
         this.aquisition = aquisition;
-        //addRequirements();
+        addRequirements(aquisition);
     }
 
     @Override
