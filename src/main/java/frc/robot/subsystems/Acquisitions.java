@@ -18,7 +18,6 @@ public class Acquisitions extends SubsystemBase {
 
     // only 1 spin
     private final SparkMax spinMotor;
-
     private final SparkMax armMotorLeft;
     private final SparkMax armMotorRight;
 
@@ -39,7 +38,9 @@ public class Acquisitions extends SubsystemBase {
             spinConfig.idleMode(IdleMode.kCoast);
             armConfigLeft.idleMode(IdleMode.kBrake);
             armConfigRight.idleMode(IdleMode.kBrake);
-
+            spinConfig.smartCurrentLimit(105); //adjust this value for maximum current input
+            armConfigLeft.smartCurrentLimit(105);
+            armConfigRight.smartCurrentLimit(105);
             
             armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
@@ -52,9 +53,9 @@ public class Acquisitions extends SubsystemBase {
 
             armEncoder = armMotorRight.getAbsoluteEncoder();
 
-            spinConfig.closedLoop.p(AcquisitionsConstants.armP);
-            spinConfig.closedLoop.p(AcquisitionsConstants.armI);
-            spinConfig.closedLoop.p(AcquisitionsConstants.armD);
+            spinConfig.closedLoop.p(AcquisitionsConstants.spinP);
+            spinConfig.closedLoop.p(AcquisitionsConstants.spinI);
+            spinConfig.closedLoop.p(AcquisitionsConstants.spinD);
 
             armConfigLeft.closedLoop.p(AcquisitionsConstants.armP);
             armConfigLeft.closedLoop.p(AcquisitionsConstants.armI);

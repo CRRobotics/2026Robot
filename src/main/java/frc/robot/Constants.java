@@ -73,7 +73,7 @@ public final class Constants {
     public static final double armP = 1;
     public static final double armI = 0;
     public static final double armD = 0;
-    public static final double spinP = 0;
+    public static final double spinP = 1;
     public static final double spinI = 0;
     public static final double spinD = 0;
     
