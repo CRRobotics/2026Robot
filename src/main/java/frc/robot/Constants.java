@@ -70,9 +70,13 @@ public final class Constants {
     public static final int aqArmLeftID = 0;
     public static final int aqArmRightID = 0;
     public static final int aqIntakeSpeed = 0;
-    public static final double p = 1;
-    public static final double i = 0;
-    public static final double d = 0;
+    public static final double armP = 1;
+    public static final double armI = 0;
+    public static final double armD = 0;
+    public static final double spinP = 0;
+    public static final double spinI = 0;
+    public static final double spinD = 0;
+    
   }
 
   public static final class TurretConstants {
