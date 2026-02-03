@@ -19,7 +19,7 @@ import com.revrobotics.ResetMode;
 
 import frc.robot.Configs;
 
-public class MAXSwerveModule {
+public class MAXSwerveModule implements SwerveModule {
   private final SparkMax m_drivingSpark;
   private final SparkMax m_turningSpark;
 
@@ -61,11 +61,13 @@ public class MAXSwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
+  
   /**
    * Returns the current state of the module.
    *
    * @return The current state of the module.
    */
+  @Override
   public SwerveModuleState getState() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
@@ -78,6 +80,7 @@ public class MAXSwerveModule {
    *
    * @return The current position of the module.
    */
+  @Override
   public SwerveModulePosition getPosition() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
@@ -91,6 +94,7 @@ public class MAXSwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
+  @Override
   public void setDesiredState(SwerveModuleState desiredState) {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
@@ -108,6 +112,7 @@ public class MAXSwerveModule {
   }
 
   /** Zeroes all the SwerveModule encoders. */
+  @Override
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
   }
