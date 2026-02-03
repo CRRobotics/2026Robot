@@ -161,8 +161,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("PhotonVisionStringSize",poseReports.size());
     SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0));
-    SmartDashboard.putNumber("Poseestimator Angle", poseEstimator.getEstimatedPosition().getRotation().getDegrees() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
-    SmartDashboard.putNumber("m_odometry Angle", m_odometry.getPoseMeters().getRotation().getDegrees() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
+    SmartDashboard.putNumber("Poseestimator Angle", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    SmartDashboard.putNumber("m_odometry Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
     SmartDashboard.putNumber("Angular Adjustment", m_gyro.getAngleAdjustment());
     SmartDashboard.putData("Field",field);
     field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -185,7 +185,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetPose(Pose2d pose) {
     m_odometry.resetPosition(
-        pose.getRotation(),
+        Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0)),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
