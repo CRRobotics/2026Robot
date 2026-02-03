@@ -86,6 +86,18 @@ public final class Constants {
     public static final double d = 0;
   }
 
+  public static final class FeederConstants {
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
+  }
+  
+  public static final class HopperConstants {
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
+  }
+
   public static final class IndexerConstants {
     //Hopper and Feeder Motor Speeds
     public static final double feederSpeed = 1;
