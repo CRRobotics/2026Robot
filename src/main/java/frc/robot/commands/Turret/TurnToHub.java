@@ -30,7 +30,7 @@ public class TurnToHub extends Command{
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        turret.turnTo(Math.atan((FieldConstants.hubY - curPose.getY())/(FieldConstants.hubX - curPose.getX())) - curPose.getRotation().getDegrees());
+        turret.turnTo(Math.atan((FieldConstants.hubY - curPose.getY())/(FieldConstants.hubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees());
     }
 
     @Override 
