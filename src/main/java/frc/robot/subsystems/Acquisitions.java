@@ -23,6 +23,7 @@ public class Acquisitions extends SubsystemBase {
     private final SparkMax armMotorRight;
 
     private final SparkClosedLoopController armPIDLeft;
+    private final SparkClosedLoopController spinPID;
 
     private final AbsoluteEncoder armEncoder;
     private SparkMaxConfig armConfigLeft;
@@ -38,6 +39,7 @@ public class Acquisitions extends SubsystemBase {
             spinConfig.idleMode(IdleMode.kCoast);
             armConfigLeft.idleMode(IdleMode.kBrake);
             armConfigRight.idleMode(IdleMode.kBrake);
+
             
             armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
@@ -50,12 +52,13 @@ public class Acquisitions extends SubsystemBase {
 
             armEncoder = armMotorRight.getAbsoluteEncoder();
 
-            
+            spinConfig.closedLoop.p(AcquisitionsConstants.armP);
+            spinConfig.closedLoop.p(AcquisitionsConstants.armI);
+            spinConfig.closedLoop.p(AcquisitionsConstants.armD);
 
-
-            armConfigLeft.closedLoop.p(AcquisitionsConstants.p);
-            armConfigLeft.closedLoop.p(AcquisitionsConstants.i);
-            armConfigLeft.closedLoop.p(AcquisitionsConstants.d);
+            armConfigLeft.closedLoop.p(AcquisitionsConstants.armP);
+            armConfigLeft.closedLoop.p(AcquisitionsConstants.armI);
+            armConfigLeft.closedLoop.p(AcquisitionsConstants.armD);
             armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
             armConfigRight.follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
@@ -65,6 +68,7 @@ public class Acquisitions extends SubsystemBase {
             spinMotor.configure(spinConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
             armPIDLeft = armMotorLeft.getClosedLoopController();
+            spinPID = spinMotor.getClosedLoopController();
         }
 
         public void stop(){
