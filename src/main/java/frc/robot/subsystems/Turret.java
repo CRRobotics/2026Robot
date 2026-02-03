@@ -8,6 +8,8 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import frc.robot.Constants.TurretConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,7 +34,8 @@ public class Turret extends SubsystemBase {
             turretConfig.closedLoop.p(TurretConstants.i);
             turretConfig.closedLoop.p(TurretConstants.d);
             turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
-            
+            turretConfig.idleMode(IdleMode.kBrake);
+
             turretMotor.configure(turretConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
             turretPID = turretMotor.getClosedLoopController();
