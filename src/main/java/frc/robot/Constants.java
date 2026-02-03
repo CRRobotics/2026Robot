@@ -156,7 +156,12 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kLeaderMotorPort = 1;
-    public static final double leadingMotorSpeed = 0.5;
+    public static final double ShooterLeader = 1;
+    public static final double ShooterFollower = 2;
+    public static int ShooteLeaderCANID1;
+    public static int ShooterFollowerCANID = 2;
+    public static double MotorLeaderSpeed = 1;
+
   }
+  
 }

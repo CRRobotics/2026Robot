@@ -1,21 +1,43 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 
 
 
 public class ShooterSubsystem extends SubsystemBase {
-    TalonFX m_shooterMotorFollower;
-    TalonFX m_shooterMotorLeader;
-    CANcoder m_shooterEncoder;
+    private final SparkMax ShooterLeader;
+    private final SparkMax ShooterFollower;
+
+    private SparkMaxConfig configShooterLeader;
+    private SparkMaxConfig configShooterFollower;
     public ShooterSubsystem(){
         // Initialize motors and set device IDs
-        TalonFX m_shooterMotorLeader = new TalonFX(ShooterConstants.kLeaderMotorPort);
-        TalonFX m_shooterMotorFollower = new TalonFX(ShooterConstants.kLeaderMotorPort);
-        m_shooterMotorLeader.set(0);
-        m_shooterMotorFollower.set(0);
+        configShooterLeader = new SparkMaxConfig();
+        configShooterFollower = new SparkMaxConfig();
+        
+        configShooterFollower.follow(1);
+        configShooterLeader.idleMode(IdleMode.kCoast);
+        configShooterFollower.idleMode(IdleMode.kCoast);
+        configShooterLeader.smartCurrentLimit(80);
+        configShooterFollower.smartCurrentLimit(80);
+       
+
+        ShooterLeader = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        ShooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+
+        ShooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        ShooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+
     }
 
 
@@ -30,8 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
     public void setSpeed() {
-        m_shooterMotorLeader.set(ShooterConstants.leadingMotorSpeed);
-        m_shooterMotorFollower.set(ShooterConstants.leadingMotorSpeed);
+        ShooterLeader.set(ShooterConstants.MotorLeaderSpeed);
+        
     }
      
 
@@ -39,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * Stops the shooter motors.
      */
     public void stopShooter() {
-        m_shooterMotorLeader.set(0);
+        ShooterLeader.set(0);
     }
 }
 
