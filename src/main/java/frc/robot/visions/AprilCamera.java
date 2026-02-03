@@ -54,7 +54,7 @@ public class AprilCamera {
     public AprilCamera(String name, double x, double y, double z, double pitch, double yaw, double roll) {
         this.name = name;
         this.photonCamera = new PhotonCamera(name);
-        this.robotToCam = new Transform3d(new Translation3d(x, y, z), new Rotation3d(pitch, yaw, roll)); // Pitch, yaw, and roll's order may need to change
+        this.robotToCam = new Transform3d(new Translation3d(x, y, z), new Rotation3d(roll, pitch, yaw)); // Pitch, yaw, and roll's order may need to change
         
         //AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //Default apriltag field
 

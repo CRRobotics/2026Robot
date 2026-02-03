@@ -32,7 +32,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.visions.Vision;
 import frc.robot.visions.VisionPose;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Field2d field;
@@ -62,22 +61,22 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);;
 
   // Copied from 2025 Robot
-  SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+  private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
             Constants.DriveConstants.kDriveKinematics, // kinematics
-            Rotation2d.fromDegrees(DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? 180 : 0), // initial angle, used to use the angle of the gyro, now alliance dependent
+            Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0)), // initial angle, used to use the angle of the gyro, now alliance dependent DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? 180 : 0
             new SwerveModulePosition[] { // initial module positions
                 m_frontLeft.getPosition(),
                 m_frontRight.getPosition(),
                 m_rearLeft.getPosition(),
                 m_rearRight.getPosition()
             },
-            new Pose2d(0, 0, Rotation2d.fromDegrees(180)), // initial pose
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)), // initial pose
             VecBuilder.fill(DriveConstants.stateTrans, DriveConstants.stateTrans, DriveConstants.stateTheta), // odometry standard deviation for x, y, theta
             VecBuilder.fill(DriveConstants.visionTrans, DriveConstants.visionTrans, DriveConstants.visionTheta) // visions standard deviation for x, y, theta
     );
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  private SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0)),
       new SwerveModulePosition[] {
@@ -106,8 +105,8 @@ public class DriveSubsystem extends SubsystemBase {
                 driveRobotRelative(speeds);
               }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(2, 0.0, 0.0), // Translation PID constants
-                      new PIDConstants(1.5, 0.0, 0.0) // Rotation PID constants
+                      new PIDConstants(1.6, 0.0, 0.0), // Translation PID constants
+                      new PIDConstants(0.35, 0.0, 0.0) // Rotation PID constants
               ),
               config, // The robot configuration
               () -> {
@@ -145,17 +144,26 @@ public class DriveSubsystem extends SubsystemBase {
         });
     for(VisionPose visPose : poseReports){
             poseEstimator.addVisionMeasurement(visPose.getPose(), visPose.getTimestamp());
+    }
+    poseEstimator.update(
+        Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)), //#todo make sure gyro is correct
+        new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
         }
-        poseEstimator.update(
-            Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0)), //#todo make sure gyro is correct
-            new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-            }
-        );
+    );
+    if (poseReports.size() > 0) {
+      SmartDashboard.putNumber("PhotonVision X", poseReports.get(0).getPose().getX());
+      SmartDashboard.putNumber("PhotonVision Y", poseReports.get(0).getPose().getY());
+      SmartDashboard.putNumber("PhotonVision Theta", poseReports.get(0).getPose().getRotation().getDegrees());
+    }
+    SmartDashboard.putNumber("PhotonVisionStringSize",poseReports.size());
     SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0));
+    SmartDashboard.putNumber("Poseestimator Angle", poseEstimator.getEstimatedPosition().getRotation().getDegrees() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
+    SmartDashboard.putNumber("m_odometry Angle", m_odometry.getPoseMeters().getRotation().getDegrees() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
+    SmartDashboard.putNumber("Angular Adjustment", m_gyro.getAngleAdjustment());
     SmartDashboard.putData("Field",field);
     field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
@@ -176,9 +184,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetPose(Pose2d pose) {
-    //Gyro specific reset, needs to be commented out? For when robot is placed in unexpected orientation on field
-    m_gyro.reset();
-    m_gyro.setAngleAdjustment(pose.getRotation().getDegrees());
     m_odometry.resetPosition(
         pose.getRotation(),
         new SwerveModulePosition[] {
@@ -209,7 +214,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(m_gyro.getAngle()* (DriveConstants.kGyroReversed ? -1.0 : 1.0))) //this invert is not in original rev template
+                m_odometry.getPoseMeters().getRotation())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -253,8 +258,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.reset();
-    m_gyro.setAngleAdjustment(0);
+    m_odometry.resetRotation(Rotation2d.fromDegrees(0));
     poseEstimator.resetRotation(Rotation2d.fromDegrees(0));
   }
 
