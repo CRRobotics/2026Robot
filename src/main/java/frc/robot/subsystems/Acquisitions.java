@@ -38,7 +38,7 @@ public class Acquisitions extends SubsystemBase {
             spinConfig.idleMode(IdleMode.kCoast);
             armConfigLeft.idleMode(IdleMode.kBrake);
             armConfigRight.idleMode(IdleMode.kBrake);
-            spinConfig.smartCurrentLimit(105); //adjust this value for maximum current input
+            spinConfig.smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
             armConfigLeft.smartCurrentLimit(105);
             armConfigRight.smartCurrentLimit(105);
             
