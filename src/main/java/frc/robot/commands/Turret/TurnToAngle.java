@@ -10,7 +10,7 @@ public class TurnToAngle extends Command{
     Turret turret;
     Double angle;
 
-    public TurnToAlliance(Turret turret, Double angle){
+    public TurnToAngle(Turret turret, Double angle){
         this.turret = turret;
         this.angle = angle;
         addRequirements(turret);
@@ -23,11 +23,12 @@ public class TurnToAngle extends Command{
 
     @Override
     public void execute(){
-        turret.turnTo(angle)
+        turret.turnTo(angle);
     }
 
     @Override 
     public void end(boolean interrupted){
+        turret.turnTo(0);
     }
 
     @Override

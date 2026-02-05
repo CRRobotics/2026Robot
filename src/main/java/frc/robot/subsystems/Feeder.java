@@ -9,7 +9,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.HopperConstants;
-import frc.robot.Constants.IndexerConstants;
 
 public class Feeder extends SubsystemBase {
 
@@ -23,13 +22,7 @@ public class Feeder extends SubsystemBase {
 
             configFeeder.idleMode(IdleMode.kCoast);
 
-            
-            configFeeder.closedLoop.p(FeederConstants.p);
-            configFeeder.closedLoop.p(FeederConstants.i);
-            configFeeder.closedLoop.p(FeederConstants.d);
-
-
-            feederMotor = new SparkMax(IndexerConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+            feederMotor = new SparkMax(FeederConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
             feederMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -43,11 +36,11 @@ public class Feeder extends SubsystemBase {
 
         //Puts balls into feeder
         public void runFeeder() {
-            feederMotor.set(IndexerConstants.feederSpeed);
+            feederMotor.set(FeederConstants.feederSpeed);
         }
 
         public double getFeederSpeed(){
-            return IndexerConstants.feederSpeed;
+            return FeederConstants.feederSpeed;
         }
 
 }

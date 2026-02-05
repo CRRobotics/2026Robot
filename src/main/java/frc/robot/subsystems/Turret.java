@@ -21,36 +21,42 @@ public class Turret extends SubsystemBase {
     private SparkMaxConfig turretConfig;
     private AbsoluteEncoder turretEncoder;
 
-        public Turret() {
+    public Turret() {
 
 
-            turretMotor = new SparkMax(TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            
-            turretEncoder = turretMotor.getAbsoluteEncoder();
-            turretConfig = new SparkMaxConfig();
+        turretMotor = new SparkMax(TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        
+        turretEncoder = turretMotor.getAbsoluteEncoder();
+        turretConfig = new SparkMaxConfig();
 
 
-            turretConfig.closedLoop.p(TurretConstants.p);
-            turretConfig.closedLoop.p(TurretConstants.i);
-            turretConfig.closedLoop.p(TurretConstants.d);
-            turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
-            turretConfig.idleMode(IdleMode.kBrake);
+        turretConfig.closedLoop.p(TurretConstants.p);
+        turretConfig.closedLoop.p(TurretConstants.i);
+        turretConfig.closedLoop.p(TurretConstants.d);
+        turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+        turretConfig.idleMode(IdleMode.kBrake);
 
-            turretMotor.configure(turretConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        turretMotor.configure(turretConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-            turretPID = turretMotor.getClosedLoopController();
-            
-        }
+        turretPID = turretMotor.getClosedLoopController();
+        
+    }
 
-        public void turnTo (double angle) {
-            turretPID.setSetpoint(angle/360,ControlType.kPosition);
-        }
+    public void turn(){
+        turretMotor.set(0.1);
+    }
 
-        public double getAngle(){
-            return turretEncoder.getPosition();
-        }
+    public void turnTo (double angle) {
+        turretPID.setSetpoint(angle/360,ControlType.kPosition);
+    }
 
+    public double getAngle(){
+        return turretEncoder.getPosition();
+    }
 
+    public void stop(){
+        turretMotor.set(0);
+    }
 
 }
 

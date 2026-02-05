@@ -89,27 +89,17 @@ public final class Constants {
   }
 
   public static final class FeederConstants {
-    public static final double p = 1;
-    public static final double i = 0;
-    public static final double d = 0;
+    public static final int feederID = 0;
+    public static final double feederSpeed = 0.1;
+    public static final int feederMotorCANID = 0;
   }
   
   public static final class HopperConstants {
-    public static final double p = 1;
-    public static final double i = 0;
-    public static final double d = 0;
+    public static final int hopperID = 0;
+    public static final double hopperSpeed = 0.1;
+    public static final int hopperMotorCANID = 0;
   }
 
-  public static final class IndexerConstants {
-    //Hopper and Feeder Motor Speeds
-    public static final double feederSpeed = 1;
-    public static final double hopperSpeed = 1;
-    //Hopper and Feeder CAN ID
-    public static int feederMotorCANID = 1;
-    public static int hopperMotorCANID = 2;
-
-
-  }
   public static final class ModuleConstants {       
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
