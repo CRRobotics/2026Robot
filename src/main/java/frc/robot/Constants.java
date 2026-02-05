@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkBase;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -156,11 +158,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final double ShooterLeader = 1;
-    public static final double ShooterFollower = 2;
-    public static int ShooteLeaderCANID1;
+    public static int ShooterLeaderCANID;
     public static int ShooterFollowerCANID = 2;
-    public static double MotorLeaderSpeed = 1;
 
   }
   

@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -8,35 +7,30 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 
-
-
-public class ShooterSubsystem extends SubsystemBase {
+public class Shooter extends SubsystemBase {
     private final SparkMax ShooterLeader;
     private final SparkMax ShooterFollower;
 
     private SparkMaxConfig configShooterLeader;
     private SparkMaxConfig configShooterFollower;
-    public ShooterSubsystem(){
+    public Shooter(){
         // Initialize motors and set device IDs
         configShooterLeader = new SparkMaxConfig();
         configShooterFollower = new SparkMaxConfig();
         
-        configShooterFollower.follow(1);
+        configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID);
         configShooterLeader.idleMode(IdleMode.kCoast);
         configShooterFollower.idleMode(IdleMode.kCoast);
         configShooterLeader.smartCurrentLimit(80);
         configShooterFollower.smartCurrentLimit(80);
-       
 
         ShooterLeader = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         ShooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
         ShooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         ShooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
 
     }
 
@@ -51,8 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
      * Sets the speed of the shooter motors.
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
-    public void setSpeed() {
-        ShooterLeader.set(ShooterConstants.MotorLeaderSpeed);
+    public void setSpeed(double speed) {
+        ShooterLeader.set(speed);
         
     }
      
