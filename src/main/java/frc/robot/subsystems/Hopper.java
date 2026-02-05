@@ -11,35 +11,24 @@ import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IndexerConstants;
 
-public class Indexer extends SubsystemBase {
+public class Hopper extends SubsystemBase {
 
     private final SparkMax hopperMotor;
-    private final SparkMax feederMotor;
 
     private SparkMaxConfig configHopper;
-    private SparkMaxConfig configFeeder;
 
 
-        public Indexer () {
-            configFeeder = new SparkMaxConfig();
+        public Hopper () {
             configHopper = new SparkMaxConfig();
 
-            configFeeder.idleMode(IdleMode.kCoast);
             configHopper.idleMode(IdleMode.kCoast);
 
-            
-            configFeeder.closedLoop.p(FeederConstants.p);
-            configFeeder.closedLoop.p(FeederConstants.i);
-            configFeeder.closedLoop.p(FeederConstants.d);
-            
             configHopper.closedLoop.p(HopperConstants.p);
             configHopper.closedLoop.p(HopperConstants.i);
             configHopper.closedLoop.p(HopperConstants.d);
 
             hopperMotor = new SparkMax(IndexerConstants.hopperMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-            feederMotor = new SparkMax(IndexerConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
-            feederMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
             hopperMotor.configure(configHopper, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
 
@@ -47,22 +36,16 @@ public class Indexer extends SubsystemBase {
 
         public void stop(){
             hopperMotor.set(0);
-            feederMotor.set(0);
-
         }
 
         //Puts balls into feeder
-        public void runIndexer() {
+        public void runFeeder() {
             hopperMotor.set(IndexerConstants.hopperSpeed);
-            feederMotor.set(IndexerConstants.feederSpeed);
         }
 
         public double getFeederSpeed(){
             return IndexerConstants.feederSpeed;
         }
 
-        public double getHopperSpeed(){
-            return IndexerConstants.hopperSpeed;
-        }
 
 }
