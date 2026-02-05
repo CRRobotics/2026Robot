@@ -1,7 +1,7 @@
-package frc.robot.commands.Indexer;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 public class DefaultShoot extends Command{
     private Shooter shooter;
 
@@ -17,12 +17,12 @@ public class DefaultShoot extends Command{
 
     @Override
     public void execute(){
-        shooter.setSpeed(0.1)
+        shooter.setSpeed(0.1);
     }
 
     @Override 
     public void end(boolean interrupted){
-        indexer.stop();
+        shooter.stop();
     }
 
     @Override

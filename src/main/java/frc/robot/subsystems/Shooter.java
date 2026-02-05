@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
     /**
      * Stops the shooter motors.
      */
-    public void stopShooter() {
+    public void stop() {
         ShooterLeader.set(0);
     }
 }

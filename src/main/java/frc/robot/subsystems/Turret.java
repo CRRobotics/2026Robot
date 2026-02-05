@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -71,7 +72,13 @@ public class Turret extends SubsystemBase {
 
     public Trigger atZero = new Trigger(this::zeroTrigger);
 
+    public Command turnCommand(){
+        return this.run(() -> this.turn());
+    }
 
+    public Command zeroCommand(){
+        return this.runOnce(() -> this.resetEncoder());
+    }
 
 }
 
