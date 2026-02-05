@@ -24,6 +24,7 @@ import frc.robot.commands.Shooter.DefaultShoot;
 import frc.robot.commands.Turret.Turn;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -44,6 +45,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
  */
 public class RobotContainer {
   // The robot's subsystems
+  private final Hopper hopper;
   private final DriveSubsystem m_robotDrive;
   private final Turret turret;
   private final Shooter shooter;
@@ -61,6 +63,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+    hopper = new Hopper();
     m_robotDrive = new DriveSubsystem();
     turret = new Turret();
     shooter = new Shooter();
@@ -82,6 +85,7 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
+    
     turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
     
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -111,6 +115,9 @@ public class RobotContainer {
         .onTrue(new InstantCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
+
+            
+    new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand());
   }
 
   /**
