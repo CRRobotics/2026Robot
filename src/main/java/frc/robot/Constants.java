@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import java.util.TreeMap;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.AngleSpeed;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -58,6 +61,22 @@ public final class Constants {
 
     //"are your gyro angles clockwise positive? if so you should negate them" - wpilib troubleshooting docs
     public static final boolean kGyroReversed = true;
+  }
+  public static final class ShooterConstants {
+
+    //TODO: get data for AngleSpeed variables//
+    public static TreeMap <Double, AngleSpeed> shootMap = new TreeMap<>();
+
+    static {
+                                            //Input data here//
+      shootMap.put(1.0, new AngleSpeed(0.0, 0.0));
+      shootMap.put(2.0, new AngleSpeed(0.0, 0.0));
+      shootMap.put(3.0, new AngleSpeed(0.0, 0.0));
+      shootMap.put(4.0, new AngleSpeed(0.0, 0.0));
+      shootMap.put(5.0, new AngleSpeed(0.0, 0.0));
+      shootMap.put(6.0, new AngleSpeed(0.0, 0.0));
+    }
+
   }
 
   public static final class ModuleConstants {       
