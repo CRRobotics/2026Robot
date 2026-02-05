@@ -86,6 +86,8 @@ public final class Constants {
     public static final double p = 1;
     public static final double i = 0;
     public static final double d = 0;
+    public static final double turretGearRatio = 0;
+    public static final int limitID = 0;
   }
 
   public static final class FeederConstants {

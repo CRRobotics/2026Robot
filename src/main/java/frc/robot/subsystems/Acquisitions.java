@@ -73,20 +73,19 @@ public class Acquisitions extends SubsystemBase {
         }
 
         public void stop(){
-            spinMotor.set(0);
+            spinPID.setSetpoint(0, ControlType.kVelocity);
         }
 
         public void intake() {
-            spinMotor.set(-AcquisitionsConstants.aqIntakeSpeed);
+            spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
         }
 
          public void eject() {
-            spinMotor.set(AcquisitionsConstants.aqIntakeSpeed);
+            spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
         }
         // #todo angle has intended units of degrees, unsure what kind of units position control uses
         public void armTurnTo (double angle) {
             armPIDLeft.setSetpoint(angle/360,ControlType.kPosition);
-
         }
 
         public double getSpeed(){
