@@ -50,6 +50,10 @@ public class Turret extends SubsystemBase {
         turretMotor.set(0.1);
     }
 
+    /**
+     * Turns the turret to a given angle
+     * @param angle the angle to turn to
+     */
     public void turnTo (double angle) {
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
     }
@@ -76,6 +80,10 @@ public class Turret extends SubsystemBase {
         return this.run(() -> this.turn());
     }
 
+    /**
+     * Supplies a command that resets the encoders for turret
+     * @return the command that resets the encoders for turret
+     */
     public Command zeroCommand(){
         return this.runOnce(() -> this.resetEncoder());
     }

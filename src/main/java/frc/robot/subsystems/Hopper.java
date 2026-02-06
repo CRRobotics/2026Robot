@@ -17,6 +17,9 @@ public class Hopper extends SubsystemBase {
     private SparkMaxConfig configHopper;
 
 
+        /**
+         * Constructor of the Hopper subsystem
+         */
         public Hopper () {
             configHopper = new SparkMaxConfig();
 
@@ -33,7 +36,9 @@ public class Hopper extends SubsystemBase {
             hopperMotor.set(0);
         }
 
-        //Puts balls into feeder
+        /**
+         * Sets the hopper motors to constant speed
+         */
         public void runHopper() {
             hopperMotor.set(HopperConstants.hopperSpeed);
         }
