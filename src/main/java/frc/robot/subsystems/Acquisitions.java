@@ -11,8 +11,12 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.AcquisitionsConstants;
-
+import frc.robot.Constants.TurretConstants;
+import frc.robot.commands.Acquisition.ExtendAcquisitionArm;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Acquisitions extends SubsystemBase {
 
@@ -28,6 +32,7 @@ public class Acquisitions extends SubsystemBase {
     private SparkMaxConfig armConfigLeft;
     private SparkMaxConfig armConfigRight;
     private SparkMaxConfig spinConfig;
+    private Boolean armDown;
 
 
         public Acquisitions () {
@@ -50,7 +55,7 @@ public class Acquisitions extends SubsystemBase {
             armMotorLeft = new SparkMax(AcquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             
-
+            armDown = false;
             armEncoder = armMotorRight.getAbsoluteEncoder();
 
             spinConfig.closedLoop.p(AcquisitionsConstants.spinP);
@@ -96,6 +101,26 @@ public class Acquisitions extends SubsystemBase {
             return armEncoder.getPosition() * 360;
         }
 
+        public Command AcquisitionEject(){
+            return this.run(() -> this.eject());
+        }
+        
+        
+        private boolean armDown(){
+            return armDown;
+        }
 
+        public Trigger aqDown = new Trigger(this::armDown);
 
+        public Command AcquisitionIntakeCommand(){
+            return this.run(() -> this.intake());
+        }
+
+        public Command ExtendAcquisitionArmCommand(){
+            return this.run(() -> this.armTurnTo(90));
+        }
+
+        public Command RetractAcquisitionArmCommand(){
+            return this.run(() -> this.armTurnTo(0));
+        }
 }
