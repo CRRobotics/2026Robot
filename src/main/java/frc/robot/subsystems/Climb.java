@@ -10,6 +10,11 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import frc.robot.Constants.ClimbConstants;
 
 public class Climb extends SubsystemBase {
+
+    /**
+     * Initalize climb motor and sensors
+     */
+
     private final TalonFX m_climb;
     private final AnalogInput lidarSensor;
     private final DigitalInput barLimit;
@@ -17,12 +22,17 @@ public class Climb extends SubsystemBase {
     private Slot0Configs m_climbConfig;
 
     public Climb() {
+
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
         m_climb.set(0);
 
         lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
         barLimit = new DigitalInput(ClimbConstants.barLimitID);
+
+        /**
+         * Config motor
+         */
 
         m_climbConfig = new Slot0Configs();
 
@@ -33,6 +43,11 @@ public class Climb extends SubsystemBase {
         m_climb.getConfigurator().apply(m_climbConfig);
     }  
 
+
+    /**
+     * Starts climbing up if in range
+     */
+
     public void climbUp() {
         if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
             m_climb.set(ClimbConstants.climbSpeed);
@@ -40,6 +55,11 @@ public class Climb extends SubsystemBase {
             m_climb.set(0);
         }
     }
+
+
+    /**
+     * Starts climbing down if in range
+     */
 
     public void climbDown() {
         if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
@@ -49,13 +69,25 @@ public class Climb extends SubsystemBase {
         }
     }
 
+    /**
+     * Turns off motor
+     */
+
     public void stop() {
         m_climb.set(0);
     }
+
+    /**
+     * @return digital input of limit switch
+     */
     
     public boolean getLimitOutput() {
         return barLimit.get();  
     }
+
+    /**
+     * @return analog input of lidar sensor
+     */
 
     public double getLidarOutput() {
         return lidarSensor.getVoltage();
