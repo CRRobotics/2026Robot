@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -50,12 +51,20 @@ public class Shooter extends SubsystemBase {
         
     }
      
-
     /**
      * Stops the shooter motors.
      */
     public void stop() {
         ShooterLeader.set(0);
+    }
+
+
+    public Command defaultShoot() {
+        return (this.run(() -> this.setSpeed(0.1)));
+    }
+
+    public Command stopShoot() {
+        return (this.run(() -> this.stop()));
     }
 }
 
