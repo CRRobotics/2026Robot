@@ -12,6 +12,10 @@ import frc.robot.Constants.FeederConstants;
 
 public class Feeder extends SubsystemBase {
 
+    /**
+     * initialize motor and config
+     */
+
     private final SparkMax feederMotor;
 
     private SparkMaxConfig configFeeder;
@@ -25,27 +29,44 @@ public class Feeder extends SubsystemBase {
             feederMotor = new SparkMax(FeederConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
             feederMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
-
         }
+
+        /**
+         * stops feeder
+         */
 
         public void stop(){
             feederMotor.set(0);
 
         }
 
-        //Puts balls into feeder
+        /**
+         * Puts balls into feeder
+         */
+        
         public void runFeeder() {
             feederMotor.set(FeederConstants.feederSpeed);
         }
+
+        /**
+         * @return speed feeder runs at
+         */
 
         public double getFeederSpeed(){
             return FeederConstants.feederSpeed;
         }
 
+        /**
+         * @return command that runs feeder
+         */
+
         public Command runFeederCommand(){
             return (this.run(() -> this.runFeeder()));
         }
+
+        /**
+         * @returncommand that stops feeder
+         */
 
         public Command stopFeederCommand(){
             return (this.run(() -> this.stop()));
