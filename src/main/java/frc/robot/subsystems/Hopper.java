@@ -12,14 +12,13 @@ import frc.robot.Constants.HopperConstants;
 
 public class Hopper extends SubsystemBase {
 
+    /**
+     * initialize motor and construct class
+     */
+
     private final SparkMax hopperMotor;
 
     private SparkMaxConfig configHopper;
-
-
-        /**
-         * Constructor of the Hopper subsystem
-         */
         public Hopper () {
             configHopper = new SparkMaxConfig();
 
@@ -32,24 +31,41 @@ public class Hopper extends SubsystemBase {
 
         }
 
+        /**
+         * stops motor
+         */
+
         public void stop(){
             hopperMotor.set(0);
         }
 
         /**
-         * Sets the hopper motors to constant speed
+         * Sets the hopper motor to constant speed
          */
+
         public void runHopper() {
             hopperMotor.set(HopperConstants.hopperSpeed);
         }
+
+        /**
+         * @return double speed hopper runs at
+         */
 
         public double getHopperSpeed(){
             return HopperConstants.hopperSpeed;
         }
 
+        /**
+         * @return command that runs hopper
+         */
+
         public Command runHopperCommand(){
            return (this.run (() -> this.runHopper()));
         }
+
+        /**
+         * @return command that stops hopper
+         */
 
         public Command stopHopperCommand(){
             return (this.run (() -> this.stop()));
