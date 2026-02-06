@@ -24,6 +24,7 @@ import frc.robot.commands.Shooter.DefaultShoot;
 import frc.robot.commands.Turret.Turn;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
@@ -51,6 +52,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final KrakenTest krakenTest;
   private final Acquisitions aquisition;
+  private final Feeder feeder;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -69,7 +71,8 @@ public class RobotContainer {
     shooter = new Shooter();
     krakenTest = new KrakenTest();
     aquisition = new Acquisitions();
-
+    feeder = new Feeder();
+    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -86,7 +89,10 @@ public class RobotContainer {
             m_robotDrive));
 
     
+    // Run at the beginning of match?
     turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
+    aquisition.ExtendAcquisitionArmCommand().andThen(aquisition.ChangeAqState());
+
     
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -117,7 +123,8 @@ public class RobotContainer {
             m_robotDrive));
 
             
-    new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand().alongWith(feeder.runFeederCommand()));
+    new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileTrue(shooter.defaultShoot());
   }
 
   /**

@@ -105,12 +105,19 @@ public class Acquisitions extends SubsystemBase {
             return this.run(() -> this.eject());
         }
         
+        public void armMove(){
+            armDown = !armDown;
+        }
         
         private boolean armDown(){
             return armDown;
         }
 
         public Trigger aqDown = new Trigger(this::armDown);
+
+        public Command ChangeAqState(){
+            return this.runOnce(() -> this.armMove());
+        }
 
         public Command AcquisitionIntakeCommand(){
             return this.run(() -> this.intake());
