@@ -99,7 +99,7 @@ public final class Constants {
   }
 
   public static final class TurretConstants {
-    public static final int turretID = 0;
+    public static final int turretID = 22;
     public static final double p = 1;
     public static final double i = 0;
     public static final double d = 0;
@@ -168,8 +168,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static int ShooterLeaderCANID;
-    public static int ShooterFollowerCANID = 2;
+    public static int ShooterLeaderCANID = 20;
+    public static int ShooterFollowerCANID = 21;
 
   }
   
