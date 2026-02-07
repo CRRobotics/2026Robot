@@ -21,13 +21,13 @@ public class Shooter extends SubsystemBase {
         configShooterLeader = new SparkMaxConfig();
         configShooterFollower = new SparkMaxConfig();
         
-        configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID);
+        configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID, true);
         configShooterLeader.idleMode(IdleMode.kCoast);
         configShooterFollower.idleMode(IdleMode.kCoast);
         configShooterLeader.smartCurrentLimit(80);
         configShooterFollower.smartCurrentLimit(80);
 
-        ShooterLeader = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        ShooterLeader = new SparkMax(ShooterConstants.ShooterLeaderCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         ShooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
         ShooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -60,7 +60,8 @@ public class Shooter extends SubsystemBase {
 
 
     public Command defaultShoot() {
-        return (this.run(() -> this.setSpeed(0.1)));
+        return (this.startEnd(() -> this.setSpeed(1),
+        () -> this.setSpeed(0.0)));
     }
 
     public Command stopShoot() {

@@ -30,7 +30,7 @@ public class Feeder extends SubsystemBase {
         }
 
         public void stop(){
-            feederMotor.set(0);
+            feederMotor.set(0.0);
 
         }
 
@@ -44,7 +44,8 @@ public class Feeder extends SubsystemBase {
         }
 
         public Command runFeederCommand(){
-            return (this.run(() -> this.runFeeder()));
+            return (this.startEnd(() -> this.runFeeder(),
+            () -> this.stop()));
         }
 
         public Command stopFeederCommand(){

@@ -77,7 +77,8 @@ public class Turret extends SubsystemBase {
     public Trigger atZero = new Trigger(this::zeroTrigger);
 
     public Command turnCommand(){
-        return this.run(() -> this.turn());
+        return this.startEnd(() -> this.turn(),
+        () -> this.stop());
     }
 
     /**

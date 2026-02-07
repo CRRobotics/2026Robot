@@ -68,9 +68,9 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
-    public static final int aqSpinID = 0;
-    public static final int aqArmLeftID = 0;
-    public static final int aqArmRightID = 0;
+    public static final int aqSpinID = 101;
+    public static final int aqArmLeftID = 102;
+    public static final int aqArmRightID = 103;
     public static final int aqIntakeSpeed = 0;
     public static final double armP = 1;
     public static final double armI = 0;
@@ -82,7 +82,7 @@ public final class Constants {
   }
 
   public static final class TurretConstants {
-    public static final int turretID = 0;
+    public static final int turretID = 23;
     public static final double p = 1;
     public static final double i = 0;
     public static final double d = 0;
@@ -91,15 +91,15 @@ public final class Constants {
   }
 
   public static final class FeederConstants {
-    public static final int feederID = 0;
-    public static final double feederSpeed = 0.1;
-    public static final int feederMotorCANID = 0;
+    public static final int feederID = 105;
+    public static final double feederSpeed = -0.5;
+    public static final int feederMotorCANID = 24;
   }
   
   public static final class HopperConstants {
-    public static final int hopperID = 0;
+    public static final int hopperID = 106;
     public static final double hopperSpeed = 0.1;
-    public static final int hopperMotorCANID = 0;
+    public static final int hopperMotorCANID = 107;
   }
 
   public static final class ModuleConstants {       
@@ -151,8 +151,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static int ShooterLeaderCANID;
-    public static int ShooterFollowerCANID = 2;
+    public static int ShooterLeaderCANID = 21;
+    public static int ShooterFollowerCANID = 20;
 
   }
   
