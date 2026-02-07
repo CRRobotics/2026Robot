@@ -276,7 +276,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Converts the state of each swerve module to chassis speeds.
    * 
-   * @return the chasss speeds of the robopt
+   * @return the chasss speeds of the robot
    */
   public ChassisSpeeds getCurrentSpeeds(){
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());

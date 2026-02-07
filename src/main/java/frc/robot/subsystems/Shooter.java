@@ -22,17 +22,31 @@ public class Shooter extends SubsystemBase {
         configShooterFollower = new SparkMaxConfig();
         
         configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID, true);
+    /**
+     * Makes the ShooterFollower actually follow the ShooterLeader
+     */
         configShooterLeader.idleMode(IdleMode.kCoast);
         configShooterFollower.idleMode(IdleMode.kCoast);
+    /**
+     * Lets the robot shooter come to a sliding halt
+     */
         configShooterLeader.smartCurrentLimit(80);
         configShooterFollower.smartCurrentLimit(80);
-
+    /**
+     * A safety limiter to stop the shooter from taking up too many amps, stops the robot from catching on fire
+     */
         ShooterLeader = new SparkMax(ShooterConstants.ShooterLeaderCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         ShooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-
+    /**
+     * Define ShooterLeader
+     * Define ShooterFollower
+     */
         ShooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         ShooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
+    /**
+     * Configure ShooterLeader
+     * Configure ShooterFollower
+     */
     }
 
 

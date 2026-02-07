@@ -33,7 +33,9 @@ public class Acquisitions extends SubsystemBase {
     private SparkMaxConfig armConfigRight;
     private SparkMaxConfig spinConfig;
     private Boolean armDown;
-
+        /**
+         * Config for acquisition mototrs
+         */
 
         public Acquisitions () {
             armConfigLeft = new SparkMaxConfig();
@@ -76,34 +78,60 @@ public class Acquisitions extends SubsystemBase {
             armPIDLeft = armMotorLeft.getClosedLoopController();
             spinPID = spinMotor.getClosedLoopController();
         }
-
+        /**
+         *Sets the acquisition motor speed to 0
+         */
         public void stop(){
             spinPID.setSetpoint(0, ControlType.kVelocity);
         }
+        /**
+         * Sets motor speed to the opposite of eject speed defined in constants in order to intake fuel
+         */
 
         public void intake() {
             spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
         }
-
+        /**
+         * Sets motor speed to the eject speed defined in constants in order to eject fuel
+         */
          public void eject() {
             spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
         }
         // #todo angle has intended units of degrees, unsure what kind of units position control uses
+        /**
+         * Sets the arm to turn to a certain angle (defined by angle)
+         * @param angle
+         */
         public void armTurnTo (double angle) {
             armPIDLeft.setSetpoint(angle/360,ControlType.kPosition);
         }
+        /**
+         * Returns the speed of the intake motors, which is equal to the aqIntakeSpeed set in constants
+         * NOTE: the aqIntakeSpeed is set to 0 at the time of writing!
+         * @return
+         */
 
         public double getSpeed(){
             return AcquisitionsConstants.aqIntakeSpeed;
         }
-
+        /**
+         * Returns the angle of the arm from the encoder
+         * @return
+         */
         public double getArmAngle(){
             return armEncoder.getPosition() * 360;
         }
-
+        /**
+         * Runs the eject command to cause the acquisition to eject fuel
+         * @return
+         */
         public Command AcquisitionEject(){
             return this.run(() -> this.eject());
         }
+
+        /**
+         * The following few lines are used for defining commands
+         */
         
         public void armMove(){
             armDown = !armDown;
@@ -114,7 +142,10 @@ public class Acquisitions extends SubsystemBase {
         }
 
         public Trigger aqDown = new Trigger(this::armDown);
-
+        /**
+         * Commandst that do: 1. Change the state of the acquisition, 2. Intake fuel, 3. Extend the acquisition arm, and 4. Retract the acquisition arm
+         * @return
+         */
         public Command ChangeAqState(){
             return this.runOnce(() -> this.armMove());
         }

@@ -81,6 +81,23 @@ public final class Constants {
     
   }
 
+  public static final class ClimbConstants {
+    //change all values
+    public static final int climbMotorID = 0;
+
+    public static final int lidarSensorID = 0;
+    public static final int barLimitID = 0;
+
+    public static final double climbSpeed = 0;
+
+    public static final double p = 0;
+    public static final double i = 0;
+    public static final double d = 0;
+
+    public static final double lowerBoundVoltage = 0;
+    public static final double higherBoundVoltage = 0;
+  }
+
   public static final class TurretConstants {
     public static final int turretID = 23;
     public static final double p = 1;
