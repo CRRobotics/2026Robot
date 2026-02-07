@@ -107,6 +107,14 @@ public final class Constants {
     public static final int limitID = 0;
   }
 
+  public static final class HoodConstants {
+    public static final int hoodID = 22;
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
+    public static final double hoodGearRatio = 0;
+  }
+
   public static final class FeederConstants {
     public static final int feederID = 105;
     public static final double feederSpeed = -0.5;

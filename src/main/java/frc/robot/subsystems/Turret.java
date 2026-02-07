@@ -69,6 +69,10 @@ public class Turret extends SubsystemBase {
         turretMotor.set(0.1);
     }
 
+    public void reverseTurn(){
+        turretMotor.set(-0.1);
+    }
+
     /**
      * Turns the turret to a given angle
      * @param angle the angle to turn to
@@ -107,6 +111,10 @@ public class Turret extends SubsystemBase {
      */
     public Command turnCommand(){
         return this.startEnd(() -> this.turn(),
+        () -> this.stop());
+    }
+      public Command reverseTurnCommand(){
+        return this.startEnd(() -> this.reverseTurn(),
         () -> this.stop());
     }
 

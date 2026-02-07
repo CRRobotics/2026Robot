@@ -25,6 +25,7 @@ import frc.robot.commands.Turret.Turn;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
@@ -53,6 +54,7 @@ public class RobotContainer {
   private final KrakenTest krakenTest;
   private final Acquisitions aquisition;
   private final Feeder feeder;
+  private final Hood hood;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -72,6 +74,7 @@ public class RobotContainer {
     krakenTest = new KrakenTest();
     aquisition = new Acquisitions();
     feeder = new Feeder();
+    hood = new Hood();
     
     // Configure the button bindings
     configureButtonBindings();
@@ -124,9 +127,12 @@ public class RobotContainer {
 
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-    new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileTrue(shooter.defaultShoot());
+    new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileTrue(shooter.defaultShoot());
     new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(feeder.runFeederCommand());
-    new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileTrue(turret.turnCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileTrue(turret.turnCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileTrue(turret.reverseTurnCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value).whileTrue(hood.turnCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value).whileTrue(hood.reverseTurnCommand());
   }
 
   /**
