@@ -26,8 +26,8 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.3;
-    public static final double kMaxAngularSpeed = 1.0 * Math.PI; // radians per second
+    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxAngularSpeed = 0.5 * Math.PI; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(24.5);
@@ -61,12 +61,63 @@ public final class Constants {
     public static final boolean kGyroReversed = true;
 
     public static final double stateTrans = 0.1;
-    public static final double visionTrans = 0.1;
-    public static final double stateTheta = 0.5;
+    public static final double stateTheta = 0.1;
+    public static final double visionTrans = 0.5;
     public static final double visionTheta = 0.5;
+  }
 
+  public static final class AcquisitionsConstants {
+    public static final int aqSpinID = 67;
+    public static final int aqArmLeftID = 69;
+    public static final int aqArmRightID = 76;
+    public static final int aqIntakeSpeed = 0;
+    public static final double armP = 1;
+    public static final double armI = 0;
+    public static final double armD = 0;
+    public static final double spinP = 1;
+    public static final double spinI = 0;
+    public static final double spinD = 0;
+    
+  }
+
+  public static final class ClimbConstants {
+    //change all values
+    public static final int climbMotorID = 607;
+
+    public static final int lidarSensorID = 667;
+    public static final int barLimitID = 677;
+
+    public static final double climbSpeed = 0;
+
+    public static final double p = 0;
+    public static final double i = 0;
+    public static final double d = 0;
+
+    public static final double lowerBoundVoltage = 0;
+    public static final double higherBoundVoltage = 0;
+  }
+
+  public static final class TurretConstants {
+    public static final int turretID = 22;
+    public static final double p = 1;
+    public static final double i = 0;
+    public static final double d = 0;
+    public static final double turretGearRatio = 0;
+    public static final int limitID = 0;                                          
+  }
+
+  public static final class FeederConstants {
+   // public static final int feederID = 0;
+    public static final double feederSpeed = 0.1;
+    public static final int feederMotorCANID = 24;
   }
   
+  public static final class HopperConstants {
+    //public static final int hopperID = 0;
+    public static final double hopperSpeed = 0.1;
+    public static final int hopperMotorCANID = 23;
+  }
+
   public static final class ModuleConstants {       
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
@@ -112,6 +163,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.025;
+    public static final int kOperatorControllerPort = 0;
   }
 
   //Not actually used for pathplanner
@@ -133,4 +185,16 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class FieldConstants {
+    public static final double hubX = 0;
+    public static final double hubY = 0;
+  }
+
+  public static final class ShooterConstants {
+    public static int ShooterLeaderCANID = 20;
+    public static int ShooterFollowerCANID = 21;
+
+  }
+  
 }

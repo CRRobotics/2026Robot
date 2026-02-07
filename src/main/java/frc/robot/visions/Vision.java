@@ -54,8 +54,8 @@ public class Vision {
      */
     public List<VisionPose> getAprilTagResultsPhotonPose() {
         List<VisionPose> poseReports = new ArrayList<VisionPose>();
-        for (AprilCamera camera : cameras)
-            poseReports.addAll(camera.getAprilTagResult());
+        //for (AprilCamera camera : cameras)
+            //poseReports.addAll(camera.getAprilTagResult());
         return poseReports;
     }
 
