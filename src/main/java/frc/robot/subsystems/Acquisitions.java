@@ -11,9 +11,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.AcquisitionsConstants;
-import frc.robot.Constants.TurretConstants;
-import frc.robot.commands.Acquisition.ExtendAcquisitionArm;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -126,7 +123,9 @@ public class Acquisitions extends SubsystemBase {
          * @return
          */
         public Command AcquisitionEject(){
-            return this.run(() -> this.eject());
+            return this.startEnd(
+                () -> this.eject(),
+                () -> this.stop());
         }
 
         /**
@@ -151,11 +150,13 @@ public class Acquisitions extends SubsystemBase {
         }
 
         public Command AcquisitionIntakeCommand(){
-            return this.run(() -> this.intake());
+            return this.startEnd(
+                () -> this.intake(),
+                () -> this.stop());
         }
 
         public Command ExtendAcquisitionArmCommand(){
-            return this.run(() -> this.armTurnTo(90));
+            return this.runOnce(() -> this.armTurnTo(90));
         }
 
         public Command RetractAcquisitionArmCommand(){

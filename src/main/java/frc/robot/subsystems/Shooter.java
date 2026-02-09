@@ -74,8 +74,9 @@ public class Shooter extends SubsystemBase {
 
 
     public Command defaultShoot() {
-        return (this.startEnd(() -> this.setSpeed(1),
-        () -> this.setSpeed(0.0)));
+        return (this.startEnd(
+            () -> this.setSpeed(1),
+            () -> this.setSpeed(0.0)));
     }
 
     public Command stopShoot() {
