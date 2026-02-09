@@ -110,12 +110,16 @@ public class Turret extends SubsystemBase {
      * This sets up the triggers for the turret. 
      */
     public Command turnCommand(){
-        return this.startEnd(() -> this.turn(),
-        () -> this.stop());
+        return this.startEnd(
+            () -> this.turn(),
+            () -> this.stop()
+        );
     }
-      public Command reverseTurnCommand(){
-        return this.startEnd(() -> this.reverseTurn(),
-        () -> this.stop());
+    public Command reverseTurnCommand(){
+        return this.startEnd(
+            () -> this.reverseTurn(),
+            () -> this.stop()
+        );
     }
 
     /**

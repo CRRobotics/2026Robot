@@ -60,17 +60,9 @@ public class Hopper extends SubsystemBase {
          */
 
         public Command runHopperCommand(){
-           return (this.run (() -> this.runHopper()));
+            return (this.startEnd(
+                () -> this.runHopper(),
+                () -> this.stop()
+            ));
         }
-
-        /**
-         * @return command that stops hopper
-         */
-
-        public Command stopHopperCommand(){
-            return (this.run (() -> this.stop()));
-        }
-        
-
-
 }

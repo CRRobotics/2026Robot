@@ -61,18 +61,10 @@ public class Feeder extends SubsystemBase {
          */
 
         public Command runFeederCommand(){
-            return (this.startEnd(() -> this.runFeeder(),
-            () -> this.stop()));
+            return (this.startEnd(
+                () -> this.runFeeder(),
+                () -> this.stop()
+            ));
         }
-
-        /**
-         * @returncommand that stops feeder
-         */
-
-        public Command stopFeederCommand(){
-            return (this.run(() -> this.stop()));
-        }
-
-
 
 }
