@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
      * Sets the speed of the shooter motors.
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
-    public void setSpeed(double speed) {
+    private void setSpeed(double speed) {
         ShooterLeader.set(speed);
         
     }
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
     /**
      * Stops the shooter motors.
      */
-    public void stop() {
+    private void stop() {
         ShooterLeader.set(0);
     }
 

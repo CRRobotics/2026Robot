@@ -35,7 +35,7 @@ public class Feeder extends SubsystemBase {
          * stops feeder
          */
 
-        public void stop(){
+        private void stop(){
             feederMotor.set(0.0);
 
         }
@@ -44,7 +44,7 @@ public class Feeder extends SubsystemBase {
          * Puts balls into feeder
          */
         
-        public void runFeeder() {
+        private void runFeeder() {
             feederMotor.set(FeederConstants.feederSpeed);
         }
 

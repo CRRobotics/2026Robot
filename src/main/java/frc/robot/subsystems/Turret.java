@@ -65,11 +65,11 @@ public class Turret extends SubsystemBase {
      */       
     }
 
-    public void turn(){
+    private void turn(){
         turretMotor.set(0.1);
     }
 
-    public void reverseTurn(){
+    private void reverseTurn(){
         turretMotor.set(-0.1);
     }
 
@@ -89,13 +89,13 @@ public class Turret extends SubsystemBase {
     /**
      * This lets the robot get the angular position of the turret
      */
-    public void stop(){
+    private void stop(){
         turretMotor.set(0);
     }
     /**
      * This sets the speed of the turret to 0 when the stop is initiated
      */
-    public void resetEncoder(){
+    private void resetEncoder(){
         turretEncoder.setPosition(0);
     }
     /**

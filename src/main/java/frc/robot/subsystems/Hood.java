@@ -64,11 +64,11 @@ public class Hood extends SubsystemBase {
      */       
     }
 
-    public void turn(){
+    private void turn(){
         hoodMotor.set(0.1);
     }
 
-    public void reverseTurn(){
+    private void reverseTurn(){
         hoodMotor.set(-0.1);
     }
 
@@ -88,13 +88,13 @@ public class Hood extends SubsystemBase {
     /**
      * This lets the robot get the angular position of the hood
      */
-    public void stop(){
+    private void stop(){
         hoodMotor.set(0);
     }
     /**
      * This sets the speed of the hood to 0 when the stop is initiated
      */
-    public void resetEncoder(){
+    private void resetEncoder(){
         hoodEncoder.setPosition(0);
     }
     /**
