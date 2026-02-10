@@ -125,8 +125,8 @@ public class RobotContainer {
 
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-  m_operatorController.y().whileTrue(shooter.defaultShoot());
-  m_operatorController.a().whileTrue(feeder.runFeederCommand());
+    m_operatorController.y().whileTrue(shooter.defaultShoot());
+    m_operatorController.a().whileTrue(feeder.runFeederCommand());
     m_operatorController.b().whileTrue(turret.turnCommand());
     m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
@@ -135,7 +135,6 @@ public class RobotContainer {
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
    * @return the command to run a test command in autonomous
    */
   public Command getExampleAutoCommand() {
