@@ -72,10 +72,10 @@ public final class Constants {
     public static final int aqArmLeftID = 102;
     public static final int aqArmRightID = 103;
     public static final int aqIntakeSpeed = 0;
-    public static final double armP = 1;
+    public static final double armP = 9;
     public static final double armI = 0;
     public static final double armD = 0;
-    public static final double spinP = 1;
+    public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
     public static final double armMotorDownAngle = 90;
@@ -102,7 +102,7 @@ public final class Constants {
 
   public static final class TurretConstants {
     public static final int turretID = 23;
-    public static final double p = 1;
+    public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;
     public static final double turretGearRatio = 0;
@@ -111,7 +111,7 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int hoodID = 22;
-    public static final double p = 1;
+    public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;
     public static final double hoodGearRatio = 0;
