@@ -76,6 +76,8 @@ public final class Constants {
     public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
+    public static final double armMotorDownAngle = 90;
+    public static final double armMotorUpAngle = 0;
     
   }
 

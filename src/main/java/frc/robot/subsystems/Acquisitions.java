@@ -46,10 +46,7 @@ public class Acquisitions extends SubsystemBase {
         armConfigLeft.smartCurrentLimit(105);
         armConfigRight.smartCurrentLimit(105);
         
-        armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
-        armConfigRight.follow(3,true); //follows armMotorLeft
-        
         spinMotor = new SparkMax(AcquisitionsConstants.aqSpinID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         armMotorLeft = new SparkMax(AcquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
@@ -156,10 +153,10 @@ public class Acquisitions extends SubsystemBase {
     }
 
     public Command ExtendAcquisitionArmCommand(){
-        return this.runOnce(() -> this.armTurnTo(90));
+        return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
     }
 
     public Command RetractAcquisitionArmCommand(){
-        return this.runOnce(() -> this.armTurnTo(0));
+        return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));
     }
 }
