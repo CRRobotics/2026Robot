@@ -37,7 +37,6 @@ public final class Configs {
             turningConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(20);
-
             turningConfig.absoluteEncoder
                     // Invert the turning encoder, since the output shaft rotates in the opposite
                     // direction of the steering motor in the MAXSwerve Module.
@@ -46,7 +45,6 @@ public final class Configs {
                     .velocityConversionFactor(turningFactor / 60.0) // radians per second
                     // This applies to REV Through Bore Encoder V2 (use REV_ThroughBoreEncoder for V1):
                     .apply(AbsoluteEncoderConfig.Presets.REV_ThroughBoreEncoderV2);
-
             turningConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                     // These are    example gains you may need to them for your own robot!
@@ -70,7 +68,6 @@ public final class Configs {
             armConfigLeft
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
-
             armConfigLeft.closedLoop
                     .p(AcquisitionsConstants.armP)
                     .p(AcquisitionsConstants.armI)
@@ -79,19 +76,24 @@ public final class Configs {
 
             armConfigRight
                     .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(105)
+                    .smartCurrentLimit(105) //adjust this value for maximum current input--105 is ideal for NEO vortex
                     .follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
 
             spinConfig
                     .idleMode(IdleMode.kCoast)
                     .smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
-
             spinConfig.closedLoop
                     .p(AcquisitionsConstants.spinP)
                     .p(AcquisitionsConstants.spinI)
                     .p(AcquisitionsConstants.spinD);
+        }
+    }
+    public static final class FeederConfig {
+        public static final SparkMaxConfig configFeeder = new SparkMaxConfig();
+        //public static final SparkMaxConfig feederMotor = new SparkMax(FeederConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
-
+        static {
+            
         }
     }
 }
