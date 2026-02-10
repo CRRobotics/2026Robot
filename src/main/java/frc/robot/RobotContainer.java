@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -32,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class RobotContainer {
   private final Hood hood;
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChooser;
 
@@ -113,24 +113,24 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+    m_driverController.rightTrigger()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    m_driverController.start()
         .onTrue(new InstantCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-    new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileTrue(shooter.defaultShoot());
-    new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(feeder.runFeederCommand());
-    new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileTrue(turret.turnCommand());
-    new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileTrue(turret.reverseTurnCommand());
-    new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value).whileTrue(hood.turnCommand());
-    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value).whileTrue(hood.reverseTurnCommand());
+  m_operatorController.y().whileTrue(shooter.defaultShoot());
+  m_operatorController.a().whileTrue(feeder.runFeederCommand());
+    m_operatorController.b().whileTrue(turret.turnCommand());
+    m_operatorController.x().whileTrue(turret.reverseTurnCommand());
+    m_operatorController.leftBumper().whileTrue(hood.turnCommand());
+    m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
   }
 
   /**
