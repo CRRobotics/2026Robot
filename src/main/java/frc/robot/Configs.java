@@ -4,7 +4,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -57,6 +56,19 @@ public final class Configs {
                     // longer route.
                     .positionWrappingEnabled(true)
                     .positionWrappingInputRange(0, turningFactor);
+        }
+    }
+    public static final class AquisitionConfig {
+        public static final SparkMaxConfig armConfigLeft = new SparkMaxConfig();
+        public static final SparkMaxConfig armConfigRight = new SparkMaxConfig();
+        public static final SparkMaxConfig spinConfig = new SparkMaxConfig();
+
+        static {
+            armConfigLeft
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(105);
+            armConfigLeft.closedLoop
+                    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         }
     }
 }
