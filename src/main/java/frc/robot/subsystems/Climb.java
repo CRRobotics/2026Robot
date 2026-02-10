@@ -60,7 +60,6 @@ public class Climb extends SubsystemBase {
         }
     }
 
-
     /**
      * Starts climbing down if in range
      */
