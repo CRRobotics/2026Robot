@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 
 import frc.robot.Constants.ClimbConstants;
 
@@ -22,10 +22,13 @@ public class Climb extends SubsystemBase {
     private final DigitalInput barLimit;
 
     private Slot0Configs m_climbConfig;
+    private TalonFXConfigurator m_climbConfigurator;
 
     public Climb() {
 
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
+
+        m_climbConfigurator = m_climb.getConfigurator();
 
         lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
@@ -41,8 +44,7 @@ public class Climb extends SubsystemBase {
         m_climbConfig.kI = ClimbConstants.i;
         m_climbConfig.kD = ClimbConstants.d;
         m_climb.setNeutralMode(NeutralModeValue.Brake);
-
-        m_climb.getConfigurator().apply(m_climbConfig);
+        m_climbConfigurator.apply(m_climbConfig);
     }  
 
 
