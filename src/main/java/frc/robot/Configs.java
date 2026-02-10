@@ -4,6 +4,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import frc.robot.Constants.AcquisitionsConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -64,11 +66,32 @@ public final class Configs {
         public static final SparkMaxConfig spinConfig = new SparkMaxConfig();
 
         static {
+
             armConfigLeft
                     .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(105);
+                    .smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
+
             armConfigLeft.closedLoop
+                    .p(AcquisitionsConstants.armP)
+                    .p(AcquisitionsConstants.armI)
+                    .p(AcquisitionsConstants.armD)
                     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+
+            armConfigRight
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(105)
+                    .follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
+
+            spinConfig
+                    .idleMode(IdleMode.kCoast)
+                    .smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
+
+            spinConfig.closedLoop
+                    .p(AcquisitionsConstants.spinP)
+                    .p(AcquisitionsConstants.spinI)
+                    .p(AcquisitionsConstants.spinD);
+
+
         }
     }
 }
