@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -12,6 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.HoodConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,6 +29,8 @@ public class Hood extends SubsystemBase {
     private SparkMaxConfig hoodConfig;
     private RelativeEncoder hoodEncoder;
     private DigitalInput hoodZero;
+    private double target;
+
     /**
      * Initiates motor
      * Helps connect motor to hood
@@ -62,6 +67,7 @@ public class Hood extends SubsystemBase {
      /**
      * Defines the PID
      */       
+        target = 0;
     }
 
     public void turn(){
@@ -77,6 +83,7 @@ public class Hood extends SubsystemBase {
      * @param angle the angle to turn to
      */
     public void turnTo (double angle) {
+        target = angle;
         hoodPID.setSetpoint(angle/360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
     }
     /**
@@ -108,11 +115,19 @@ public class Hood extends SubsystemBase {
     /**
      * This sets up the triggers for the hood. 
      */
+
+    private boolean atAngle(){
+        return Math.abs(this.getAngle() - target) < HoodConstants.hoodTolerance;
+    }
+
+    public Trigger hoodDone = new Trigger(() -> this.atAngle());
+
     public Command turnCommand(){
         return this.startEnd(() -> this.turn(),
         () -> this.stop());
     }
-      public Command reverseTurnCommand(){
+
+    public Command reverseTurnCommand(){
         return this.startEnd(() -> this.reverseTurn(),
         () -> this.stop());
     }
@@ -123,6 +138,15 @@ public class Hood extends SubsystemBase {
      */
     public Command zeroCommand(){
         return this.runOnce(() -> this.resetEncoder());
+    }
+
+    public Command angleCommand(DoubleSupplier angle){
+        return this.runOnce(() -> this.turnTo(angle.getAsDouble()));
+    }
+
+    public void periodic(){
+        SmartDashboard.putNumber("hood (no gear factor)", this.getAngle());
+        SmartDashboard.putNumber("hood target", target);
     }
 
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -12,6 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,6 +29,8 @@ public class Turret extends SubsystemBase {
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
     private DigitalInput turretZero;
+    private double target;
+
     /**
      * Initiates motor
      * Helps connect motor to turret
@@ -51,6 +56,7 @@ public class Turret extends SubsystemBase {
      * Configures the pid as well as the feedbackSensor
      */
         turretConfig.idleMode(IdleMode.kBrake);
+        turretConfig.encoder.positionConversionFactor(TurretConstants.turretGearRatio/360);
     /**
      * Configures how the turret comes to a stop
      * Engages full break rather than letting it coast
@@ -63,6 +69,7 @@ public class Turret extends SubsystemBase {
      /**
      * Defines the PID
      */       
+        target = 0;
     }
 
     public void turn(){
@@ -78,13 +85,14 @@ public class Turret extends SubsystemBase {
      * @param angle the angle to turn to
      */
     public void turnTo (double angle) {
-        turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
+        target = angle;
+        turretPID.setSetpoint(angle,ControlType.kPosition);
     }
     /**
      * When the robot starts, the turrest gear ratio will probably be 1-1
      */
     public double getAngle(){
-        return turretEncoder.getPosition() / TurretConstants.turretGearRatio;
+        return turretEncoder.getPosition();
     }
     /**
      * This lets the robot get the angular position of the turret
@@ -124,6 +132,22 @@ public class Turret extends SubsystemBase {
      */
     public Command zeroCommand(){
         return this.runOnce(() -> this.resetEncoder());
+    }
+
+    public Command angleCommand(DoubleSupplier angle){
+        return this.runOnce(() -> this.turnTo(angle.getAsDouble()));
+    }
+
+    private boolean atAngle(){
+        return Math.abs(this.getAngle() - target) < TurretConstants.turretTolerance;
+    }
+
+    public Trigger turretDone = new Trigger(() -> this.atAngle());
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("turret (no gear factor)", this.getAngle());
+        SmartDashboard.putNumber("turret target", target);
     }
 
 }

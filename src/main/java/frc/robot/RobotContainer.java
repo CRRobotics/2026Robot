@@ -31,11 +31,13 @@ import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -103,6 +105,8 @@ public class RobotContainer {
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putNumber("turret input", 0);
+    SmartDashboard.putNumber("hood input", 0);
   }
 
   /**
@@ -133,6 +137,12 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileTrue(turret.reverseTurnCommand());
     new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value).whileTrue(hood.turnCommand());
     new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value).whileTrue(hood.reverseTurnCommand());
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).whileTrue(
+      turret.angleCommand(() -> SmartDashboard.getNumber("turret input",0))
+      .alongWith(hood.angleCommand(() -> SmartDashboard.getNumber("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
+      .andThen(shooter.defaultShoot()
+      .alongWith(feeder.runFeederCommand())));
   }
 
   /**

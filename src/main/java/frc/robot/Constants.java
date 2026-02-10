@@ -103,8 +103,9 @@ public final class Constants {
     public static final double p = 1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double turretGearRatio = 0;
+    public static final double turretGearRatio = 1;
     public static final int limitID = 0;
+    public static final int turretTolerance = 3;
   }
 
   public static final class HoodConstants {
@@ -112,7 +113,8 @@ public final class Constants {
     public static final double p = 1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double hoodGearRatio = 0;
+    public static final double hoodGearRatio = 1;
+    public static final double hoodTolerance = 0;
   }
 
   public static final class FeederConstants {
