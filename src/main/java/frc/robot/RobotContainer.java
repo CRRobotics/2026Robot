@@ -134,7 +134,7 @@ public class RobotContainer {
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
     m_operatorController.leftTrigger().onTrue(climb.climbExtend());
-    m_operatorController.rightTrigger().onTrue(climb.climbExtend().until(climb.TopLimitSwitch));
+    m_operatorController.rightTrigger().onTrue(climb.climbExtend().until(climb.topLimitSwitch));
   }
 
   /**
