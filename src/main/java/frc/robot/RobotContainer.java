@@ -129,7 +129,7 @@ public class RobotContainer {
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
-            
+
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
     new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileTrue(shooter.defaultShoot());
     new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(feeder.runFeederCommand());
