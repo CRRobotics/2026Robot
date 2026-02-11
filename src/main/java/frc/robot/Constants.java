@@ -86,6 +86,7 @@ public final class Constants {
     public static final int climbMotorID = 0;
     public static final int TopLimitSwitchID = 0;
     public static final int BottomLimitSwitchID = 1;
+    public static final int RungSwitchID = 2;
     public static final int lidarSensorID = 0;
     public static final int barLimitID = 0;
 

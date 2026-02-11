@@ -23,6 +23,7 @@ public class Climb extends SubsystemBase {
     private final DigitalInput barLimit;
     DigitalInput m_toplimitSwitch;
     DigitalInput m_bottomlimitSwitch;
+    DigitalInput m_rungSwitch;
     private Slot0Configs m_climbConfig;
     private TalonFXConfigurator m_climbConfigurator;
 
@@ -33,6 +34,7 @@ public class Climb extends SubsystemBase {
         m_climbConfigurator = m_climb.getConfigurator();
         m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
         m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
+        m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
 
         lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
@@ -76,8 +78,13 @@ public class Climb extends SubsystemBase {
         return m_bottomlimitSwitch.get();
     }
 
-    public Trigger TopLimitSwitch = new Trigger (this::TopSwitchTrigger);
-    public Trigger BottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
+    private boolean RungSwitchTrigger(){
+        return m_rungSwitch.get();
+    }
+
+    public Trigger topLimitSwitch = new Trigger (this::TopSwitchTrigger);
+    public Trigger bottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
+    public Trigger rungLimitSwitch = new Trigger (this::RungSwitchTrigger);
 
     public void climbDown() {
         if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
