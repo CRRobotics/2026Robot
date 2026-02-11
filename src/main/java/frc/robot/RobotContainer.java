@@ -20,6 +20,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Acquisitions;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hood;
@@ -53,7 +54,7 @@ public class RobotContainer {
   private final Acquisitions aquisition;
   private final Feeder feeder;
   private final Hood hood;
-
+  private final Climb climb;
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -73,6 +74,7 @@ public class RobotContainer {
     aquisition = new Acquisitions();
     feeder = new Feeder();
     hood = new Hood();
+    climb = new Climb();
     
     // Configure the button bindings
     configureButtonBindings();
@@ -131,6 +133,8 @@ public class RobotContainer {
     m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
+    m_operatorController.leftTrigger().onTrue(climb.climbExtend());
+    m_operatorController.rightTrigger().onTrue(climb.climbExtend().until(climb.TopLimitSwitch));
   }
 
   /**

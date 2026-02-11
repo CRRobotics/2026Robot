@@ -2,13 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ClimbConstants;
 
 public class Climb extends SubsystemBase {
@@ -20,7 +21,8 @@ public class Climb extends SubsystemBase {
     private final TalonFX m_climb;
     private final AnalogInput lidarSensor;
     private final DigitalInput barLimit;
-
+    DigitalInput m_toplimitSwitch;
+    DigitalInput m_bottomlimitSwitch;
     private Slot0Configs m_climbConfig;
     private TalonFXConfigurator m_climbConfigurator;
 
@@ -29,6 +31,8 @@ public class Climb extends SubsystemBase {
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
 
         m_climbConfigurator = m_climb.getConfigurator();
+        m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
+        m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
 
         lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
@@ -64,6 +68,17 @@ public class Climb extends SubsystemBase {
      * Starts climbing down if in range
      */
 
+    private boolean TopSwitchTrigger(){
+        return m_toplimitSwitch.get();
+    }
+
+    private boolean BottomSwitchTrigger(){
+        return m_bottomlimitSwitch.get();
+    }
+
+    public Trigger TopLimitSwitch = new Trigger (this::TopSwitchTrigger);
+    public Trigger BottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
+
     public void climbDown() {
         if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
             m_climb.set(-ClimbConstants.climbSpeed);
@@ -87,6 +102,27 @@ public class Climb extends SubsystemBase {
     public boolean getLimitOutput() {
         return barLimit.get();  
     }
+
+    public Command climbExtend(){
+        return this.startEnd(
+            () -> this.climbUp(),
+            () -> this.stop()
+        );
+    }
+
+    public Command climbRetract(){
+        return this.startEnd(
+            () -> this.climbDown(),
+            () -> this.stop()
+        );
+    }
+
+    //public Command turnCommand(){
+        //return this.startEnd(
+            //() -> this.turn(),
+            //() -> this.stop()
+        //);
+    //}
 
     /**
      * @return analog input of lidar sensor
