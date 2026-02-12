@@ -148,6 +148,7 @@ public class Turret extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putNumber("turret (no gear factor)", this.getAngle());
         SmartDashboard.putNumber("turret target", target);
+        SmartDashboard.putBoolean("TurretDone", turretDone.getAsBoolean());
     }
 
 }

@@ -147,6 +147,7 @@ public class Hood extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putNumber("hood (no gear factor)", this.getAngle());
         SmartDashboard.putNumber("hood target", target);
+        SmartDashboard.putBoolean("HoodDone", hoodDone.getAsBoolean());
     }
 
 }

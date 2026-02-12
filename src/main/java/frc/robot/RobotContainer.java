@@ -137,12 +137,13 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileTrue(turret.reverseTurnCommand());
     new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value).whileTrue(hood.turnCommand());
     new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value).whileTrue(hood.reverseTurnCommand());
+    new JoystickButton(m_operatorController, XboxController.Button.kStart.value).whileTrue(turret.angleCommand(() -> 10));
 
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).whileTrue(
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value).whileTrue(
       turret.angleCommand(() -> SmartDashboard.getNumber("turret input",0))
       .alongWith(hood.angleCommand(() -> SmartDashboard.getNumber("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
       .andThen(shooter.defaultShoot()
-      .alongWith(feeder.runFeederCommand())));
+      .alongWith(feeder.runFeederCommand())));  
   }
 
   /**
