@@ -97,7 +97,8 @@ public final class Constants {
     public static final double d = 0;
 
     public static final double lowerBoundVoltage = 0;
-    public static final double higherBoundVoltage = 0;
+    
+    public static final double climbHeight = 0.0;
   }
 
   public static final class TurretConstants {

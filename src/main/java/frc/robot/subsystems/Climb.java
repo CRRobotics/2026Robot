@@ -66,6 +66,10 @@ public class Climb extends SubsystemBase {
         }
     }
 
+    public void resetEncoder() {
+        m_climb.setPosition(0);
+    }
+
     /**
      * Starts climbing down if in range
      */
@@ -103,6 +107,14 @@ public class Climb extends SubsystemBase {
     }
 
     /**
+     * @return analog input of lidar sensor
+     */
+
+    public double getLidarOutput() {
+        return lidarSensor.getVoltage();
+    }
+
+    /**
      * @return digital input of limit switch
      */
     
@@ -131,11 +143,5 @@ public class Climb extends SubsystemBase {
         //);
     //}
 
-    /**
-     * @return analog input of lidar sensor
-     */
 
-    public double getLidarOutput() {
-        return lidarSensor.getVoltage();
-    }
 }
