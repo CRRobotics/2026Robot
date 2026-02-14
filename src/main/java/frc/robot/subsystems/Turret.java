@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.TurretConstants;
+import frc.robot.ShooterCalculations.ValueFromDistance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -115,6 +116,12 @@ public class Turret extends SubsystemBase {
             () -> this.stop()
         );
     }
+    
+    public Command turnToCommand(){
+        return this.runOnce(
+            () -> this.turnTo(1));
+    }
+
     public Command reverseTurnCommand(){
         return this.startEnd(
             () -> this.reverseTurn(),

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.ShooterCalculations.ValueFromDistance;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
@@ -136,6 +137,11 @@ public class RobotContainer {
     m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
     m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
+    m_operatorController.back().whileTrue(turret.angleCommand(() -> ValueFromDistance.getAngleSpeed("Speed",0)).alongWith(hood.angleCommand(() -> ValueFromDistance.getAngleSpeed("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone))));
+
+      .andThen(shooter.defaultShoot()
+      .alongWith(feeder.runFeederCommand())));  
+    
   }
 
   /**
