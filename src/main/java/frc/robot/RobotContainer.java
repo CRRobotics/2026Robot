@@ -137,10 +137,10 @@ public class RobotContainer {
     m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
     m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
-    m_operatorController.back().whileTrue(turret.angleCommand(() -> ValueFromDistance.getAngleSpeed("Speed",0)).alongWith(hood.angleCommand(() -> ValueFromDistance.getAngleSpeed("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone))));
-
-      .andThen(shooter.defaultShoot()
-      .alongWith(feeder.runFeederCommand())));  
+    
+    //FIX THIS---NEEDS WORK---WORK IN PROGRESS
+    //m_operatorController.back().whileTrue(turret.angleCommand(() -> s ("Speed",0)).alongWith(hood.angleCommand(() -> ValueFromDistance.getAngleSpeed("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone))).andThen(shooter.defaultShoot());
+      //.alongWith(feeder.runFeederCommand()));  
     
   }
 

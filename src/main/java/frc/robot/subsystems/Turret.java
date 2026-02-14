@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -117,9 +119,9 @@ public class Turret extends SubsystemBase {
         );
     }
     
-    public Command turnToCommand(){
+    public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(
-            () -> this.turnTo(1));
+            () -> this.turnTo(angle.getAsDouble()));
     }
 
     public Command reverseTurnCommand(){
