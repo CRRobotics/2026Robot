@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -13,6 +14,7 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
     private final SparkMax ShooterLeader;
     private final SparkMax ShooterFollower;
+    //private final SparkClosedLoopController ShooterPID;
 
     private SparkMaxConfig configShooterLeader;
     private SparkMaxConfig configShooterFollower;
@@ -26,6 +28,7 @@ public class Shooter extends SubsystemBase {
      * Makes the ShooterFollower actually follow the ShooterLeader
      */
         configShooterLeader.idleMode(IdleMode.kCoast);
+        //configShooterLeader.closedLoop.pid(0.00001, 0.00, 0.00);
         configShooterFollower.idleMode(IdleMode.kCoast);
     /**
      * Lets the robot shooter come to a sliding halt
@@ -65,6 +68,7 @@ public class Shooter extends SubsystemBase {
         
     }
      
+    
     /**
      * Stops the shooter motors.
      */
