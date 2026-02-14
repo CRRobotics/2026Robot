@@ -77,7 +77,7 @@ public class Turret extends SubsystemBase {
      * Turns the turret to a given angle
      * @param angle the angle to turn to
      */
-    public void turnTo (double angle) {
+    private void turnTo (double angle) {
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
     }
     /**
