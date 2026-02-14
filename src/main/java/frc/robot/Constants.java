@@ -181,7 +181,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static int ShooterLeaderCANID = 20;
     public static int ShooterFollowerCANID = 21;
-
+    public static int ShooterSpeedTopLimit = 100;
   }
   
 }
