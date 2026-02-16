@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -26,6 +28,7 @@ public class Hood extends SubsystemBase {
     private SparkMaxConfig hoodConfig;
     private RelativeEncoder hoodEncoder;
     private DigitalInput hoodZero;
+    private double target;
     /**
      * Initiates motor
      * Helps connect motor to hood
@@ -61,7 +64,8 @@ public class Hood extends SubsystemBase {
         hoodPID = hoodMotor.getClosedLoopController();
      /**
      * Defines the PID
-     */       
+     */      
+        target = 0;
     }
 
     private void turn(){
@@ -108,6 +112,13 @@ public class Hood extends SubsystemBase {
     /**
      * This sets up the triggers for the hood. 
      */
+
+        private boolean atAngle(){
+        return Math.abs(this.getAngle() - target) < HoodConstants.hoodTolerance;
+    }
+
+    public Trigger hoodDone = new Trigger(() -> this.atAngle());
+
     public Command turnCommand(){
         return this.startEnd(() -> this.turn(),
         () -> this.stop());
@@ -125,5 +136,8 @@ public class Hood extends SubsystemBase {
         return this.runOnce(() -> this.resetEncoder());
     }
 
+    public Command turnCommand(DoubleSupplier angle){
+        return this.runOnce(() -> this.turnTo(angle.getAsDouble()));
+    }
 }
 

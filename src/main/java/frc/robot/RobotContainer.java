@@ -30,6 +30,7 @@ import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -52,7 +53,7 @@ public class RobotContainer {
   private final Turret turret;
   private final Shooter shooter;
   private final KrakenTest krakenTest;
-  private final Acquisitions aquisition;
+  private final Acquisitions acquisition;
   private final Feeder feeder;
   private final Hood hood;
   private final Climb climb;
@@ -72,7 +73,7 @@ public class RobotContainer {
     turret = new Turret();
     shooter = new Shooter();
     krakenTest = new KrakenTest();
-    aquisition = new Acquisitions();
+    acquisition = new Acquisitions();
     feeder = new Feeder();
     hood = new Hood();
     climb = new Climb();
@@ -138,9 +139,14 @@ public class RobotContainer {
     m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
     
-    //FIX THIS---NEEDS WORK---WORK IN PROGRESS
-    //m_operatorController.back().whileTrue(turret.angleCommand(() -> s ("Speed",0)).alongWith(hood.angleCommand(() -> ValueFromDistance.getAngleSpeed("hood input", 0))).andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone))).andThen(shooter.defaultShoot());
-      //.alongWith(feeder.runFeederCommand()));  
+    //#TODO Test this
+    m_operatorController.back()
+      .whileTrue(turret.turnToHub(() -> m_robotDrive.getPose())
+      .alongWith(hood.turnCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getAngle()))
+      .andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
+      .andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getSpeed()))
+      .alongWith(feeder.runFeederCommand())
+      .alongWith(hopper.runHopperCommand()));
     
   }
 

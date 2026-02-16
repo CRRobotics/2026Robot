@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -90,6 +92,10 @@ public class Shooter extends SubsystemBase {
             () -> this.setSpeed(1),
             () -> this.stop()
         ));
+    }
+
+    public Command shootCommand(DoubleSupplier speed){
+        return this.run(() -> this.setSpeed(speed.getAsDouble()));
     }
 }
 

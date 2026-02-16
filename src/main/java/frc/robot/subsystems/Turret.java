@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -12,8 +13,10 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.ShooterCalculations.ValueFromDistance;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +32,7 @@ public class Turret extends SubsystemBase {
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
     private DigitalInput turretZero;
+    private double target;
     /**
      * Initiates motor
      * Helps connect motor to turret
@@ -66,6 +70,7 @@ public class Turret extends SubsystemBase {
      /**
      * Defines the PID
      */       
+        target = 0;
     }
 
     private void turn(){
@@ -118,6 +123,12 @@ public class Turret extends SubsystemBase {
             () -> this.stop()
         );
     }
+
+    private boolean atAngle(){
+        return Math.abs(this.getAngle() - target) < TurretConstants.turretTolerance;
+    }
+
+    public Trigger turretDone = new Trigger(() -> this.atAngle());
     
     public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(
@@ -137,6 +148,25 @@ public class Turret extends SubsystemBase {
      */
     public Command zeroCommand(){
         return this.runOnce(() -> this.resetEncoder());
+    }
+
+    public Command turnToAlliance(Supplier<Pose2d> pose){
+        Pose2d curPose = pose.get();
+
+        //#todo NOT DONE
+        // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
+        // turn to angle alpha = 180 degrees - theta, clockwise negitive
+        // 180 degrees becuase turret needs to point 180 degrees, field relative
+        return this.runOnce(() -> this.turnTo(180 - curPose.getRotation().getDegrees()));
+    }
+
+    public Command turnToHub(Supplier<Pose2d> pose){
+        Pose2d curPose = pose.get();
+        // Blue alliance angle calculations
+        // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
+        // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
+        // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
+        return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.hubY - curPose.getY())/(FieldConstants.hubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
     }
 
 }
