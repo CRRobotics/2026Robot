@@ -72,12 +72,14 @@ public class Acquisitions extends SubsystemBase {
         armPIDLeft = armMotorLeft.getClosedLoopController();
         spinPID = spinMotor.getClosedLoopController();
     }
+
     /**
      *Sets the acquisition motor speed to 0
         */
     private void stop(){
         spinPID.setSetpoint(0, ControlType.kVelocity);
     }
+
     /**
      * Sets motor speed to the opposite of eject speed defined in constants in order to intake fuel
      */
@@ -85,12 +87,14 @@ public class Acquisitions extends SubsystemBase {
     private void intake() {
         spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
     }
+
     /**
      * Sets motor speed to the eject speed defined in constants in order to eject fuel
      */
-        private void eject() {
+    private void eject() {
         spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
     }
+
     // #todo angle has intended units of degrees, unsure what kind of units position control uses
     /**
      * Sets the arm to turn to a certain angle (defined by angle)
@@ -99,15 +103,16 @@ public class Acquisitions extends SubsystemBase {
     private void armTurnTo (double angle) {
         armPIDLeft.setSetpoint(angle/360,ControlType.kPosition);
     }
+
     /**
      * Returns the speed of the intake motors, which is equal to the aqIntakeSpeed set in constants
      * NOTE: the aqIntakeSpeed is set to 0 at the time of writing!
      * @return
      */
-
     public double getSpeed(){
         return AcquisitionsConstants.aqIntakeSpeed;
     }
+
     /**
      * Returns the angle of the arm from the encoder
      * @return
@@ -115,6 +120,7 @@ public class Acquisitions extends SubsystemBase {
     public double getArmAngle(){
         return armEncoder.getPosition() * 360;
     }
+
     /**
      * Runs the eject command to cause the acquisition to eject fuel
      * @return
@@ -138,9 +144,10 @@ public class Acquisitions extends SubsystemBase {
     }
 
     public Trigger aqDown = new Trigger(this::armDown);
+
     /**
-     * Commandst that do: 1. Change the state of the acquisition, 2. Intake fuel, 3. Extend the acquisition arm, and 4. Retract the acquisition arm
-     * @return
+     * Flip arm down
+     * @return command that flips aq arm down
      */
     public Command ChangeAqState(){
         return this.runOnce(() -> this.armMove());

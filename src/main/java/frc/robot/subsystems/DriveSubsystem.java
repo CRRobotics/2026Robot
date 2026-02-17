@@ -124,8 +124,6 @@ public class DriveSubsystem extends SubsystemBase {
       // Handle exception as needed
       e.printStackTrace();
     }
-
-    
   }
 
   @Override
@@ -169,7 +167,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   /**
    * Resets the odometry to the specified pose.
-   *
    * @param pose The pose to which to set the odometry.
    */
   public void resetPose(Pose2d pose) {

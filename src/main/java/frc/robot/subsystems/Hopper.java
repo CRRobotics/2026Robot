@@ -34,7 +34,6 @@ public class Hopper extends SubsystemBase {
         /**
          * stops motor
          */
-
         private void stop(){
             hopperMotor.set(0);
         }
@@ -42,7 +41,6 @@ public class Hopper extends SubsystemBase {
         /**
          * Sets the hopper motor to constant speed
          */
-
         private void runHopper() {
             hopperMotor.set(HopperConstants.hopperSpeed);
         }
@@ -50,7 +48,6 @@ public class Hopper extends SubsystemBase {
         /**
          * @return double speed hopper runs at
          */
-
         public double getHopperSpeed(){
             return HopperConstants.hopperSpeed;
         }
@@ -58,7 +55,6 @@ public class Hopper extends SubsystemBase {
         /**
          * @return command that runs hopper
          */
-
         public Command runHopperCommand(){
             return (this.startEnd(
                 () -> this.runHopper(),

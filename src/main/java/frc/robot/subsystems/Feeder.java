@@ -20,7 +20,6 @@ public class Feeder extends SubsystemBase {
 
     private SparkMaxConfig configFeeder;
 
-
         public Feeder () {
             configFeeder = new SparkMaxConfig();
             configFeeder.idleMode(IdleMode.kCoast);
@@ -38,7 +37,6 @@ public class Feeder extends SubsystemBase {
         /**
          * Puts balls into feeder
          */
-        
         private void runFeeder() {
             feederMotor.set(FeederConstants.feederSpeed);
         }
@@ -46,7 +44,6 @@ public class Feeder extends SubsystemBase {
         /**
          * @return speed feeder runs at
          */
-
         public double getFeederSpeed(){
             return FeederConstants.feederSpeed;
         }
@@ -54,7 +51,6 @@ public class Feeder extends SubsystemBase {
         /**
          * @return command that runs feeder
          */
-
         public Command runFeederCommand(){
             return (this.startEnd(
                 () -> this.runFeeder(),

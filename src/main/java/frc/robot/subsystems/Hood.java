@@ -18,9 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-    /**
-     * Importing code for the robot
-     */
 
 public class Hood extends SubsystemBase {
 
@@ -30,10 +27,6 @@ public class Hood extends SubsystemBase {
     private RelativeEncoder hoodEncoder;
     private DigitalInput hoodZero;
     private double target;
-    /**
-     * Initiates motor
-     * Helps connect motor to hood
-     */
 
     public Hood() {
 
@@ -84,18 +77,21 @@ public class Hood extends SubsystemBase {
     public void turnTo (double angle) {
         hoodPID.setSetpoint(angle/360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
     }
+
     /**
      * When the robot starts, the ____ gear ratio will probably be 1-1
      */
     public double getAngle(){
         return hoodEncoder.getPosition() / HoodConstants.hoodGearRatio;
     }
+
     /**
      * This lets the robot get the angular position of the hood
      */
     private void stop(){
         hoodMotor.set(0);
     }
+
     /**
      * This sets the speed of the hood to 0 when the stop is initiated
      */
@@ -116,11 +112,11 @@ public class Hood extends SubsystemBase {
     }
 
     public Trigger atZero = new Trigger(this::zeroTrigger);
+
     /**
      * This sets up the triggers for the hood. 
      */
-
-        private boolean atAngle(){
+    private boolean atAngle(){
         return Math.abs(this.getAngle() - target) < HoodConstants.hoodTolerance;
     }
 
@@ -130,9 +126,11 @@ public class Hood extends SubsystemBase {
         return this.startEnd(() -> this.turn(),
         () -> this.stop());
     }
-      public Command reverseTurnCommand(){
-        return this.startEnd(() -> this.reverseTurn(),
-        () -> this.stop());
+
+    public Command reverseTurnCommand(){
+        return this.startEnd(
+            () -> this.reverseTurn(),
+            () -> this.stop());
     }
 
     /**

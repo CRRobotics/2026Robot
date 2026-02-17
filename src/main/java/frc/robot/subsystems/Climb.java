@@ -57,7 +57,6 @@ public class Climb extends SubsystemBase {
     /**
      * Starts climbing up if in range
      */
-
     public void climbUp() {
         if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
             m_climb.set(ClimbConstants.climbSpeed);
@@ -73,7 +72,6 @@ public class Climb extends SubsystemBase {
     /**
      * Starts climbing down if in range
      */
-
     private boolean TopSwitchTrigger(){
         return m_toplimitSwitch.get();
     }
@@ -101,7 +99,6 @@ public class Climb extends SubsystemBase {
     /**
      * Turns off motor
      */
-
     public void stop() {
         m_climb.set(0);
     }
@@ -109,7 +106,6 @@ public class Climb extends SubsystemBase {
     /**
      * @return analog input of lidar sensor
      */
-
     public double getLidarOutput() {
         return lidarSensor.getVoltage();
     }
@@ -117,7 +113,6 @@ public class Climb extends SubsystemBase {
     /**
      * @return digital input of limit switch
      */
-    
     public boolean getLimitOutput() {
         return barLimit.get();  
     }

@@ -88,18 +88,21 @@ public class Turret extends SubsystemBase {
     private void turnTo (double angle) {
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
     }
+
     /**
      * When the robot starts, the turrest gear ratio will probably be 1-1
      */
     public double getAngle(){
         return turretEncoder.getPosition() / TurretConstants.turretGearRatio;
     }
+
     /**
      * This lets the robot get the angular position of the turret
      */
     private void stop(){
         turretMotor.set(0);
     }
+
     /**
      * This sets the speed of the turret to 0 when the stop is initiated
      */
