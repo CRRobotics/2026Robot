@@ -142,11 +142,15 @@ public class RobotContainer {
     //#TODO Test this
     m_operatorController.back()
       .whileTrue(turret.turnToHub(() -> m_robotDrive.getPose())
-      .alongWith(hood.turnCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getAngle()))
+      .alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getAngle()))
       .andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
       .andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getSpeed()))
       .alongWith(feeder.runFeederCommand())
       .alongWith(hopper.runHopperCommand()));
+    
+    m_driverController.a().whileTrue(turret.turnToCommand(() -> 90));
+    m_driverController.b().whileTrue(hood.turnToCommand(() -> 30));
+    m_driverController.x().whileTrue(shooter.shootCommand(() -> 90));
     
   }
 

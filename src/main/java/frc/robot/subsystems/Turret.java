@@ -15,9 +15,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.ShooterCalculations.ValueFromDistance;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -106,6 +106,12 @@ public class Turret extends SubsystemBase {
     private void resetEncoder(){
         turretEncoder.setPosition(0);
     }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("TurretAngle", this.getAngle());
+    }
+
     /**
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */

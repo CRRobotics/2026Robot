@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -10,15 +11,16 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.TurretConstants;
 
 public class Shooter extends SubsystemBase {
-    private final SparkMax ShooterLeader;
-    private final SparkMax ShooterFollower;
-    private final SparkClosedLoopController ShooterPID;
+    private final SparkMax shooterLeader;
+    private final SparkMax shooterFollower;
+    private final SparkClosedLoopController shooterPID;
+    private final RelativeEncoder shooterEncoder;
 
     private SparkMaxConfig configShooterLeader;
     private SparkMaxConfig configShooterFollower;
@@ -43,15 +45,16 @@ public class Shooter extends SubsystemBase {
     /**
      * A safety limiter to stop the shooter from taking up too many amps, stops the robot from catching on fire
      */
-        ShooterLeader = new SparkMax(ShooterConstants.ShooterLeaderCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-        ShooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        shooterLeader = new SparkMax(ShooterConstants.ShooterLeaderCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        shooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
     /**
      * Define ShooterLeader
      * Define ShooterFollower
      */
-        ShooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        ShooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        ShooterPID = ShooterLeader.getClosedLoopController();
+        shooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        shooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        shooterPID = shooterLeader.getClosedLoopController();
+        shooterEncoder = shooterLeader.getEncoder();
     /**
      * Configure ShooterLeader
      * Configure ShooterFollower
@@ -63,6 +66,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
     // This method will be called once per scheduler run
+        SmartDashboard.putNumber("ShooterSpeed", this.getSpeed());
     }
 
     /**
@@ -70,12 +74,20 @@ public class Shooter extends SubsystemBase {
      * @param speed The speed (as a percentage of max voltage, -1.0 to 1.0)
      */
     private void setSpeed(double speed) {
-        ShooterLeader.set(speed);
+        shooterLeader.set(speed);
         
+    }
+
+    /**
+     * Gets the velocity of encoder in RPM
+     * @return velocity of encoder in RPM
+     */
+    private double getSpeed(){
+        return shooterEncoder.getVelocity();
     }
     
     private void setSpeedRPM(double speed) {
-        ShooterPID.setSetpoint(speed,ControlType.kVelocity);
+        shooterPID.setSetpoint(speed,ControlType.kVelocity);
 
     }
     
@@ -83,9 +95,8 @@ public class Shooter extends SubsystemBase {
      * Stops the shooter motors.
      */
     private void stop() {
-        ShooterLeader.set(0);
+        shooterLeader.set(0);
     }
-
 
     public Command defaultShoot() {
         return (this.startEnd(
@@ -95,7 +106,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command shootCommand(DoubleSupplier speed){
-        return this.run(() -> this.setSpeed(speed.getAsDouble()));
+        return this.run(() -> this.setSpeedRPM(speed.getAsDouble()));
     }
 }
 

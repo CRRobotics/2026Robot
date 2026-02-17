@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.HoodConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -101,6 +102,12 @@ public class Hood extends SubsystemBase {
     private void resetEncoder(){
         hoodEncoder.setPosition(0);
     }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("HoodAngle", this.getAngle());
+    }
+
     /**
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */
@@ -136,7 +143,7 @@ public class Hood extends SubsystemBase {
         return this.runOnce(() -> this.resetEncoder());
     }
 
-    public Command turnCommand(DoubleSupplier angle){
+    public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(() -> this.turnTo(angle.getAsDouble()));
     }
 }
