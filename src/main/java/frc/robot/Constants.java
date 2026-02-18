@@ -73,6 +73,7 @@ public final class Constants {
     public static final double armP = 9;
     public static final double armI = 0;
     public static final double armD = 0;
+    public static final double armGearRatio = 81;
     public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
@@ -106,7 +107,7 @@ public final class Constants {
     public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double turretGearRatio = 0;
+    public static final double turretGearRatio = 100;
     public static final int limitID = 0;
     public static final int turretTolerance = 0;
   }
@@ -116,7 +117,7 @@ public final class Constants {
     public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double hoodGearRatio = 0;
+    public static final double hoodGearRatio = 9;
     public static final int hoodTolerance = 0;
   }
 

@@ -29,7 +29,7 @@ public class Acquisitions extends SubsystemBase {
     private SparkMaxConfig armConfigLeft;
     private SparkMaxConfig armConfigRight;
     private SparkMaxConfig spinConfig;
-    private Boolean armDown;
+    private Boolean armExtended;
     /**
      * Config for acquisition mototrs
      */
@@ -51,7 +51,7 @@ public class Acquisitions extends SubsystemBase {
         armMotorLeft = new SparkMax(AcquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         
-        armDown = false;
+        armExtended = false;
         armEncoder = armMotorRight.getAbsoluteEncoder();
 
         spinConfig.closedLoop.p(AcquisitionsConstants.spinP);
@@ -95,13 +95,25 @@ public class Acquisitions extends SubsystemBase {
         spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
     }
 
+    private void armDown(){
+        armMotorLeft.set(0.1);
+    }
+
+    private void armUp(){
+        armMotorLeft.set(-0.1);
+    }
+
+    private void armStop(){
+        armMotorLeft.set(0);
+    }
+
     // #todo angle has intended units of degrees, unsure what kind of units position control uses
     /**
      * Sets the arm to turn to a certain angle (defined by angle)
      * @param angle
      */
     private void armTurnTo (double angle) {
-        armPIDLeft.setSetpoint(angle/360,ControlType.kPosition);
+        armPIDLeft.setSetpoint(angle/360 * AcquisitionsConstants.armGearRatio,ControlType.kPosition);
     }
 
     /**
@@ -125,7 +137,7 @@ public class Acquisitions extends SubsystemBase {
      * Runs the eject command to cause the acquisition to eject fuel
      * @return
      */
-    public Command AcquisitionEject(){
+    public Command AcquisitionEjectCommand(){
         return this.startEnd(
             () -> this.eject(),
             () -> this.stop());
@@ -136,14 +148,14 @@ public class Acquisitions extends SubsystemBase {
      */
     
     private void armMove(){
-        armDown = !armDown;
+        armExtended = !armExtended;
     }
     
-    public boolean armDown(){
-        return armDown;
+    public boolean armExtended(){
+        return armExtended;
     }
 
-    public Trigger aqDown = new Trigger(this::armDown);
+    public Trigger aqDown = new Trigger(this::armExtended);
 
     /**
      * Flip arm down
@@ -160,10 +172,16 @@ public class Acquisitions extends SubsystemBase {
     }
 
     public Command ExtendAcquisitionArmCommand(){
-        return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
+        //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
+        return this.startEnd(
+            () -> this.armDown(),
+            () -> this.armStop());
     }
 
     public Command RetractAcquisitionArmCommand(){
-        return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));
+        //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));
+        return this.startEnd(
+            () -> this.armUp(),
+            () -> this.armStop());
     }
 }
