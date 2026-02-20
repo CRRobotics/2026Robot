@@ -41,6 +41,10 @@ public class Feeder extends SubsystemBase {
             feederMotor.set(FeederConstants.feederSpeed);
         }
 
+        private void runReverseFeeder(){
+            feederMotor.set(-FeederConstants.feederSpeed);
+        }
+
         /**
          * @return speed feeder runs at
          */
@@ -54,6 +58,13 @@ public class Feeder extends SubsystemBase {
         public Command runFeederCommand(){
             return (this.startEnd(
                 () -> this.runFeeder(),
+                () -> this.stop()
+            ));
+        }
+
+        public Command runReverseFeederCommand(){
+            return (this.startEnd(
+                () -> this.runReverseFeeder(),
                 () -> this.stop()
             ));
         }

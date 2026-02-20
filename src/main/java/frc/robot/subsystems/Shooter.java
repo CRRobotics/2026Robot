@@ -18,41 +18,41 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
     private final SparkMax shooterLeader;
-    private final SparkMax shooterFollower;
+    //private final SparkMax shooterFollower;
     private final SparkClosedLoopController shooterPID;
     private final RelativeEncoder shooterEncoder;
 
     private SparkMaxConfig configShooterLeader;
-    private SparkMaxConfig configShooterFollower;
+    //private SparkMaxConfig configShooterFollower;
     public Shooter(){
         // Initialize motors and set device IDs
         configShooterLeader = new SparkMaxConfig();
-        configShooterFollower = new SparkMaxConfig();
+        //configShooterFollower = new SparkMaxConfig();
         
-        configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID, true);
+        //configShooterFollower.follow(ShooterConstants.ShooterLeaderCANID, true);
     /**
      * Makes the ShooterFollower actually follow the ShooterLeader
      */
         configShooterLeader.idleMode(IdleMode.kCoast);
         configShooterLeader.closedLoop.pid(0.00001, 0.00, 0.00);
 
-        configShooterFollower.idleMode(IdleMode.kCoast);
+        //configShooterFollower.idleMode(IdleMode.kCoast);
     /**
      * Lets the robot shooter come to a sliding halt
      */
         configShooterLeader.smartCurrentLimit(80);
-        configShooterFollower.smartCurrentLimit(80);
+        //configShooterFollower.smartCurrentLimit(80);
     /**
      * A safety limiter to stop the shooter from taking up too many amps, stops the robot from catching on fire
      */
         shooterLeader = new SparkMax(ShooterConstants.ShooterLeaderCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-        shooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        //shooterFollower = new SparkMax(ShooterConstants.ShooterFollowerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
     /**
      * Define ShooterLeader
      * Define ShooterFollower
      */
         shooterLeader.configure(configShooterLeader, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        shooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        //shooterFollower.configure(configShooterFollower, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         shooterPID = shooterLeader.getClosedLoopController();
         shooterEncoder = shooterLeader.getEncoder();
     /**
@@ -99,7 +99,7 @@ public class Shooter extends SubsystemBase {
 
     public Command defaultShoot() {
         return (this.startEnd(
-            () -> this.setSpeed(1),
+            () -> this.setSpeed(0.75),
             () -> this.stop()
         ));
     }

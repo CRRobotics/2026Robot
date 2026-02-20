@@ -45,11 +45,8 @@ public class Hopper extends SubsystemBase {
             hopperMotor.set(HopperConstants.hopperSpeed);
         }
 
-        /**
-         * @return double speed hopper runs at
-         */
-        public double getHopperSpeed(){
-            return HopperConstants.hopperSpeed;
+        private void runReverseHopper(){
+            hopperMotor.set(-HopperConstants.hopperSpeed);
         }
 
         /**
@@ -58,6 +55,13 @@ public class Hopper extends SubsystemBase {
         public Command runHopperCommand(){
             return (this.startEnd(
                 () -> this.runHopper(),
+                () -> this.stop()
+            ));
+        }
+
+        public Command runReverseHopperCommand(){
+            return (this.startEnd(
+                () -> this.runReverseHopper(),
                 () -> this.stop()
             ));
         }

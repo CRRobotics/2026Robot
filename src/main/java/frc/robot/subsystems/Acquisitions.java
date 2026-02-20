@@ -20,14 +20,14 @@ public class Acquisitions extends SubsystemBase {
     // only 1 spin
     private final SparkMax spinMotor;
     private final SparkMax armMotorLeft;
-    private final SparkMax armMotorRight;
+    //private final SparkMax armMotorRight;
 
     private final SparkClosedLoopController armPIDLeft;
     private final SparkClosedLoopController spinPID;
 
     private final AbsoluteEncoder armEncoder;
     private SparkMaxConfig armConfigLeft;
-    private SparkMaxConfig armConfigRight;
+    //private SparkMaxConfig armConfigRight;
     private SparkMaxConfig spinConfig;
     private Boolean armExtended;
     /**
@@ -36,23 +36,23 @@ public class Acquisitions extends SubsystemBase {
 
     public Acquisitions () {
         armConfigLeft = new SparkMaxConfig();
-        armConfigRight = new SparkMaxConfig();
+        //armConfigRight = new SparkMaxConfig();
         spinConfig = new SparkMaxConfig();
 
         spinConfig.idleMode(IdleMode.kCoast);
         armConfigLeft.idleMode(IdleMode.kBrake);
-        armConfigRight.idleMode(IdleMode.kBrake);
+        //armConfigRight.idleMode(IdleMode.kBrake);
         spinConfig.smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
         armConfigLeft.smartCurrentLimit(105);
-        armConfigRight.smartCurrentLimit(105);
+        //armConfigRight.smartCurrentLimit(105);
         
 
         spinMotor = new SparkMax(AcquisitionsConstants.aqSpinID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         armMotorLeft = new SparkMax(AcquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-        armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        //armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         
         armExtended = false;
-        armEncoder = armMotorRight.getAbsoluteEncoder();
+        armEncoder = armMotorLeft.getAbsoluteEncoder();
 
         spinConfig.closedLoop.p(AcquisitionsConstants.spinP);
         spinConfig.closedLoop.p(AcquisitionsConstants.spinI);
@@ -63,10 +63,10 @@ public class Acquisitions extends SubsystemBase {
         armConfigLeft.closedLoop.p(AcquisitionsConstants.armD);
         armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
-        armConfigRight.follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
+        //armConfigRight.follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
 
         armMotorLeft.configure(armConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        armMotorRight.configure(armConfigRight, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        //armMotorRight.configure(armConfigRight, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         spinMotor.configure(spinConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         armPIDLeft = armMotorLeft.getClosedLoopController();
@@ -85,14 +85,16 @@ public class Acquisitions extends SubsystemBase {
      */
 
     private void intake() {
-        spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
+        //spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
+        spinMotor.set(0.25);
     }
 
     /**
      * Sets motor speed to the eject speed defined in constants in order to eject fuel
      */
     private void eject() {
-        spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
+        //spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
+        spinMotor.set(-0.25);
     }
 
     private void armDown(){

@@ -138,15 +138,19 @@ public class RobotContainer {
         );
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-    m_operatorController.y().whileTrue(shooter.defaultShoot());
+    m_operatorController.y().whileTrue(shooter.defaultShoot().alongWith(feeder.runFeederCommand()));
     m_operatorController.a().whileTrue(feeder.runFeederCommand());
-    m_operatorController.b().whileTrue(turret.turnCommand());
-    m_operatorController.x().whileTrue(turret.reverseTurnCommand());
+    m_operatorController.b().whileTrue(acquisition.AcquisitionIntakeCommand());
+    m_operatorController.x().whileTrue(acquisition.AcquisitionEjectCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
+    m_operatorController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
+    m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+    m_operatorController.back().whileTrue(hopper.runHopperCommand());
+    m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
 
-    m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
-    m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
+    // m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
+    // m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
     
     //#TODO Test this

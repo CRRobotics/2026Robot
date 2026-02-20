@@ -19,11 +19,11 @@ public class Climb extends SubsystemBase {
      */
 
     private final TalonFX m_climb;
-    private final AnalogInput lidarSensor;
-    private final DigitalInput barLimit;
-    DigitalInput m_toplimitSwitch;
-    DigitalInput m_bottomlimitSwitch;
-    DigitalInput m_rungSwitch;
+    // private final AnalogInput lidarSensor;
+    // private final DigitalInput barLimit;
+    // DigitalInput m_toplimitSwitch;
+    // DigitalInput m_bottomlimitSwitch;
+    // DigitalInput m_rungSwitch;
     private Slot0Configs m_climbConfig;
     private TalonFXConfigurator m_climbConfigurator;
 
@@ -32,13 +32,13 @@ public class Climb extends SubsystemBase {
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
 
         m_climbConfigurator = m_climb.getConfigurator();
-        m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
-        m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
-        m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
+        // m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
+        // m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
+        // m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
 
-        lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
+        // lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
-        barLimit = new DigitalInput(ClimbConstants.barLimitID);
+        // barLimit = new DigitalInput(ClimbConstants.barLimitID);
 
         /**
          * Config motor
@@ -57,13 +57,13 @@ public class Climb extends SubsystemBase {
     /**
      * Starts climbing up if in range
      */
-    public void climbUp() {
-        if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
-            m_climb.set(ClimbConstants.climbSpeed);
-        } else {
-            m_climb.set(0);
-        }
-    }
+    // public void climbUp() {
+    //     if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
+    //         m_climb.set(ClimbConstants.climbSpeed);
+    //     } else {
+    //         m_climb.set(0);
+    //     }
+    // }
 
     public void resetEncoder() {
         m_climb.setPosition(0);
@@ -72,29 +72,29 @@ public class Climb extends SubsystemBase {
     /**
      * Starts climbing down if in range
      */
-    private boolean TopSwitchTrigger(){
-        return m_toplimitSwitch.get();
-    }
+    // private boolean TopSwitchTrigger(){
+    //     return m_toplimitSwitch.get();
+    // }
 
-    private boolean BottomSwitchTrigger(){
-        return m_bottomlimitSwitch.get();
-    }
+    // private boolean BottomSwitchTrigger(){
+    //     return m_bottomlimitSwitch.get();
+    // }
 
-    private boolean RungSwitchTrigger(){
-        return m_rungSwitch.get();
-    }
+    // private boolean RungSwitchTrigger(){
+    //     return m_rungSwitch.get();
+    // }
 
-    public Trigger topLimitSwitch = new Trigger (this::TopSwitchTrigger);
-    public Trigger bottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
-    public Trigger rungLimitSwitch = new Trigger (this::RungSwitchTrigger);
+    // public Trigger topLimitSwitch = new Trigger (this::TopSwitchTrigger);
+    // public Trigger bottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
+    // public Trigger rungLimitSwitch = new Trigger (this::RungSwitchTrigger);
 
-    public void climbDown() {
-        if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
-            m_climb.set(-ClimbConstants.climbSpeed);
-        } else {
-            m_climb.set(0);
-        }
-    }
+    // public void climbDown() {
+    //     if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
+    //         m_climb.set(-ClimbConstants.climbSpeed);
+    //     } else {
+    //         m_climb.set(0);
+    //     }
+    // }
 
     /**
      * Turns off motor
@@ -106,30 +106,30 @@ public class Climb extends SubsystemBase {
     /**
      * @return analog input of lidar sensor
      */
-    public double getLidarOutput() {
-        return lidarSensor.getVoltage();
-    }
+    // public double getLidarOutput() {
+    //     return lidarSensor.getVoltage();
+    // }
 
     /**
      * @return digital input of limit switch
      */
-    public boolean getLimitOutput() {
-        return barLimit.get();  
-    }
+    // public boolean getLimitOutput() {
+    //     return barLimit.get();  
+    // }
 
-    public Command climbExtend(){
-        return this.startEnd(
-            () -> this.climbUp(),
-            () -> this.stop()
-        );
-    }
+    // public Command climbExtend(){
+    //     return this.startEnd(
+    //         () -> this.climbUp(),
+    //         () -> this.stop()
+    //     );
+    // }
 
-    public Command climbRetract(){
-        return this.startEnd(
-            () -> this.climbDown(),
-            () -> this.stop()
-        );
-    }
+    // public Command climbRetract(){
+    //     return this.startEnd(
+    //         () -> this.climbDown(),
+    //         () -> this.stop()
+    //     );
+    // }
 
     //public Command turnCommand(){
         //return this.startEnd(

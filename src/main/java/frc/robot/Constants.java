@@ -66,11 +66,11 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
-    public static final int aqSpinID = 101;
-    public static final int aqArmLeftID = 102;
-    public static final int aqArmRightID = 103;
-    public static final int aqIntakeSpeed = 0;
-    public static final double armP = 9;
+    public static final int aqSpinID = 62;
+    public static final int aqArmLeftID = 61;
+    public static final int aqArmRightID = 60;
+    public static final double aqIntakeSpeed = 0.5;
+    public static final double armP = 1;
     public static final double armI = 0;
     public static final double armD = 0;
     public static final double armGearRatio = 81;
@@ -103,7 +103,8 @@ public final class Constants {
   }
 
   public static final class TurretConstants {
-    public static final int turretID = 23;
+    public static final int turretID = 13;
+    //public static final int otherturret = 56
     public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;
@@ -122,15 +123,15 @@ public final class Constants {
   }
 
   public static final class FeederConstants {
-    public static final int feederID = 105;
-    public static final double feederSpeed = -0.5;
+    public static final int feederID = 24;
+    public static final double feederSpeed = -1;
     public static final int feederMotorCANID = 24;
   }
   
   public static final class HopperConstants {
-    public static final int hopperID = 106;
-    public static final double hopperSpeed = 0.1;
-    public static final int hopperMotorCANID = 107;
+    public static final int hopperID = 23;
+    public static final double hopperSpeed = 1;
+    public static final int hopperMotorCANID = 23;
   }
 
   public static final class ModuleConstants {       
@@ -153,7 +154,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.025;
-    public static final int kOperatorControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
 
   //Not actually used for pathplanner
@@ -183,7 +184,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static int ShooterLeaderCANID = 20;
-    public static int ShooterFollowerCANID = 21;
+    public static int ShooterFollowerCANID = 56;
     public static int ShooterSpeedTopLimit = 100;
   }
   

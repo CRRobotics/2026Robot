@@ -31,7 +31,7 @@ public class Turret extends SubsystemBase {
     private final SparkClosedLoopController turretPID;
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
-    private DigitalInput turretZero;
+    //private DigitalInput turretZero;
     private double target;
     /**
      * Initiates motor
@@ -46,7 +46,7 @@ public class Turret extends SubsystemBase {
         turretEncoder = turretMotor.getEncoder();
         turretConfig = new SparkMaxConfig();
 
-        turretZero = new DigitalInput(TurretConstants.limitID);
+        //turretZero = new DigitalInput(TurretConstants.limitID);
     /**
      * Defines turretEncoder, turretMotor, turretConfig, and turretZero
      */
@@ -119,7 +119,8 @@ public class Turret extends SubsystemBase {
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */
     private boolean zeroTrigger(){
-        return turretZero.get();
+        return false;
+        //return turretZero.get();
     }
 
     public Trigger atZero = new Trigger(this::zeroTrigger);
