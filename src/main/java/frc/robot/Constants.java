@@ -69,7 +69,7 @@ public final class Constants {
     public static final int aqSpinID = 62;
     public static final int aqArmLeftID = 61;
     public static final int aqArmRightID = 60;
-    public static final double aqIntakeSpeed = 0.5;
+    public static final double aqIntakeSpeed = 0.75;
     public static final double armP = 1;
     public static final double armI = 0;
     public static final double armD = 0;
@@ -103,8 +103,8 @@ public final class Constants {
   }
 
   public static final class TurretConstants {
-    public static final int turretID = 13;
-    //public static final int otherturret = 56
+    public static final int turretLeaderID = 13;
+    public static final int turretFollowerID = 14;
     public static final double p = 0;
     public static final double i = 0;
     public static final double d = 0;

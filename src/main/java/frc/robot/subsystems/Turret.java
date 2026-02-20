@@ -41,7 +41,7 @@ public class Turret extends SubsystemBase {
     public Turret() {
 
 
-        turretMotor = new SparkMax(TurretConstants.turretID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        turretMotor = new SparkMax(TurretConstants.turretLeaderID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
         turretEncoder = turretMotor.getEncoder();
         turretConfig = new SparkMaxConfig();
@@ -74,11 +74,11 @@ public class Turret extends SubsystemBase {
     }
 
     private void turn(){
-        turretMotor.set(0.1);
+        turretMotor.set(0.5);
     }
 
     private void reverseTurn(){
-        turretMotor.set(-0.1);
+        turretMotor.set(-0.5);
     }
 
     /**

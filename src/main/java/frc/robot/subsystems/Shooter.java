@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
      * Makes the ShooterFollower actually follow the ShooterLeader
      */
         configShooterLeader.idleMode(IdleMode.kCoast);
-        configShooterLeader.closedLoop.pid(0.00001, 0.00, 0.00);
+        configShooterLeader.closedLoop.pid(0.001, 0.00, 0.00);
 
         //configShooterFollower.idleMode(IdleMode.kCoast);
     /**
@@ -65,6 +65,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println(this.getSpeed());
         SmartDashboard.putNumber("ShooterSpeed", this.getSpeed());
     }
 
@@ -105,7 +106,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command shootCommand(DoubleSupplier speed){
-        return this.run(() -> this.setSpeedRPM(speed.getAsDouble()));
+        return this.startEnd(
+            () -> this.setSpeedRPM(speed.getAsDouble()),
+            () -> this.stop()
+            );
     }
 }
 

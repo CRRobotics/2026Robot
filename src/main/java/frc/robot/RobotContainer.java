@@ -131,21 +131,21 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-MathUtil.applyDeadband(m_driverController.getLeftY() * Math.abs(m_driverController.getLeftY()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-MathUtil.applyDeadband(m_driverController.getLeftX() * Math.abs(m_driverController.getLeftX()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-    m_operatorController.y().whileTrue(shooter.defaultShoot().alongWith(feeder.runFeederCommand()));
+    m_operatorController.y().whileTrue(shooter.shootCommand(() -> 4000).alongWith(feeder.runFeederCommand()));
     m_operatorController.a().whileTrue(feeder.runFeederCommand());
-    m_operatorController.b().whileTrue(acquisition.AcquisitionIntakeCommand());
-    m_operatorController.x().whileTrue(acquisition.AcquisitionEjectCommand());
+    m_operatorController.b().whileTrue(turret.turnCommand());
+    m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
-    m_operatorController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
-    m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+    //m_operatorController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
+    //m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
     m_operatorController.back().whileTrue(hopper.runHopperCommand());
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
 
