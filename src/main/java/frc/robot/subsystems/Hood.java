@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -24,7 +25,7 @@ public class Hood extends SubsystemBase {
     private final SparkMax hoodMotor;
     private final SparkClosedLoopController hoodPID;
     private SparkMaxConfig hoodConfig;
-    private RelativeEncoder hoodEncoder;
+    private AbsoluteEncoder hoodEncoder;
     private DigitalInput hoodZero;
     private double target;
 
@@ -33,7 +34,7 @@ public class Hood extends SubsystemBase {
 
         hoodMotor = new SparkMax(HoodConstants.hoodID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
-        hoodEncoder = hoodMotor.getEncoder();
+        hoodEncoder = hoodMotor.getAbsoluteEncoder();
         hoodConfig = new SparkMaxConfig();
 
     /**
@@ -75,14 +76,14 @@ public class Hood extends SubsystemBase {
      * @param angle the angle to turn to
      */
     public void turnTo (double angle) {
-        hoodPID.setSetpoint(angle/360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
+        hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
     }
 
     /**
      * When the robot starts, the ____ gear ratio will probably be 1-1
      */
     public double getAngle(){
-        return hoodEncoder.getPosition() / HoodConstants.hoodGearRatio;
+        return hoodEncoder.getPosition() * 360 / HoodConstants.hoodGearRatio;
     }
 
     /**
@@ -90,13 +91,6 @@ public class Hood extends SubsystemBase {
      */
     private void stop(){
         hoodMotor.set(0);
-    }
-
-    /**
-     * This sets the speed of the hood to 0 when the stop is initiated
-     */
-    private void resetEncoder(){
-        hoodEncoder.setPosition(0);
     }
 
     @Override
@@ -131,14 +125,6 @@ public class Hood extends SubsystemBase {
         return this.startEnd(
             () -> this.reverseTurn(),
             () -> this.stop());
-    }
-
-    /**
-     * Supplies a command that resets the encoders for hood
-     * @return the command that resets the encoders for hood
-     */
-    public Command zeroCommand(){
-        return this.runOnce(() -> this.resetEncoder());
     }
 
     public Command turnToCommand(DoubleSupplier angle){

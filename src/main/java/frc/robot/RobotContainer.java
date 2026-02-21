@@ -162,7 +162,7 @@ public class RobotContainer {
     //   .alongWith(hopper.runHopperCommand()));
     
     m_driverController.a().whileTrue(turret.turnToCommand(() -> 90));
-    m_driverController.b().whileTrue(hood.turnToCommand(() -> 30));
+    m_driverController.b().whileTrue(hood.turnToCommand(() -> 90));
     m_driverController.x().whileTrue(shooter.shootCommand(() -> 90));
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());

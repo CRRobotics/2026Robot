@@ -115,10 +115,10 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int hoodID = 22;
-    public static final double p = 0;
-    public static final double i = 0;
+    public static final double p = 0.1;
+    public static final double i = 0.0005;
     public static final double d = 0;
-    public static final double hoodGearRatio = 9;
+    public static final double hoodGearRatio = 46/15;
     public static final int hoodTolerance = 0;
   }
 
@@ -130,7 +130,7 @@ public final class Constants {
   
   public static final class HopperConstants {
     public static final int hopperID = 23;
-    public static final double hopperSpeed = 1;
+    public static final double hopperSpeed = 0.5;
     public static final int hopperMotorCANID = 23;
   }
 

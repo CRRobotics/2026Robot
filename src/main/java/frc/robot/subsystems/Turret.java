@@ -93,7 +93,7 @@ public class Turret extends SubsystemBase {
      * When the robot starts, the turrest gear ratio will probably be 1-1
      */
     public double getAngle(){
-        return turretEncoder.getPosition() / TurretConstants.turretGearRatio;
+        return turretEncoder.getPosition() * 360 / TurretConstants.turretGearRatio;
     }
 
     /**
