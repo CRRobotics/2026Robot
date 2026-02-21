@@ -34,7 +34,8 @@ public class Shooter extends SubsystemBase {
      * Makes the ShooterFollower actually follow the ShooterLeader
      */
         configShooterLeader.idleMode(IdleMode.kCoast);
-        configShooterLeader.closedLoop.pid(0.001, 0.00, 0.00);
+        configShooterLeader.closedLoop.pid(0.001, 0.00, 0.00).feedForward.kV(0.01);
+
 
         //configShooterFollower.idleMode(IdleMode.kCoast);
     /**
