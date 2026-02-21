@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.servohub.ServoChannel;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -66,6 +68,11 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
+    public static final int servoChannel = 1;
+    public static final int servoLength = 1;
+    public static final int servoSpeed = 1;
+    public static final double servoOpen = 1;
+    public static final double servoClosed = 2;
     public static final int aqSpinID = 62;
     public static final int aqArmLeftID = 61;
     public static final int aqArmRightID = 60;

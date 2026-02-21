@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
+import frc.robot.LinearServo;
 import frc.robot.Constants.AcquisitionsConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +24,7 @@ public class Acquisitions extends SubsystemBase {
 
     private final SparkClosedLoopController armPIDLeft;
     private final SparkClosedLoopController spinPID;
+    //private final LinearServo servo;
 
     private final AbsoluteEncoder armEncoder;
     private SparkMaxConfig armConfigLeft;
@@ -38,6 +39,7 @@ public class Acquisitions extends SubsystemBase {
         armConfigLeft = new SparkMaxConfig();
         //armConfigRight = new SparkMaxConfig();
         spinConfig = new SparkMaxConfig();
+        //servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
 
         spinConfig.idleMode(IdleMode.kCoast);
         armConfigLeft.idleMode(IdleMode.kBrake);
@@ -108,6 +110,14 @@ public class Acquisitions extends SubsystemBase {
     private void armStop(){
         armMotorLeft.set(0);
     }
+    /**Commands for opening and closing servo */
+    //public void dock(){
+        //servo.setPosition(AcquisitionsConstants.servoOpen);
+    //}
+
+    //public void undock(){
+        //servo.setPosition(AcquisitionsConstants.servoClosed);
+    //}
 
     // #todo angle has intended units of degrees, unsure what kind of units position control uses
     /**
