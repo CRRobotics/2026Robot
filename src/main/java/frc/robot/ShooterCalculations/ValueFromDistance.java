@@ -6,7 +6,7 @@ import frc.robot.Constants.ShooterConstants;
 
 public class ValueFromDistance {
 
-    public static TreeMap<Double, AngleSpeed> shootMap = new TreeMap<>();
+    public static TreeMap<Double, AngleSpeedTime> shootMap = new TreeMap<>();
     static {
         //put values here
     }
@@ -15,9 +15,9 @@ public class ValueFromDistance {
      * Calculates the speed and angle at which we should shoot based on how far we are
      * @author Kai Kwee-Hallem (with lots of help from Zach & the template of the 2024 code)
      * @param distance
-     * @return AngleSpeed
+     * @return AngleSpeedTime
      */
-    public static AngleSpeed getAngleSpeed(double distance) {
+    public static AngleSpeedTime getAngleSpeedTime(double distance) {
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
             double floorDistance = shootMap.floorKey(distance);
             double ceilingDistance = shootMap.ceilingKey(distance);
@@ -27,8 +27,9 @@ public class ValueFromDistance {
         }
             double speed = shootMap.get(floorDistance).getSpeed() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getSpeed() - shootMap.get(floorDistance).getSpeed()));
             double angle = shootMap.get(floorDistance).getAngle() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getAngle() - shootMap.get(floorDistance).getAngle()));
+            double time = shootMap.get(floorDistance).getTime() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getTime() - shootMap.get(floorDistance).getTime()));
             System.out.println("WORKING!");
-            return new AngleSpeed(angle, speed);
+            return new AngleSpeedTime(angle, speed, time);
         }
         else if (distance > shootMap.lastKey() && distance < ShooterConstants.ShooterSpeedTopLimit){
             /**
@@ -45,7 +46,11 @@ public class ValueFromDistance {
             double Anglea = (distance - lastKey)/(lastKey - shootMap.lowerKey(lastKey));
             double Angleb = (shootMap.get(lastKey).getAngle() - shootMap.get(shootMap.lowerKey(lastKey)).getAngle());
             double Anglec = (Anglea*Angleb) + shootMap.get(lastKey).getAngle();
-            return new AngleSpeed(Anglec, Speedc);
+            /**Same thing for time. Apparently visions wants this, idk */
+            double Timea = (distance - lastKey)/(lastKey - shootMap.lowerKey(lastKey));
+            double Timeb = (shootMap.get(lastKey).getTime() - shootMap.get(shootMap.lowerKey(lastKey)).getTime());
+            double Timec = (Timea*Timeb) + shootMap.get(lastKey).getTime();
+            return new AngleSpeedTime(Anglec, Speedc, Timec);
         }
         else if (distance < shootMap.firstKey()){
             /**
@@ -59,14 +64,18 @@ public class ValueFromDistance {
             double Anglea = (distance - firstKey)/(firstKey - shootMap.higherKey(firstKey));
             double Angleb = (shootMap.get(firstKey).getAngle() - shootMap.get(shootMap.higherKey(firstKey)).getAngle());
             double Anglec = (Anglea*Angleb) + shootMap.get(firstKey).getAngle();
-            return new AngleSpeed(Anglec, Speedc);
+            /**For time again */
+            double Timea = (distance - firstKey)/(firstKey - shootMap.higherKey(firstKey));
+            double Timeb = (shootMap.get(firstKey).getTime() - shootMap.get(shootMap.higherKey(firstKey)).getTime());
+            double Timec = (Timea*Timeb) + shootMap.get(firstKey).getTime();
+            return new AngleSpeedTime(Anglec, Speedc, Timec);
         }
         else {
             /**
              * backup case for when we're shooting farther than the limit value defined in constants (100 by default; don't ask 100 what, I don't know either.)
              * Shoots as far as it would if the distance was equal to the largest value in the treemap
              */
-            return new AngleSpeed(shootMap.get(shootMap.lastKey()).getAngle(), shootMap.get(shootMap.lastKey()).getSpeed());
+            return new AngleSpeedTime(shootMap.get(shootMap.lastKey()).getAngle(), shootMap.get(shootMap.lastKey()).getSpeed(), shootMap.get(shootMap.lastKey()).getTime());
         }
     }
 

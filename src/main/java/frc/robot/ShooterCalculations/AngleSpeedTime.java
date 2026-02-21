@@ -3,11 +3,12 @@ package frc.robot.ShooterCalculations;
 /**
  * Wrapper class. I still don't know why this is necessary, but VScode gives me errors if I don't add it, so whatever.
  */
-public class AngleSpeed {
+public class AngleSpeedTime {
     private double angle;
     private double speed;
+    private double time;
     
-    public AngleSpeed(double angle, double speed) {
+    public AngleSpeedTime(double angle, double speed, double time) {
         this.angle = angle;
         this.speed = speed;
     }
@@ -18,5 +19,9 @@ public class AngleSpeed {
 
     public double getSpeed() {
         return speed;
+    }
+
+    public double getTime() {
+        return time;
     }
 }
