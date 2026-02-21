@@ -11,6 +11,7 @@ public class AngleSpeedTime {
     public AngleSpeedTime(double angle, double speed, double time) {
         this.angle = angle;
         this.speed = speed;
+        this.time = time;
     }
 
     public double getAngle() {
