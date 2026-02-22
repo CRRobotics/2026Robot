@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightTurnMoveRight"
+            "pathName": "Forward1Robot"
           }
         }
       ]

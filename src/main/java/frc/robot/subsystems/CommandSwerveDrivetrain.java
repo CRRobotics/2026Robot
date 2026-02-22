@@ -145,6 +145,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         configureAutoBuilder();
         field = new Field2d();
+        SmartDashboard.putData("Field",field);
     }
 
     /**
@@ -171,6 +172,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         configureAutoBuilder();
         field = new Field2d();
+        SmartDashboard.putData("Field",field);
     }
 
     /**
@@ -205,6 +207,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         configureAutoBuilder();
         field = new Field2d();
+        SmartDashboard.putData("Field",field); 
     }
 
     private void configureAutoBuilder() {
@@ -287,7 +290,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        SmartDashboard.putData("Field",field);
         field.setRobotPose(this.getState().Pose);
     }
 
