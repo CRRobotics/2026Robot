@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
@@ -33,6 +35,7 @@ public class Shooter extends SubsystemBase {
     private final MutVoltage m_appliedVoltage;
     private final MutAngle m_angle;
     private final MutAngularVelocity m_velocity;
+    private double target;
 
 
     private SparkMaxConfig configShooterLeader;
@@ -109,6 +112,7 @@ public class Shooter extends SubsystemBase {
                     // Tell SysId to make generated commands require this subsystem, suffix test state in
                     // WPILog with this subsystem's name ("shooter")
                     this));
+        target = 0.0;
     }
 
     @Override
@@ -123,7 +127,7 @@ public class Shooter extends SubsystemBase {
      */
     private void setSpeed(double speed) {
         shooterLeader.set(speed);
-        
+        target = speed;
     }
 
     /**
@@ -139,6 +143,12 @@ public class Shooter extends SubsystemBase {
 
     }
     
+    public boolean atSpeed(){
+        return Math.abs(this.getSpeed() - target) > ShooterConstants.ShooterSpeedTopLimit;
+    }
+    
+    public Trigger shooterDone = new Trigger(() -> this.atSpeed());
+
     /**
      * Stops the shooter motors.
      */

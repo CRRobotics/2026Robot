@@ -100,8 +100,8 @@ public class RobotContainer {
     climb = new Climb();
     
     // Configure the button bindings
-    configureButtonBindings();
-
+    configureRealBindings();
+    configureTestBindings();
     
     // Run at the beginning of match?
     // turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
@@ -125,7 +125,54 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureRealBindings() {
+
+    drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-MathUtil.applyDeadband(m_driverController.getLeftY() * Math.abs(m_driverController.getLeftY()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-MathUtil.applyDeadband(m_driverController.getLeftX() * Math.abs(m_driverController.getLeftX()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+            
+   // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
+    m_operatorController.y().whileTrue(shooter.shootCommand(() -> 4000).alongWith(feeder.runFeederCommand()));
+    m_operatorController.a().whileTrue(feeder.runFeederCommand());
+    m_operatorController.b().whileTrue(turret.turnCommand());
+    m_operatorController.x().whileTrue(turret.reverseTurnCommand());
+    m_operatorController.leftBumper().whileTrue(hood.turnCommand());
+    m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
+    //m_operatorController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
+    //m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+    m_operatorController.back().whileTrue(hopper.runHopperCommand());
+    m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
+
+    // m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
+    // m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
+    //TODO: add command to drive forward until rung switch is activated
+    
+    //#TODO Test this
+    // m_operatorController.back()
+    //   .whileTrue(turret.turnToHub(() -> m_robotDrive.getPose())
+    //   .alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getAngle()))
+    //   .andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
+    //   .andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getSpeed()))
+    //   .andThen(Commands.waitUntil(shooter.maxSpeed))
+    //   .alongWith(feeder.runFeederCommand())
+    //   .alongWith(hopper.runHopperCommand()));
+    
+    m_driverController.a().whileTrue(turret.turnToCommand(() -> 90));
+    m_driverController.b().whileTrue(hood.turnToCommand(() -> 90));
+    m_driverController.x().whileTrue(shooter.shootCommand(() -> 90));
+    m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
+    m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
+    m_driverController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
+    m_driverController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+    
+  }
+
+  private void configureTestBindings() {
 
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
