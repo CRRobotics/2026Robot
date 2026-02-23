@@ -139,7 +139,7 @@ public class Acquisitions extends SubsystemBase {
      * @return
      */
     public double getArmAngle(){
-        return armEncoder.getPosition() * 360;
+        return armEncoder.getPosition() * 360 * AcquisitionsConstants.armGearRatio;
     }
 
     /**

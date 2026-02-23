@@ -43,7 +43,7 @@ public class Hood extends SubsystemBase {
         hoodConfig.closedLoop.p(HoodConstants.p);
         hoodConfig.closedLoop.i(HoodConstants.i);
         hoodConfig.closedLoop.d(HoodConstants.d);
-        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
+        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
     /**
      * Configures the pid as well as the feedbackSensor
      */
