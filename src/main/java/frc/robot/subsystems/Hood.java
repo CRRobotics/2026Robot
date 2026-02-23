@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Value;
+
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import frc.robot.ShooterCalculations.AngleSpeedTime;
+import frc.robot.ShooterCalculations.ValueFromDistance;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -43,7 +47,7 @@ public class Hood extends SubsystemBase {
         hoodConfig.closedLoop.p(HoodConstants.p);
         hoodConfig.closedLoop.i(HoodConstants.i);
         hoodConfig.closedLoop.d(HoodConstants.d);
-        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
+        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
     /**
      * Configures the pid as well as the feedbackSensor
      */
@@ -77,6 +81,7 @@ public class Hood extends SubsystemBase {
      */
     public void turnTo (double angle) {
         hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
+        target = angle;
     }
 
     /**
