@@ -56,13 +56,13 @@ public class Acquisitions extends SubsystemBase {
         armExtended = false;
         armEncoder = armMotorLeft.getAbsoluteEncoder();
 
-        spinConfig.closedLoop.p(AcquisitionsConstants.spinP);
-        spinConfig.closedLoop.p(AcquisitionsConstants.spinI);
-        spinConfig.closedLoop.p(AcquisitionsConstants.spinD);
+        /**
+         * MAKE SURE TO ADJUST THESE FEED FORWARD VALUES BEFORE RUNNING! THEY ARE CURRENTLY SET TO 1
+         */
+        spinConfig.closedLoop.pid(AcquisitionsConstants.spinP, AcquisitionsConstants.spinI, AcquisitionsConstants.spinD).feedForward.kV(AcquisitionsConstants.SpinFeedForward);
+        armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
 
-        armConfigLeft.closedLoop.p(AcquisitionsConstants.armP);
-        armConfigLeft.closedLoop.p(AcquisitionsConstants.armI);
-        armConfigLeft.closedLoop.p(AcquisitionsConstants.armD);
+        armConfigLeft.closedLoop.pid(AcquisitionsConstants.armP, AcquisitionsConstants.armI, AcquisitionsConstants.armD).feedForward.kV(AcquisitionsConstants.ArmFeedForward);
         armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
         //armConfigRight.follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
@@ -88,7 +88,7 @@ public class Acquisitions extends SubsystemBase {
 
     private void intake() {
         //spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
-        spinMotor.set(0.25);
+        spinPID.setSetpoint(AcquisitionsConstants.IntakeSpeed,ControlType.kVelocity);
     }
 
     /**
@@ -96,15 +96,15 @@ public class Acquisitions extends SubsystemBase {
      */
     private void eject() {
         //spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
-        spinMotor.set(-0.25);
+        spinPID.setSetpoint(AcquisitionsConstants.EjectSpeed,ControlType.kVelocity);
     }
 
     private void armDown(){
-        armMotorLeft.set(0.1);
+        armMotorLeft.set(AcquisitionsConstants.ArmDownSpeed);
     }
 
     private void armUp(){
-        armMotorLeft.set(-0.1);
+        armMotorLeft.set(AcquisitionsConstants.ArmUpSpeed);
     }
 
     private void armStop(){
@@ -132,11 +132,8 @@ public class Acquisitions extends SubsystemBase {
      * Returns the speed of the intake motors, which is equal to the aqIntakeSpeed set in constants
      * NOTE: the aqIntakeSpeed is set to 0 at the time of writing!
      * @return
+     * Removed at 2/23/26 due to being unnecessary.
      */
-    public double getSpeed(){
-        return AcquisitionsConstants.aqIntakeSpeed;
-    }
-
     /**
      * Returns the angle of the arm from the encoder
      * @return

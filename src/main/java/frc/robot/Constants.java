@@ -68,6 +68,12 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
+    public static final double ArmUpSpeed = -0.1;
+    public static final double ArmDownSpeed = 0.1;
+    public static final double EjectSpeed = -0.25;
+    public static final double IntakeSpeed = 0.25;
+    public static final double ArmFeedForward = 1;
+    public static final double SpinFeedForward = 1;
     public static final int servoChannel = 1;
     public static final int servoLength = 1;
     public static final int servoSpeed = 1;
