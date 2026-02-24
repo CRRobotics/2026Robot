@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
-
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.PersistMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;

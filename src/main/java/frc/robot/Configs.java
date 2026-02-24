@@ -1,3 +1,6 @@
+/**
+ * Other than the MAXSwerveModule, this file is currently NOT USED so changing parameters in here will do nothing. :)
+ */
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
