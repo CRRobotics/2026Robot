@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class Turret extends SubsystemBase {
 
     private final SparkMax turretMotor;
-    private final boolean IsRed;
+    private boolean IsRed;
     private final SparkClosedLoopController turretPID;
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
@@ -57,18 +57,7 @@ public class Turret extends SubsystemBase {
         turretConfig.closedLoop.i(TurretConstants.i);
         turretConfig.closedLoop.d(TurretConstants.d);
         turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            if (alliance.get() == DriverStation.Alliance.Red){
-                IsRed = true;
-            }
-            else {
-                IsRed = false;
-            }
-        }
-        else {
-            IsRed= false;
-        };
+        CheckAlliance();
     /**
      * Configures the pid as well as the feedbackSensor
      */
@@ -96,6 +85,20 @@ public class Turret extends SubsystemBase {
         turretMotor.set(-0.5);
     }
 
+    private void CheckAlliance(){
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red){
+                IsRed = true;
+            }
+            else {
+                IsRed = false;
+            }
+        }
+        else {
+            IsRed= false;
+        };
+    }
     /**
      * Turns the turret to a given angle
      * @param angle the angle to turn to
@@ -118,7 +121,7 @@ public class Turret extends SubsystemBase {
     private void stop(){
         turretMotor.set(0);
     }
-    
+
     /**
      * This sets the speed of the turret to 0 when the stop is initiated
      */
@@ -178,7 +181,7 @@ public class Turret extends SubsystemBase {
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
         Pose2d curPose = pose.get();
-
+        CheckAlliance();
         //#todo NOT DONE
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
         // turn to angle alpha = 180 degrees - theta, clockwise negitive
@@ -192,6 +195,7 @@ public class Turret extends SubsystemBase {
     }
 
     public Command turnToHub(Supplier<Pose2d> pose){
+        CheckAlliance();
         Pose2d curPose = pose.get();
         // Blue alliance angle calculations
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
