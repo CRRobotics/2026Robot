@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -17,7 +18,7 @@ public class Feeder extends SubsystemBase {
      */
 
     private final SparkMax feederMotor;
-
+    private final RelativeEncoder feederEncoder;
     private SparkMaxConfig configFeeder;
 
         public Feeder () {
@@ -25,6 +26,7 @@ public class Feeder extends SubsystemBase {
             configFeeder.idleMode(IdleMode.kCoast);
             feederMotor = new SparkMax(FeederConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             feederMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            feederEncoder = feederMotor.getEncoder();
         }
 
         /**
@@ -49,7 +51,7 @@ public class Feeder extends SubsystemBase {
          * @return speed feeder runs at
          */
         public double getFeederSpeed(){
-            return FeederConstants.feederSpeed;
+            return feederEncoder.getVelocity();
         }
 
         /**
