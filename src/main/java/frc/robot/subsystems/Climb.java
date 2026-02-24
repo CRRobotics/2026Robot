@@ -21,9 +21,9 @@ public class Climb extends SubsystemBase {
     private final TalonFX m_climb;
     // private final AnalogInput lidarSensor;
     // private final DigitalInput barLimit;
-    // DigitalInput m_toplimitSwitch;
-    // DigitalInput m_bottomlimitSwitch;
-    // DigitalInput m_rungSwitch;
+    DigitalInput m_toplimitSwitch;
+    DigitalInput m_bottomlimitSwitch;
+    DigitalInput m_rungSwitch;
     private Slot0Configs m_climbConfig;
     private TalonFXConfigurator m_climbConfigurator;
 
@@ -32,9 +32,9 @@ public class Climb extends SubsystemBase {
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
 
         m_climbConfigurator = m_climb.getConfigurator();
-        // m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
-        // m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
-        // m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
+        m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
+        m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
+        m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
 
         // lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 

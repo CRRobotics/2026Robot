@@ -101,8 +101,8 @@ public final class Constants {
     public static final int TopLimitSwitchID = 0;
     public static final int BottomLimitSwitchID = 1;
     public static final int RungSwitchID = 2;
-    public static final int lidarSensorID = 0;
-    public static final int barLimitID = 0;
+    public static final int lidarSensorID = 3;
+    public static final int barLimitID = 4;
 
     public static final double climbSpeed = 0;
 
@@ -122,7 +122,7 @@ public final class Constants {
     public static final double i = 0;
     public static final double d = 0;
     public static final double turretGearRatio = 100;
-    public static final int limitID = 0;
+    public static final int limitID = 5;
     public static final int turretTolerance = 0;
   }
 
@@ -133,6 +133,7 @@ public final class Constants {
     public static final double d = 0;
     public static final double hoodGearRatio = 46/15;
     public static final int hoodTolerance = 0;
+    public static final int zeroID = 6;
   }
 
   public static final class FeederConstants {

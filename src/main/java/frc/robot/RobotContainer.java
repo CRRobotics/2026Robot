@@ -98,9 +98,12 @@ public class RobotContainer {
     feeder = new Feeder();
     hood = new Hood();
     climb = new Climb();
+
+    SmartDashboard.putNumber("Hood Angle", 0);
+    SmartDashboard.putNumber("Shoot Speed", 0);
     
     // Configure the button bindings
-    configureRealBindings();
+    //configureRealBindings();
     configureTestBindings();
     
     // Run at the beginning of match?
@@ -184,7 +187,13 @@ public class RobotContainer {
         );
             
    // new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(hopper.runHopperCommand()).alongWith(feeder.runFeederCommand()));
-    m_operatorController.y().whileTrue(shooter.shootCommand(() -> 4000).alongWith(feeder.runFeederCommand()));
+    m_operatorController.y()
+      .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Hood Angle", 0))
+      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Shoot Speed", 0)))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand()));
+    m_operatorController.y().onFalse(shooter.shootFinished());
+
     m_operatorController.a().whileTrue(feeder.runFeederCommand());
     m_operatorController.b().whileTrue(turret.turnCommand());
     m_operatorController.x().whileTrue(turret.reverseTurnCommand());
@@ -208,14 +217,15 @@ public class RobotContainer {
     //   .alongWith(feeder.runFeederCommand())
     //   .alongWith(hopper.runHopperCommand()));
     
-    m_driverController.a().whileTrue(turret.turnToCommand(() -> 90));
-    m_driverController.b().whileTrue(hood.turnToCommand(() -> 90));
-    m_driverController.x().whileTrue(shooter.shootCommand(() -> 90));
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
     m_driverController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
     
+  }
+
+  public void configureDefaults(){
+    hood.atZero.onTrue(hood.zeroHoodCommand());
   }
 
   public Command getAutonomousCommand(){

@@ -1,15 +1,10 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Value;
-
 import java.util.function.DoubleSupplier;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import frc.robot.ShooterCalculations.AngleSpeedTime;
-import frc.robot.ShooterCalculations.ValueFromDistance;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -29,17 +24,16 @@ public class Hood extends SubsystemBase {
     private final SparkMax hoodMotor;
     private final SparkClosedLoopController hoodPID;
     private SparkMaxConfig hoodConfig;
-    private AbsoluteEncoder hoodEncoder;
+    private RelativeEncoder hoodEncoder;
     private DigitalInput hoodZero;
     private double target;
 
     public Hood() {
 
-
         hoodMotor = new SparkMax(HoodConstants.hoodID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-
-        hoodEncoder = hoodMotor.getAbsoluteEncoder();
+        hoodEncoder = hoodMotor.getEncoder();
         hoodConfig = new SparkMaxConfig();
+        hoodZero = new DigitalInput(HoodConstants.zeroID);
 
     /**
      * Defines hoodEncoder, hoodMotor, hoodConfig, and hoodZero
@@ -98,6 +92,10 @@ public class Hood extends SubsystemBase {
         hoodMotor.set(0);
     }
 
+    private void zeroHood(){
+        hoodEncoder.setPosition(0);
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("HoodAngle", this.getAngle());
@@ -106,11 +104,15 @@ public class Hood extends SubsystemBase {
     /**
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */
-    private boolean zeroTrigger(){
+    private boolean atLimit(){
         return hoodZero.get();
     }
 
-    public Trigger atZero = new Trigger(this::zeroTrigger);
+    public Trigger atZero = new Trigger(this::atLimit);
+
+    public Command zeroHoodCommand(){
+        return runOnce(() -> this.zeroHood());
+    }
 
     /**
      * This sets up the triggers for the hood. 
