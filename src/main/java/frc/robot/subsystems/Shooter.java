@@ -145,7 +145,7 @@ public class Shooter extends SubsystemBase {
     }
     
     public boolean atSpeed(){
-        return Math.abs(this.getSpeed() - target) > ShooterConstants.ShooterSpeedTopLimit;
+        return Math.abs(this.getSpeed() - target) > ShooterConstants.ShooterTolerance;
     }
     
     public Trigger shooterDone = new Trigger(() -> this.atSpeed());

@@ -205,6 +205,11 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
     m_driverController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+
+    // Pre-Match Checklist functions
+    SmartDashboard.putData("Zero Turret", turret.resetTurretCommand()
+      .until(turret.atZero)
+      .andThen(turret.zeroTurretCommand()));
     
   }
 

@@ -121,7 +121,7 @@ public final class Constants {
     public static final double d = 0;
     public static final double turretGearRatio = 100;
     public static final int limitID = 5;
-    public static final int turretTolerance = 0;
+    public static final double turretTolerance = 0.5;
   }
 
   public static final class HoodConstants {
@@ -130,7 +130,7 @@ public final class Constants {
     public static final double i = 0.0005;
     public static final double d = 0;
     public static final double hoodGearRatio = 46/15;
-    public static final int hoodTolerance = 0;
+    public static final double hoodTolerance = 0.1;
     public static final int zeroID = 6;
   }
 
@@ -197,13 +197,14 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
+    public static final double ShooterTolerance = 100;
+    public static final double ShooterSpeedTopLimit = 100;
     public static double ShooterP = 0.0005;
     public static double ShooterI = 0.000000005;
     public static double ShooterD = 0.0;
     public static double ShooterFFW = 0.00016;
     public static int ShooterLeaderCANID = 20;
     public static int ShooterFollowerCANID = 56;
-    public static int ShooterSpeedTopLimit = 100;
   }
   
 }

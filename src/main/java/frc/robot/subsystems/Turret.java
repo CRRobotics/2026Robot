@@ -16,6 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,7 +33,7 @@ public class Turret extends SubsystemBase {
     private final SparkClosedLoopController turretPID;
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
-    //private DigitalInput turretZero;
+    private DigitalInput turretZero;
     private double target;
     /**
      * Initiates motor
@@ -123,7 +124,7 @@ public class Turret extends SubsystemBase {
     /**
      * This sets the speed of the turret to 0 when the stop is initiated
      */
-    private void resetEncoder(){
+    private void zeroTurret(){
         turretEncoder.setPosition(0);
     }
 
@@ -136,14 +137,14 @@ public class Turret extends SubsystemBase {
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */
     private boolean zeroTrigger(){
-        return false;
-        //return turretZero.get();
+        return turretZero.get();
     }
 
-    public Trigger atZero = new Trigger(this::zeroTrigger);
     /**
      * This sets up the triggers for the turret. 
      */
+    public Trigger atZero = new Trigger(this::zeroTrigger);
+
     public Command turnCommand(){
         return this.startEnd(
             () -> this.turn(),
@@ -173,8 +174,15 @@ public class Turret extends SubsystemBase {
      * Supplies a command that resets the encoders for turret
      * @return the command that resets the encoders for turret
      */
-    public Command zeroCommand(){
-        return this.runOnce(() -> this.resetEncoder());
+    public Command zeroTurretCommand(){
+        return this.runOnce(() -> this.zeroTurret());
+    }
+
+    public Command resetTurretCommand(){
+        return this.startEnd(
+            () -> this.reverseTurn(),
+            () -> this.stop()
+        );
     }
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
