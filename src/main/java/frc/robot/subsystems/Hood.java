@@ -1,15 +1,9 @@
 package frc.robot.subsystems;
-
-import static edu.wpi.first.units.Units.Value;
-
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import frc.robot.ShooterCalculations.AngleSpeedTime;
-import frc.robot.ShooterCalculations.ValueFromDistance;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
