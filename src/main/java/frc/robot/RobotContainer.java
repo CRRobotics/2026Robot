@@ -87,6 +87,7 @@ public class RobotContainer {
     // Configure the button bindings
     //configureRealBindings();
     configureTestBindings();
+    configureDefaults();
     
     // Run at the beginning of match?
     // turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
