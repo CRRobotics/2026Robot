@@ -17,6 +17,8 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class Turret extends SubsystemBase {
 
     private final SparkMax turretMotor;
+    private final boolean IsRed;
     private final SparkClosedLoopController turretPID;
     private SparkMaxConfig turretConfig;
     private RelativeEncoder turretEncoder;
@@ -54,6 +57,18 @@ public class Turret extends SubsystemBase {
         turretConfig.closedLoop.i(TurretConstants.i);
         turretConfig.closedLoop.d(TurretConstants.d);
         turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red){
+                IsRed = true;
+            }
+            else {
+                IsRed = false;
+            }
+        }
+        else {
+            IsRed= false;
+        };
     /**
      * Configures the pid as well as the feedbackSensor
      */
@@ -87,6 +102,7 @@ public class Turret extends SubsystemBase {
      */
     private void turnTo (double angle) {
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
+        target=angle;
     }
 
     /**
@@ -102,7 +118,7 @@ public class Turret extends SubsystemBase {
     private void stop(){
         turretMotor.set(0);
     }
-
+    
     /**
      * This sets the speed of the turret to 0 when the stop is initiated
      */
@@ -167,7 +183,12 @@ public class Turret extends SubsystemBase {
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
         // turn to angle alpha = 180 degrees - theta, clockwise negitive
         // 180 degrees becuase turret needs to point 180 degrees, field relative
-        return this.runOnce(() -> this.turnTo(180 - curPose.getRotation().getDegrees()));
+        if (IsRed == false){
+            return this.runOnce(() -> this.turnTo(180 - curPose.getRotation().getDegrees()));
+        }
+        else {
+            return this.runOnce(() -> this.turnTo(-(180 - curPose.getRotation().getDegrees())));
+        }
     }
 
     public Command turnToHub(Supplier<Pose2d> pose){
@@ -176,7 +197,13 @@ public class Turret extends SubsystemBase {
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.hubY - curPose.getY())/(FieldConstants.hubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+        if (IsRed == true){
+            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.redhubY - curPose.getY())/(FieldConstants.redhubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+        }
+        else {
+            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - curPose.getY())/(FieldConstants.bluehubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+
+        }
     }
 
 }

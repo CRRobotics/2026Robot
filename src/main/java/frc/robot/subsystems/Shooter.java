@@ -8,6 +8,7 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -51,7 +52,8 @@ public class Shooter extends SubsystemBase {
      * Makes the ShooterFollower actually follow the ShooterLeader
      */
         configShooterLeader.idleMode(IdleMode.kCoast);
-        configShooterLeader.closedLoop.pid(0.0005, 0.000000005, 0.00).feedForward.kV(0.00016);
+        configShooterLeader.closedLoop.pid(ShooterConstants.ShooterP, ShooterConstants.ShooterI, ShooterConstants.ShooterD).feedForward.kV(ShooterConstants.ShooterFFW);
+        configShooterLeader.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
 
         //configShooterFollower.idleMode(IdleMode.kCoast);

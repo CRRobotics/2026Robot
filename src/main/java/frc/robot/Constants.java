@@ -191,11 +191,17 @@ public final class Constants {
   }
 
   public static final class FieldConstants {
-    public static final double hubX = 0;
-    public static final double hubY = 0;
+    public static final double redhubX = 0;
+    public static final double redhubY = 0;
+    public static final double bluehubX = 0;
+    public static final double bluehubY = 0;
   }
 
   public static final class ShooterConstants {
+    public static double ShooterP = 0.0005;
+    public static double ShooterI = 0.000000005;
+    public static double ShooterD = 0.0;
+    public static double ShooterFFW = 0.00016;
     public static int ShooterLeaderCANID = 20;
     public static int ShooterFollowerCANID = 56;
     public static int ShooterSpeedTopLimit = 100;
