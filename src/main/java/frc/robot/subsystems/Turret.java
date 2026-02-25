@@ -76,13 +76,25 @@ public class Turret extends SubsystemBase {
         target = 0;
     }
 
+    /**
+     * starts turning turret at speed
+     */
+
     private void turn(){
         turretMotor.set(0.5);
     }
 
+    /**
+     * starts turning turret at reverse speed
+     */
+
     private void reverseTurn(){
         turretMotor.set(-0.5);
     }
+
+    /**
+     * checks whether alliance is towards red is blue, sets variable IsRed
+     */
 
     private void CheckAlliance(){
         var alliance = DriverStation.getAlliance();
@@ -145,6 +157,10 @@ public class Turret extends SubsystemBase {
      */
     public Trigger atZero = new Trigger(this::zeroTrigger);
 
+    /**
+     * @return creates command that turns turret motor
+     */
+
     public Command turnCommand(){
         return this.startEnd(
             () -> this.turn(),
@@ -152,16 +168,33 @@ public class Turret extends SubsystemBase {
         );
     }
 
+    /**
+     * @return is turret at specified angle?
+     */
+
     private boolean atAngle(){
         return Math.abs(this.getAngle() - target) < TurretConstants.turretTolerance;
     }
 
+    /**
+     * trigger for turret being finished
+     */
+
     public Trigger turretDone = new Trigger(() -> this.atAngle());
     
+    /**
+     * @param angle supplier that gives angle in double degrees
+     * @return creates command that turns turret to angle
+     */
+
     public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(
             () -> this.turnTo(angle.getAsDouble()));
     }
+
+    /**
+     * @return creates command that turns turret in reverse
+     */
 
     public Command reverseTurnCommand(){
         return this.startEnd(
@@ -178,12 +211,21 @@ public class Turret extends SubsystemBase {
         return this.runOnce(() -> this.zeroTurret());
     }
 
+    /**
+     * @return creates command that resets turret
+     */
+
     public Command resetTurretCommand(){
         return this.startEnd(
             () -> this.reverseTurn(),
             () -> this.stop()
         );
     }
+
+    /**
+     * @param pose supplier that gives target pose
+     * @return creates command that turns turret to specified alliance
+     */
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
         Pose2d curPose = pose.get();
@@ -199,6 +241,11 @@ public class Turret extends SubsystemBase {
             return this.runOnce(() -> this.turnTo(-(180 - curPose.getRotation().getDegrees())));
         }
     }
+
+    /**
+     * @param pose supplier that gives target pose
+     * @return creates command that turns turret to specified hub
+     */
 
     public Command turnToHub(Supplier<Pose2d> pose){
         CheckAlliance();

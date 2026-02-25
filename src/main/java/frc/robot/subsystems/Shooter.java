@@ -138,16 +138,29 @@ public class Shooter extends SubsystemBase {
     private double getSpeed(){
         return shooterEncoder.getVelocity();
     }
+
+    /**
+     * @param speed speed of motor
+     * sets speed of motor
+     */
     
     private void setSpeedRPM(double speed) {
         shooterPID.setSetpoint(speed,ControlType.kVelocity);
 
     }
     
+    /**
+     * @return is shooter at specified speed?
+     */
+
     public boolean atSpeed(){
         return Math.abs(this.getSpeed() - target) > ShooterConstants.ShooterTolerance;
     }
     
+    /**
+     * trigger for shooter being done
+     */
+
     public Trigger shooterDone = new Trigger(() -> this.atSpeed());
 
     /**
@@ -157,6 +170,10 @@ public class Shooter extends SubsystemBase {
         shooterLeader.set(0);
     }
 
+    /**
+     * @return creates command that starts shooting at speed
+     */
+
     public Command defaultShoot() {
         return (this.startEnd(
             () -> this.setSpeed(0.75),
@@ -164,11 +181,20 @@ public class Shooter extends SubsystemBase {
         ));
     }
 
+    /**
+     * @param speed supplier that gives speed in double
+     * @return runs shoot systems
+     */
+
     public Command shootCommand(DoubleSupplier speed){
         return this.runOnce(
             () -> this.setSpeedRPM(speed.getAsDouble())
             );
     }
+
+    /**
+     * @return creates command that ensures shooter is finished
+     */
 
     public Command shootFinished(){
         return this.runOnce(() -> this.stop());

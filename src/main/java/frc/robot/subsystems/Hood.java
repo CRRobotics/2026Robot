@@ -60,9 +60,17 @@ public class Hood extends SubsystemBase {
         target = 0;
     }
 
+    /**
+     * starts turning hood at speed 0.1
+     */
+
     private void turn(){
         hoodMotor.set(0.1);
     }
+
+    /**
+     * starts turning hood opposite direction at speed 0.1
+     */
 
     private void reverseTurn(){
         hoodMotor.set(-0.1);
@@ -91,6 +99,10 @@ public class Hood extends SubsystemBase {
         hoodMotor.set(0);
     }
 
+    /**
+     * sets current hood position to zero
+     */
+
     private void zeroHood(){
         hoodEncoder.setPosition(0);
     }
@@ -107,7 +119,15 @@ public class Hood extends SubsystemBase {
         return hoodZero.get();
     }
 
+    /**
+     * creates trigger for zero position
+     */
+
     public Trigger atZero = new Trigger(this::atLimit);
+
+    /**
+     * @return creates command that zeroes hood
+     */
 
     public Command zeroHoodCommand(){
         return runOnce(() -> this.zeroHood());
@@ -120,18 +140,35 @@ public class Hood extends SubsystemBase {
         return Math.abs(this.getAngle() - target) < HoodConstants.hoodTolerance;
     }
 
+    /**
+     * creates trigger for hood at done angle
+     */
+
     public Trigger hoodDone = new Trigger(() -> this.atAngle());
+
+    /**
+     * @return creates command that starts turning hood
+     */
 
     public Command turnCommand(){
         return this.startEnd(() -> this.turn(),
         () -> this.stop());
     }
 
+    /**
+     * @return creates command that starts turning hood reverse
+     */
+
     public Command reverseTurnCommand(){
         return this.startEnd(
             () -> this.reverseTurn(),
             () -> this.stop());
     }
+
+    /**
+     * @param angle supplies angle of desired angle
+     * @return creates command that turns to desired angle
+     */
 
     public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(() -> this.turnTo(angle.getAsDouble()));

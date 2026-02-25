@@ -20,7 +20,7 @@ public class Feeder extends SubsystemBase {
     private final SparkMax feederMotor;
     private final RelativeEncoder feederEncoder;
     private SparkMaxConfig configFeeder;
-
+    
         public Feeder () {
             configFeeder = new SparkMaxConfig();
             configFeeder.idleMode(IdleMode.kCoast);
@@ -43,6 +43,10 @@ public class Feeder extends SubsystemBase {
             feederMotor.set(FeederConstants.feederSpeed);
         }
 
+        /**
+         * runs feeder in reverse
+         */
+
         private void runReverseFeeder(){
             feederMotor.set(-FeederConstants.feederSpeed);
         }
@@ -64,6 +68,9 @@ public class Feeder extends SubsystemBase {
             ));
         }
 
+        /**
+         * @return creates a command that runs feeder in reverse
+         */
         public Command runReverseFeederCommand(){
             return (this.startEnd(
                 () -> this.runReverseFeeder(),

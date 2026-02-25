@@ -9,7 +9,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import frc.robot.LinearServo;
 import frc.robot.Constants.AcquisitionsConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -99,13 +98,25 @@ public class Acquisitions extends SubsystemBase {
         spinPID.setSetpoint(AcquisitionsConstants.EjectSpeed,ControlType.kVelocity);
     }
 
+    /**
+     * starts spinning arm down
+     */
+
     private void armDown(){
         armMotorLeft.set(AcquisitionsConstants.ArmDownSpeed);
     }
 
+    /**
+     * starts spinning arm up
+     */
+
     private void armUp(){
         armMotorLeft.set(AcquisitionsConstants.ArmUpSpeed);
     }
+
+    /**
+     * stops arm
+     */
 
     private void armStop(){
         armMotorLeft.set(0);
@@ -124,6 +135,12 @@ public class Acquisitions extends SubsystemBase {
      * Sets the arm to turn to a certain angle (defined by angle)
      * @param angle
      */
+
+    /**
+     * @param angle desired angle in degrees
+     * turns arm to desired angle
+     */
+
     private void armTurnTo (double angle) {
         armPIDLeft.setSetpoint(angle/360 * AcquisitionsConstants.armGearRatio,ControlType.kPosition);
     }
@@ -159,10 +176,18 @@ public class Acquisitions extends SubsystemBase {
     private void armMove(){
         armExtended = !armExtended;
     }
+
+    /**
+     * @return is arm extended?
+     */
     
     public boolean armExtended(){
         return armExtended;
     }
+
+    /**
+     * trigger for aquisition being fully extended
+     */
 
     public Trigger aqDown = new Trigger(this::armExtended);
 
@@ -174,11 +199,19 @@ public class Acquisitions extends SubsystemBase {
         return this.runOnce(() -> this.armMove());
     }
 
+    /**
+     * @return creates command that runs acquisiton intake motors
+     */
+
     public Command AcquisitionIntakeCommand(){
         return this.startEnd(
             () -> this.intake(),
             () -> this.stop());
     }
+
+    /**
+     * @return crewtes command that extends AQ arm
+     */
 
     public Command ExtendAcquisitionArmCommand(){
         //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
@@ -186,6 +219,10 @@ public class Acquisitions extends SubsystemBase {
             () -> this.armDown(),
             () -> this.armStop());
     }
+
+    /**
+     * @return creates command that retracts AQ arm
+     */
 
     public Command RetractAcquisitionArmCommand(){
         //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));

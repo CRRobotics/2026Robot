@@ -59,6 +59,10 @@ public class Hopper extends SubsystemBase {
             ));
         }
 
+        /**
+         * @return creates command that runs hopper in reverse
+         */
+
         public Command runReverseHopperCommand(){
             return (this.startEnd(
                 () -> this.runReverseHopper(),
