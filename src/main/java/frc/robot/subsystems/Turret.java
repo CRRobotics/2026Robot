@@ -22,9 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-    /**
-     * Importing code for the robot
-     */
 
 public class Turret extends SubsystemBase {
 
@@ -35,10 +32,6 @@ public class Turret extends SubsystemBase {
     private RelativeEncoder turretEncoder;
     private DigitalInput turretZero;
     private double target;
-    /**
-     * Initiates motor
-     * Helps connect motor to turret
-     */
 
     public Turret() {
 

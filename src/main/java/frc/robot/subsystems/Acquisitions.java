@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants.AcquisitionsConstants;
+import frc.robot.LinearServo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,7 +24,7 @@ public class Acquisitions extends SubsystemBase {
 
     private final SparkClosedLoopController armPIDLeft;
     private final SparkClosedLoopController spinPID;
-    //private final LinearServo servo;
+    private final LinearServo servo;
 
     private final AbsoluteEncoder armEncoder;
     private SparkMaxConfig armConfigLeft;
@@ -38,7 +39,7 @@ public class Acquisitions extends SubsystemBase {
         armConfigLeft = new SparkMaxConfig();
         //armConfigRight = new SparkMaxConfig();
         spinConfig = new SparkMaxConfig();
-        //servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
+        servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
 
         spinConfig.idleMode(IdleMode.kCoast);
         armConfigLeft.idleMode(IdleMode.kBrake);
@@ -122,13 +123,13 @@ public class Acquisitions extends SubsystemBase {
         armMotorLeft.set(0);
     }
     /**Commands for opening and closing servo */
-    //public void dock(){
-        //servo.setPosition(AcquisitionsConstants.servoOpen);
-    //}
+    public void dock(){
+        servo.setPosition(AcquisitionsConstants.servoOpen);
+    }
 
-    //public void undock(){
-        //servo.setPosition(AcquisitionsConstants.servoClosed);
-    //}
+    public void undock(){
+        servo.setPosition(AcquisitionsConstants.servoClosed);
+    }
 
     // #todo angle has intended units of degrees, unsure what kind of units position control uses
     /**
@@ -218,6 +219,26 @@ public class Acquisitions extends SubsystemBase {
         return this.startEnd(
             () -> this.armDown(),
             () -> this.armStop());
+    }
+
+    /**
+     * Drops acquisition arm
+     * @return
+     */
+    public Command Deploy(){
+        return this.runOnce(
+            () -> this.dock()
+        );
+    }
+
+    /**
+     * re-inserts linear actuator
+     * @return
+     */
+    public Command Undeploy(){
+        return this.runOnce(
+            () -> this.undock()
+        );
     }
 
     /**

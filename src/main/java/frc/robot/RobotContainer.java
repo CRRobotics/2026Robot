@@ -156,6 +156,8 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
     m_driverController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
+    m_driverController.start().whileTrue(acquisition.Deploy());
+    m_driverController.back().whileTrue(acquisition.Undeploy());
     
   }
 
