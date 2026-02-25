@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -214,5 +216,11 @@ public final class Constants {
 
   public static final boolean isSimulated = false;
 
-  public static final Map<String, Transform3d> cameras = new HashMap<String, Transform3d>();
+  public static final Map<String, Transform3d> cameras = getCameraMap();
+
+  public static Map<String, Transform3d> getCameraMap() {
+    Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
+    cameras.put("Cam2", new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI)));
+    return camerasTemp;
+  }
 }
