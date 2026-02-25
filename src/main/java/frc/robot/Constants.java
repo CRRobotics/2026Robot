@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -206,5 +211,8 @@ public final class Constants {
     public static int ShooterLeaderCANID = 20;
     public static int ShooterFollowerCANID = 56;
   }
-  
+
+  public static final boolean isSimulated = false;
+
+  public static final Map<String, Transform3d> cameras = new HashMap<String, Transform3d>();
 }

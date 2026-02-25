@@ -4,32 +4,41 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import static edu.wpi.first.units.Units.*;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.Vision;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -47,6 +56,7 @@ public class RobotContainer {
   private final Feeder feeder;
   private final Hood hood;
   private final Climb climb;
+  private final Vision vision;
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -101,6 +111,23 @@ public class RobotContainer {
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
+    Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI));
+    Transform3d robotToCam1 = new Transform3d(new Translation3d(-0.311, 0.3, 0), new Rotation3d(0, Math.PI/12, Math.PI));
+    if (Constants.isSimulated) { // Whether the robot is running simulated or actual mode
+      vision = new Vision( // These are the AK Vision class
+        drivetrain::addVisionMeasurement, // A function that takes in the reported poses and adds them to the Kalman filter
+        new VisionIOPhotonVisionSim("Cam2", robotToCam2, () -> (drivetrain.getState().Pose)),
+        new VisionIOPhotonVisionSim("ArduCam", robotToCam1, () -> (drivetrain.getState().Pose))
+      );
+    } else {
+      vision = new Vision(
+        drivetrain::addVisionMeasurement,
+        new VisionIOPhotonVision("Cam2", robotToCam2),
+        new VisionIOPhotonVision("ArduCam", robotToCam1)
+      );
+    }
   }
 
   /**
