@@ -16,7 +16,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.KrakenTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,7 +41,6 @@ public class RobotContainer {
   private final Hopper hopper;
   private final Turret turret;
   private final Shooter shooter;
-  private final KrakenTest krakenTest;
   private final Acquisitions acquisition;
   private final Feeder feeder;
   private final Hood hood;
@@ -76,7 +74,6 @@ public class RobotContainer {
     hopper = new Hopper();
     turret = new Turret();
     shooter = new Shooter();
-    krakenTest = new KrakenTest();
     acquisition = new Acquisitions();
     feeder = new Feeder();
     hood = new Hood();
