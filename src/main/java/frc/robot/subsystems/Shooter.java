@@ -118,7 +118,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(this.getSpeed());
+        //System.out.println(this.getSpeed());
         SmartDashboard.putNumber("ShooterSpeed", this.getSpeed());
     }
 

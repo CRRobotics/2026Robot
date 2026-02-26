@@ -37,10 +37,10 @@ public class Hood extends SubsystemBase {
     /**
      * Defines hoodEncoder, hoodMotor, hoodConfig, and hoodZero
      */
-        hoodConfig.closedLoop.p(HoodConstants.p);
+        hoodConfig.closedLoop.p(HoodConstants.p).maxOutput(0.3).minOutput(-0.1);
         hoodConfig.closedLoop.i(HoodConstants.i);
         hoodConfig.closedLoop.d(HoodConstants.d);
-        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+        hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
     /**
      * Configures the pid as well as the feedbackSensor
      */
@@ -65,7 +65,7 @@ public class Hood extends SubsystemBase {
      */
 
     private void turn(){
-        hoodMotor.set(0.1);
+        hoodMotor.set(0.2);
     }
 
     /**
@@ -81,6 +81,7 @@ public class Hood extends SubsystemBase {
      * @param angle the angle to turn to
      */
     public void turnTo (double angle) {
+        System.out.println("Running Hood");
         hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
         target = angle;
     }
@@ -105,6 +106,7 @@ public class Hood extends SubsystemBase {
 
     private void zeroHood(){
         hoodEncoder.setPosition(0);
+        System.out.println("Zeroed Hood");
     }
 
     @Override

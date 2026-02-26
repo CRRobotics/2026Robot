@@ -45,7 +45,7 @@ public class Turret extends SubsystemBase {
     /**
      * Defines turretEncoder, turretMotor, turretConfig, and turretZero
      */
-        turretConfig.closedLoop.p(TurretConstants.p);
+        turretConfig.closedLoop.p(TurretConstants.p).maxOutput(.25).minOutput(-.25);
         turretConfig.closedLoop.i(TurretConstants.i);
         turretConfig.closedLoop.d(TurretConstants.d);
         turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
@@ -74,7 +74,7 @@ public class Turret extends SubsystemBase {
      */
 
     private void turn(){
-        turretMotor.set(0.5);
+        turretMotor.set(0.1);
     }
 
     /**
@@ -82,7 +82,7 @@ public class Turret extends SubsystemBase {
      */
 
     private void reverseTurn(){
-        turretMotor.set(-0.5);
+        turretMotor.set(-0.1);
     }
 
     /**
@@ -108,6 +108,7 @@ public class Turret extends SubsystemBase {
      * @param angle the angle to turn to
      */
     private void turnTo (double angle) {
+        System.out.println("turning");
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
         target=angle;
     }

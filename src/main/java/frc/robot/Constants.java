@@ -116,20 +116,20 @@ public final class Constants {
   public static final class TurretConstants {
     public static final int turretLeaderID = 13;
     public static final int turretFollowerID = 14;
-    public static final double p = 0;
+    public static final double p = 0.5;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double turretGearRatio = 100;
+    public static final double turretGearRatio = 50;
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
   }
 
   public static final class HoodConstants {
     public static final int hoodID = 22;
-    public static final double p = 0.1;
-    public static final double i = 0.0005;
+    public static final double p = 0.2;
+    public static final double i = 0.0;
     public static final double d = 0;
-    public static final double hoodGearRatio = 46/15;
+    public static final double hoodGearRatio = 46/15 * 4;
     public static final double hoodTolerance = 0.1;
     public static final int zeroID = 6;
   }
