@@ -276,10 +276,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
-        List<VisionPose> poseReports = vision.getAprilTagResultsPhotonPose();
-        for(VisionPose visPose : poseReports){
-            this.addVisionMeasurement(visPose.getPose(), visPose.getTimestamp());
-        }
+        // List<VisionPose> poseReports = vision.getAprilTagResultsPhotonPose();
+        // for(VisionPose visPose : poseReports){
+        //     this.addVisionMeasurement(visPose.getPose(), visPose.getTimestamp());
+        // }
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
