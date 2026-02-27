@@ -186,6 +186,13 @@ public class RobotContainer {
 
   public void configureDefaults(){
     hood.atZero.onTrue(hood.zeroHoodCommand());
+    acquisition.setDefaultCommand(Commands.run(() ->
+    {
+      System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());
+      SmartDashboard.putNumber("Controller x", m_driverController.getLeftX());
+      SmartDashboard.putNumber("Controller y", m_driverController.getLeftY());
+    }
+    , acquisition).ignoringDisable(true));
   }
 
   public Command getAutonomousCommand(){
