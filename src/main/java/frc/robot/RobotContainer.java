@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.Map;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -39,6 +41,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -112,22 +115,17 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-
-    Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI));
-    Transform3d robotToCam1 = new Transform3d(new Translation3d(-0.311, 0.3, 0), new Rotation3d(0, Math.PI/12, Math.PI));
-    if (Constants.isSimulated) { // Whether the robot is running simulated or actual mode
-      vision = new Vision( // These are the AK Vision class
-        drivetrain::addVisionMeasurement, // A function that takes in the reported poses and adds them to the Kalman filter
-        new VisionIOPhotonVisionSim("Cam2", robotToCam2, () -> (drivetrain.getState().Pose)),
-        new VisionIOPhotonVisionSim("ArduCam", robotToCam1, () -> (drivetrain.getState().Pose))
-      );
-    } else {
-      vision = new Vision(
-        drivetrain::addVisionMeasurement,
-        new VisionIOPhotonVision("Cam2", robotToCam2),
-        new VisionIOPhotonVision("ArduCam", robotToCam1)
-      );
+    // Visions setup
+    VisionIO[] visionIOs = new VisionIO[Constants.cameras.size()]; // An array to insert into the Vision constructor
+    int i = 0;
+    for (Map.Entry<String,Transform3d> entry : Constants.cameras.entrySet()) {
+      if (Constants.isSimulated) // Whether the robot is running simulated or actual mode
+        visionIOs[i] = new VisionIOPhotonVisionSim(entry.getKey(), entry.getValue(), () -> (drivetrain.getState().Pose));
+      else
+        visionIOs[i] = new VisionIOPhotonVision(entry.getKey(), entry.getValue()); // Key is name, value is transform
+      i++;
     }
+    vision = new Vision(drivetrain::addVisionMeasurement, visionIOs);
   }
 
   /**

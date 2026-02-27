@@ -216,9 +216,9 @@ public final class Constants {
 
   public static final boolean isSimulated = false;
 
-  public static final Map<String, Transform3d> cameras = getCameraMap();
-
-  public static Map<String, Transform3d> getCameraMap() {
+  public static final Map<String, Transform3d> cameras = getCameraMap(); // Map of camera names to robot-to-cam transforms
+  // Populates a HashMap to assign to cameras
+  private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
     cameras.put("Cam2", new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI)));
     return camerasTemp;
