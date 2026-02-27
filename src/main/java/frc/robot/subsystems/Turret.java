@@ -243,16 +243,25 @@ public class Turret extends SubsystemBase {
 
     public Command turnToHub(Supplier<Pose2d> pose){
         CheckAlliance();
-        Pose2d curPose = pose.get();
         // Blue alliance angle calculations
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
+        // TODO make isRed included in the command is returned
         if (IsRed == true){
-            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.redhubY - curPose.getY())/(FieldConstants.redhubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+            return this.run(() -> 
+                {
+                    //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                    double hubTargetAngle = -Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
+                                            + pose.get().getRotation().getDegrees();
+                    SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                    SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+                    this.turnTo(hubTargetAngle);
+                }
+            );
         }
         else {
-            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - curPose.getY())/(FieldConstants.bluehubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+            return this.run(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - pose.get().getY())/(FieldConstants.bluehubX - pose.get().getX()))*(180/Math.PI) - pose.get().getRotation().getDegrees()));
 
         }
     }

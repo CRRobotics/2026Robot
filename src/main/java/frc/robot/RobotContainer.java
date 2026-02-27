@@ -4,31 +4,43 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.Map;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import static edu.wpi.first.units.Units.*;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -45,6 +57,7 @@ public class RobotContainer {
   private final Feeder feeder;
   private final Hood hood;
   private final Climb climb;
+  private final Vision vision;
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -84,7 +97,7 @@ public class RobotContainer {
     
     // Configure the button bindings
     //configureRealBindings();
-    configureRealBindings();
+    configureTestBindings();
     configureDefaults();
     
     // Run at the beginning of match?
@@ -98,6 +111,18 @@ public class RobotContainer {
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    // Visions setup
+    VisionIO[] visionIOs = new VisionIO[Constants.cameras.size()]; // An array to insert into the Vision constructor
+    int i = 0;
+    for (Map.Entry<String,Transform3d> entry : Constants.cameras.entrySet()) {
+      if (Constants.isSimulated) // Whether the robot is running simulated or actual mode
+        visionIOs[i] = new VisionIOPhotonVisionSim(entry.getKey(), entry.getValue(), () -> (drivetrain.getState().Pose));
+      else
+        visionIOs[i] = new VisionIOPhotonVision(entry.getKey(), entry.getValue()); // Key is name, value is transform
+      i++;
+    }
+    vision = new Vision(drivetrain::addVisionMeasurement, visionIOs);
   }
 
   /**
@@ -114,9 +139,12 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+              {
+                System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
+                return drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                  .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                  .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+              } 
             )
         );
   }
@@ -141,7 +169,7 @@ public class RobotContainer {
     m_operatorController.y().onFalse(shooter.shootFinished());
 
     m_operatorController.a().whileTrue(feeder.runFeederCommand());
-    m_operatorController.b().whileTrue(turret.turnCommand());
+    m_operatorController.b().whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
     m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
@@ -183,6 +211,13 @@ public class RobotContainer {
 
   public void configureDefaults(){
     hood.atZero.onTrue(hood.zeroHoodCommand());
+    acquisition.setDefaultCommand(Commands.run(() ->
+    {
+      System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());
+      SmartDashboard.putNumber("Controller x", m_driverController.getLeftX());
+      SmartDashboard.putNumber("Controller y", m_driverController.getLeftY());
+    }
+    , acquisition).ignoringDisable(true));
   }
 
   public Command getAutonomousCommand(){
