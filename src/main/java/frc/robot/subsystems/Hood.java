@@ -109,6 +109,11 @@ public class Hood extends SubsystemBase {
         System.out.println("Zeroed Hood");
     }
 
+    private void underTrench(){
+         hoodPID.setSetpoint(0, ControlType.kPosition);
+
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("HoodAngle", this.getAngle());
@@ -165,6 +170,10 @@ public class Hood extends SubsystemBase {
         return this.startEnd(
             () -> this.reverseTurn(),
             () -> this.stop());
+    }
+
+    public Command underTrenchCommand(){
+        return this.runOnce(() -> this.underTrench());
     }
 
     /**
