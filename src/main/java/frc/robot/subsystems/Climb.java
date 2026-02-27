@@ -63,6 +63,10 @@ public class Climb extends SubsystemBase {
     //     }
     // }
 
+    /**
+     * resets encoder position to 0
+     */
+
     public void resetEncoder() {
         m_climb.setPosition(0);
     }

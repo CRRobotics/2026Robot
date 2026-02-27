@@ -9,8 +9,8 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import frc.robot.LinearServo;
 import frc.robot.Constants.AcquisitionsConstants;
+import frc.robot.LinearServo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,7 +24,7 @@ public class Acquisitions extends SubsystemBase {
 
     private final SparkClosedLoopController armPIDLeft;
     private final SparkClosedLoopController spinPID;
-    //private final LinearServo servo;
+    private final LinearServo servo;
 
     private final AbsoluteEncoder armEncoder;
     private SparkMaxConfig armConfigLeft;
@@ -39,7 +39,7 @@ public class Acquisitions extends SubsystemBase {
         armConfigLeft = new SparkMaxConfig();
         //armConfigRight = new SparkMaxConfig();
         spinConfig = new SparkMaxConfig();
-        //servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
+        servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
 
         spinConfig.idleMode(IdleMode.kCoast);
         armConfigLeft.idleMode(IdleMode.kBrake);
@@ -99,31 +99,49 @@ public class Acquisitions extends SubsystemBase {
         spinPID.setSetpoint(AcquisitionsConstants.EjectSpeed,ControlType.kVelocity);
     }
 
+    /**
+     * starts spinning arm down
+     */
+
     private void armDown(){
         armMotorLeft.set(AcquisitionsConstants.ArmDownSpeed);
     }
+
+    /**
+     * starts spinning arm up
+     */
 
     private void armUp(){
         armMotorLeft.set(AcquisitionsConstants.ArmUpSpeed);
     }
 
+    /**
+     * stops arm
+     */
+
     private void armStop(){
         armMotorLeft.set(0);
     }
     /**Commands for opening and closing servo */
-    //public void dock(){
-        //servo.setPosition(AcquisitionsConstants.servoOpen);
-    //}
+    public void dock(){
+        servo.setPosition(AcquisitionsConstants.servoOpen);
+    }
 
-    //public void undock(){
-        //servo.setPosition(AcquisitionsConstants.servoClosed);
-    //}
+    public void undock(){
+        servo.setPosition(AcquisitionsConstants.servoClosed);
+    }
 
     // #todo angle has intended units of degrees, unsure what kind of units position control uses
     /**
      * Sets the arm to turn to a certain angle (defined by angle)
      * @param angle
      */
+
+    /**
+     * @param angle desired angle in degrees
+     * turns arm to desired angle
+     */
+
     private void armTurnTo (double angle) {
         armPIDLeft.setSetpoint(angle/360 * AcquisitionsConstants.armGearRatio,ControlType.kPosition);
     }
@@ -159,10 +177,18 @@ public class Acquisitions extends SubsystemBase {
     private void armMove(){
         armExtended = !armExtended;
     }
+
+    /**
+     * @return is arm extended?
+     */
     
     public boolean armExtended(){
         return armExtended;
     }
+
+    /**
+     * trigger for aquisition being fully extended
+     */
 
     public Trigger aqDown = new Trigger(this::armExtended);
 
@@ -174,11 +200,19 @@ public class Acquisitions extends SubsystemBase {
         return this.runOnce(() -> this.armMove());
     }
 
+    /**
+     * @return creates command that runs acquisiton intake motors
+     */
+
     public Command AcquisitionIntakeCommand(){
         return this.startEnd(
             () -> this.intake(),
             () -> this.stop());
     }
+
+    /**
+     * @return crewtes command that extends AQ arm
+     */
 
     public Command ExtendAcquisitionArmCommand(){
         //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
@@ -186,6 +220,30 @@ public class Acquisitions extends SubsystemBase {
             () -> this.armDown(),
             () -> this.armStop());
     }
+
+    /**
+     * Drops acquisition arm
+     * @return
+     */
+    public Command Deploy(){
+        return this.runOnce(
+            () -> this.dock()
+        );
+    }
+
+    /**
+     * re-inserts linear actuator
+     * @return
+     */
+    public Command Undeploy(){
+        return this.runOnce(
+            () -> this.undock()
+        );
+    }
+
+    /**
+     * @return creates command that retracts AQ arm
+     */
 
     public Command RetractAcquisitionArmCommand(){
         //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));

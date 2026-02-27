@@ -22,9 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-    /**
-     * Importing code for the robot
-     */
 
 public class Turret extends SubsystemBase {
 
@@ -35,10 +32,6 @@ public class Turret extends SubsystemBase {
     private RelativeEncoder turretEncoder;
     private DigitalInput turretZero;
     private double target;
-    /**
-     * Initiates motor
-     * Helps connect motor to turret
-     */
 
     public Turret() {
 
@@ -52,7 +45,7 @@ public class Turret extends SubsystemBase {
     /**
      * Defines turretEncoder, turretMotor, turretConfig, and turretZero
      */
-        turretConfig.closedLoop.p(TurretConstants.p);
+        turretConfig.closedLoop.p(TurretConstants.p).maxOutput(.25).minOutput(-.25);
         turretConfig.closedLoop.i(TurretConstants.i);
         turretConfig.closedLoop.d(TurretConstants.d);
         turretConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
@@ -76,13 +69,25 @@ public class Turret extends SubsystemBase {
         target = 0;
     }
 
+    /**
+     * starts turning turret at speed
+     */
+
     private void turn(){
-        turretMotor.set(0.5);
+        turretMotor.set(0.1);
     }
 
+    /**
+     * starts turning turret at reverse speed
+     */
+
     private void reverseTurn(){
-        turretMotor.set(-0.5);
+        turretMotor.set(-0.1);
     }
+
+    /**
+     * checks whether alliance is towards red is blue, sets variable IsRed
+     */
 
     private void CheckAlliance(){
         var alliance = DriverStation.getAlliance();
@@ -103,6 +108,7 @@ public class Turret extends SubsystemBase {
      * @param angle the angle to turn to
      */
     private void turnTo (double angle) {
+        System.out.println("turning");
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
         target=angle;
     }
@@ -145,6 +151,10 @@ public class Turret extends SubsystemBase {
      */
     public Trigger atZero = new Trigger(this::zeroTrigger);
 
+    /**
+     * @return creates command that turns turret motor
+     */
+
     public Command turnCommand(){
         return this.startEnd(
             () -> this.turn(),
@@ -152,16 +162,33 @@ public class Turret extends SubsystemBase {
         );
     }
 
+    /**
+     * @return is turret at specified angle?
+     */
+
     private boolean atAngle(){
         return Math.abs(this.getAngle() - target) < TurretConstants.turretTolerance;
     }
 
+    /**
+     * trigger for turret being finished
+     */
+
     public Trigger turretDone = new Trigger(() -> this.atAngle());
     
+    /**
+     * @param angle supplier that gives angle in double degrees
+     * @return creates command that turns turret to angle
+     */
+
     public Command turnToCommand(DoubleSupplier angle){
         return this.runOnce(
             () -> this.turnTo(angle.getAsDouble()));
     }
+
+    /**
+     * @return creates command that turns turret in reverse
+     */
 
     public Command reverseTurnCommand(){
         return this.startEnd(
@@ -178,12 +205,21 @@ public class Turret extends SubsystemBase {
         return this.runOnce(() -> this.zeroTurret());
     }
 
+    /**
+     * @return creates command that resets turret
+     */
+
     public Command resetTurretCommand(){
         return this.startEnd(
             () -> this.reverseTurn(),
             () -> this.stop()
         );
     }
+
+    /**
+     * @param pose supplier that gives target pose
+     * @return creates command that turns turret to specified alliance
+     */
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
         Pose2d curPose = pose.get();
@@ -200,18 +236,32 @@ public class Turret extends SubsystemBase {
         }
     }
 
+    /**
+     * @param pose supplier that gives target pose
+     * @return creates command that turns turret to specified hub
+     */
+
     public Command turnToHub(Supplier<Pose2d> pose){
         CheckAlliance();
-        Pose2d curPose = pose.get();
         // Blue alliance angle calculations
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
+        // TODO make isRed included in the command is returned
         if (IsRed == true){
-            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.redhubY - curPose.getY())/(FieldConstants.redhubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+            return this.run(() -> 
+                {
+                    //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                    double hubTargetAngle = -Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
+                                            + pose.get().getRotation().getDegrees();
+                    SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                    SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+                    this.turnTo(hubTargetAngle);
+                }
+            );
         }
         else {
-            return this.runOnce(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - curPose.getY())/(FieldConstants.bluehubX - curPose.getX()))*(180/Math.PI) - curPose.getRotation().getDegrees()));
+            return this.run(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - pose.get().getY())/(FieldConstants.bluehubX - pose.get().getX()))*(180/Math.PI) - pose.get().getRotation().getDegrees()));
 
         }
     }
