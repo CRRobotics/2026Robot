@@ -251,10 +251,12 @@ public class Turret extends SubsystemBase {
         if (IsRed == true){
             return this.run(() -> 
                 {
-                    System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
-                    this.turnTo(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
-                                + pose.get().getRotation().getDegrees()
-                                );
+                    //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                    double hubTargetAngle = -Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
+                                            + pose.get().getRotation().getDegrees();
+                    SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                    SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+                    this.turnTo(hubTargetAngle);
                 }
             );
         }
