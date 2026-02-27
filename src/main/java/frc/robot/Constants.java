@@ -119,7 +119,7 @@ public final class Constants {
     public static final double p = 0.5;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double turretGearRatio = 50;
+    public static final double turretGearRatio = 52.29;
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
   }
