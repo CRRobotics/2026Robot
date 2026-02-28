@@ -75,8 +75,8 @@ public final class Constants {
   public static final class AcquisitionsConstants {
     public static final double ArmUpSpeed = -0.1;
     public static final double ArmDownSpeed = 0.1;
-    public static final double EjectSpeed = -0.25;
-    public static final double IntakeSpeed = 0.25;
+    public static final double EjectSpeed = 0.5;
+    public static final double IntakeSpeed = -0.5;
     public static final double ArmFeedForward = 1;
     public static final double SpinFeedForward = 1;
     public static final int servoChannel = 1;
@@ -131,11 +131,11 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int hoodID = 22;
-    public static final double p = 0.2;
-    public static final double i = 0.0;
+    public static final double p = 0.5;
+    public static final double i = 0.000;
     public static final double d = 0;
-    public static final double hoodGearRatio = 46/15 * 4;
-    public static final double hoodTolerance = 0.1;
+    public static final double hoodGearRatio = 46/15 * 12;
+    public static final double hoodTolerance = 0.5;
     public static final int zeroID = 6;
   }
 

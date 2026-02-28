@@ -59,7 +59,8 @@ public class Acquisitions extends SubsystemBase {
      *Sets the acquisition motor speed to 0
         */
     private void stop(){
-        spinPID.setSetpoint(0, ControlType.kVelocity);
+        //spinPID.setSetpoint(0, ControlType.kVelocity);
+        spinMotor.set(0);
     }
 
     /**
@@ -67,8 +68,9 @@ public class Acquisitions extends SubsystemBase {
      */
 
     private void intake() {
+        spinMotor.set(AcquisitionsConstants.IntakeSpeed);
         //spinPID.setSetpoint(-AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
-        spinPID.setSetpoint(AcquisitionsConstants.IntakeSpeed,ControlType.kVelocity);
+        //spinPID.setSetpoint(AcquisitionsConstants.IntakeSpeed,ControlType.kVelocity);
     }
 
     /**
@@ -76,7 +78,7 @@ public class Acquisitions extends SubsystemBase {
      */
     private void eject() {
         //spinPID.setSetpoint(AcquisitionsConstants.aqIntakeSpeed, ControlType.kVelocity);
-        spinPID.setSetpoint(AcquisitionsConstants.EjectSpeed,ControlType.kVelocity);
+        spinMotor.set(AcquisitionsConstants.EjectSpeed);
     }
 
     /**Commands for opening and closing servo */

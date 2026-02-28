@@ -37,7 +37,7 @@ public class Hood extends SubsystemBase {
     /**
      * Defines hoodEncoder, hoodMotor, hoodConfig, and hoodZero
      */
-        hoodConfig.closedLoop.p(HoodConstants.p).maxOutput(0.3).minOutput(-0.1);
+        hoodConfig.closedLoop.p(HoodConstants.p).maxOutput(0.3).minOutput(-0.2);
         hoodConfig.closedLoop.i(HoodConstants.i);
         hoodConfig.closedLoop.d(HoodConstants.d);
         hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
@@ -73,7 +73,7 @@ public class Hood extends SubsystemBase {
      */
 
     private void reverseTurn(){
-        hoodMotor.set(-0.1);
+        hoodMotor.set(-0.2);
     }
 
     /**

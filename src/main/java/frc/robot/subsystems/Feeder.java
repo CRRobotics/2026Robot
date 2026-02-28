@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeederConstants;
@@ -29,6 +30,9 @@ public class Feeder extends SubsystemBase {
             feederEncoder = feederMotor.getEncoder();
         }
 
+        public void periodic () {
+            SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
+        }
         /**
          * stops feeder
          */

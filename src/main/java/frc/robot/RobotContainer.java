@@ -98,7 +98,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
     
     // Configure the button bindings
-    configureRealBindings();
+    configureTestBindings();
     //configureTestBindings();
     configureDefaults();
     
@@ -170,12 +170,12 @@ public class RobotContainer {
       .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
       .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand()));
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
     m_operatorController.y().onFalse(shooter.shootFinished());
 
     m_operatorController.a().whileTrue(feeder.runFeederCommand());
-    m_operatorController.b().whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
-    m_operatorController.x().whileTrue(turret.reverseTurnCommand());
+    //m_operatorController.b().whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
+    //m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
     m_operatorController.rightBumper().whileTrue(hood.reverseTurnCommand());
     //m_operatorController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
