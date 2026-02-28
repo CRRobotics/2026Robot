@@ -218,8 +218,8 @@ public final class Constants {
   // Populates a HashMap to assign to cameras
   private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
-    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 0.335)/M_TO_IN, (12.75 + 0.253)/M_TO_IN, 16/M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
-    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 3.453)/M_TO_IN, (12.75 + 0.253)/M_TO_IN, 16/M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 0.335)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
+    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 3.453)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
     return camerasTemp;
   }
 
