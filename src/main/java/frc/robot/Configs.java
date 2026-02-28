@@ -68,19 +68,7 @@ public final class Configs {
 
         static {
 
-            armConfigLeft
-                    .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
-            armConfigLeft.closedLoop
-                    .p(AcquisitionsConstants.armP)
-                    .p(AcquisitionsConstants.armI)
-                    .p(AcquisitionsConstants.armD)
-                    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
-            armConfigRight
-                    .idleMode(IdleMode.kBrake)
-                    .smartCurrentLimit(105) //adjust this value for maximum current input--105 is ideal for NEO vortex
-                    .follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
 
             spinConfig
                     .idleMode(IdleMode.kCoast)

@@ -19,16 +19,11 @@ public class Acquisitions extends SubsystemBase {
 
     // only 1 spin
     private final SparkMax spinMotor;
-    private final SparkMax armMotorLeft;
     //private final SparkMax armMotorRight;
 
-    private final SparkClosedLoopController armPIDLeft;
     private final SparkClosedLoopController spinPID;
     private final LinearServo servo;
 
-    private final AbsoluteEncoder armEncoder;
-    private SparkMaxConfig armConfigLeft;
-    //private SparkMaxConfig armConfigRight;
     private SparkMaxConfig spinConfig;
     private Boolean armExtended;
     /**
@@ -36,42 +31,27 @@ public class Acquisitions extends SubsystemBase {
      */
 
     public Acquisitions () {
-        armConfigLeft = new SparkMaxConfig();
-        //armConfigRight = new SparkMaxConfig();
         spinConfig = new SparkMaxConfig();
         servo = new LinearServo(AcquisitionsConstants.servoChannel, AcquisitionsConstants.servoLength, AcquisitionsConstants.servoSpeed);
 
         spinConfig.idleMode(IdleMode.kCoast);
-        armConfigLeft.idleMode(IdleMode.kBrake);
-        //armConfigRight.idleMode(IdleMode.kBrake);
         spinConfig.smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
-        armConfigLeft.smartCurrentLimit(105);
-        //armConfigRight.smartCurrentLimit(105);
         
 
         spinMotor = new SparkMax(AcquisitionsConstants.aqSpinID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-        armMotorLeft = new SparkMax(AcquisitionsConstants.aqArmLeftID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-        //armMotorRight = new SparkMax(AcquisitionsConstants.aqArmRightID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         
         armExtended = false;
-        armEncoder = armMotorLeft.getAbsoluteEncoder();
 
         /**
          * MAKE SURE TO ADJUST THESE FEED FORWARD VALUES BEFORE RUNNING! THEY ARE CURRENTLY SET TO 1
          */
         spinConfig.closedLoop.pid(AcquisitionsConstants.spinP, AcquisitionsConstants.spinI, AcquisitionsConstants.spinD).feedForward.kV(AcquisitionsConstants.SpinFeedForward);
-        armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder); 
 
-        armConfigLeft.closedLoop.pid(AcquisitionsConstants.armP, AcquisitionsConstants.armI, AcquisitionsConstants.armD).feedForward.kV(AcquisitionsConstants.ArmFeedForward);
-        armConfigLeft.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
 
-        //armConfigRight.follow(AcquisitionsConstants.aqArmLeftID,true); //follows armMotorLeft
 
-        armMotorLeft.configure(armConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         //armMotorRight.configure(armConfigRight, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         spinMotor.configure(spinConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-        armPIDLeft = armMotorLeft.getClosedLoopController();
         spinPID = spinMotor.getClosedLoopController();
     }
 
@@ -99,29 +79,6 @@ public class Acquisitions extends SubsystemBase {
         spinPID.setSetpoint(AcquisitionsConstants.EjectSpeed,ControlType.kVelocity);
     }
 
-    /**
-     * starts spinning arm down
-     */
-
-    private void armDown(){
-        armMotorLeft.set(AcquisitionsConstants.ArmDownSpeed);
-    }
-
-    /**
-     * starts spinning arm up
-     */
-
-    private void armUp(){
-        armMotorLeft.set(AcquisitionsConstants.ArmUpSpeed);
-    }
-
-    /**
-     * stops arm
-     */
-
-    private void armStop(){
-        armMotorLeft.set(0);
-    }
     /**Commands for opening and closing servo */
     public void dock(){
         servo.setPosition(AcquisitionsConstants.servoOpen);
@@ -142,9 +99,7 @@ public class Acquisitions extends SubsystemBase {
      * turns arm to desired angle
      */
 
-    private void armTurnTo (double angle) {
-        armPIDLeft.setSetpoint(angle/360 * AcquisitionsConstants.armGearRatio,ControlType.kPosition);
-    }
+
 
     /**
      * Returns the speed of the intake motors, which is equal to the aqIntakeSpeed set in constants
@@ -156,9 +111,7 @@ public class Acquisitions extends SubsystemBase {
      * Returns the angle of the arm from the encoder
      * @return
      */
-    public double getArmAngle(){
-        return armEncoder.getPosition() * 360 * AcquisitionsConstants.armGearRatio;
-    }
+
 
     /**
      * Runs the eject command to cause the acquisition to eject fuel
@@ -214,12 +167,7 @@ public class Acquisitions extends SubsystemBase {
      * @return crewtes command that extends AQ arm
      */
 
-    public Command ExtendAcquisitionArmCommand(){
-        //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorDownAngle));
-        return this.startEnd(
-            () -> this.armDown(),
-            () -> this.armStop());
-    }
+
 
     /**
      * Drops acquisition arm
@@ -245,10 +193,4 @@ public class Acquisitions extends SubsystemBase {
      * @return creates command that retracts AQ arm
      */
 
-    public Command RetractAcquisitionArmCommand(){
-        //return this.runOnce(() -> this.armTurnTo(AcquisitionsConstants.armMotorUpAngle));
-        return this.startEnd(
-            () -> this.armUp(),
-            () -> this.armStop());
-    }
 }

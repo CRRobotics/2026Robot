@@ -198,8 +198,6 @@ public class RobotContainer {
     
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
-    m_driverController.leftTrigger().whileTrue(acquisition.ExtendAcquisitionArmCommand());
-    m_driverController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
     m_driverController.a().whileTrue(turret.turnToCommand(()-> SmartDashboard.getNumber("Input Turret Angle", 0)));
     m_driverController.b().whileTrue(hood.turnToCommand(()-> SmartDashboard.getNumber("Input Hood Angle", 0)));
 

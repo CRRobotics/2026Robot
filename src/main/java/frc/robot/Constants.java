@@ -85,8 +85,6 @@ public final class Constants {
     public static final double servoOpen = 1;
     public static final double servoClosed = 2;
     public static final int aqSpinID = 62;
-    public static final int aqArmLeftID = 61;
-    public static final int aqArmRightID = 60;
     public static final double aqIntakeSpeed = 0.75;
     public static final double armP = 1;
     public static final double armI = 0;
@@ -220,7 +218,7 @@ public final class Constants {
   // Populates a HashMap to assign to cameras
   private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
-    cameras.put("Cam2", new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI)));
+    camerasTemp.put("Cam2", new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI)));
     return camerasTemp;
   }
 
