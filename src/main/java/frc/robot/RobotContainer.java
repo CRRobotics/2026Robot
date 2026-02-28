@@ -94,10 +94,12 @@ public class RobotContainer {
     SmartDashboard.putNumber("Input Hood Angle", 30);
     SmartDashboard.putNumber("Input Shoot Speed", 0);
     SmartDashboard.putNumber("Input Turret Angle", 0);
+
+    NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
     
     // Configure the button bindings
-    //configureRealBindings();
-    configureTestBindings();
+    configureRealBindings();
+    //configureTestBindings();
     configureDefaults();
     
     // Run at the beginning of match?
@@ -154,9 +156,12 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-MathUtil.applyDeadband(m_driverController.getLeftY() * Math.abs(m_driverController.getLeftY()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-MathUtil.applyDeadband(m_driverController.getLeftX() * Math.abs(m_driverController.getLeftX()), OIConstants.kDriveDeadband) * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+              {
+                System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
+                return drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                  .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                  .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+              } 
             )
         );
             

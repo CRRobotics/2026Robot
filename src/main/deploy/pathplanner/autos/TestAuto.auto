@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Forward1Robot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Forward1Robot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runAcquisition"
+                }
+              }
+            ]
           }
         }
       ]
