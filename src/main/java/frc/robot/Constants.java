@@ -223,4 +223,7 @@ public final class Constants {
     cameras.put("Cam2", new Transform3d(new Translation3d(-0.311, -0.3, 0), new Rotation3d(Math.PI, Math.PI/12, Math.PI)));
     return camerasTemp;
   }
+
+  public static final double M_TO_IN = 0.0254;
+  public static final double LIMELIGHT_X_OFFSET = 0.13;
 }
