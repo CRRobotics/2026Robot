@@ -230,12 +230,12 @@ public class Turret extends SubsystemBase {
         return this.run(() -> 
         this.turnToPoint(
             () -> pose.get(),
-            (pose.get().getY() > 10 == true) ?
+            (pose.get().getY() > FieldConstants.upperEquator == true) ?
                 () -> FieldConstants.blueUpperTarget
             :
                 () -> FieldConstants.blueLowerTarget
             ,
-            (pose.get().getY() > 10 == true) ?
+            (pose.get().getY() > FieldConstants.lowerEquator == true) ?
                 () -> FieldConstants.redUpperTarget
             :
                 () -> FieldConstants.redLowerTarget
