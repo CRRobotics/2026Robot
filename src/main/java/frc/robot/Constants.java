@@ -10,7 +10,10 @@ import java.util.Map;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -127,6 +130,7 @@ public final class Constants {
     public static final double turretGearRatio = 52.29;
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
+    public static final Transform2d turretTranslation = new Transform2d(-6.25,-5.75,null);
   }
 
   public static final class HoodConstants {
@@ -199,6 +203,10 @@ public final class Constants {
     public static final double redhubY = 0;
     public static final double bluehubX = 0;
     public static final double bluehubY = 0;
+    public static final Pose2d blueUpperTarget = new Pose2d(0,0,new Rotation2d(0));
+    public static final Pose2d blueLowerTarget = new Pose2d(0,0,new Rotation2d(0));
+    public static final Pose2d redUpperTarget = new Pose2d(0,0,new Rotation2d(0));
+    public static final Pose2d redLowerTarget = new Pose2d(0,0,new Rotation2d(0));
   }
 
   public static final class ShooterConstants {
