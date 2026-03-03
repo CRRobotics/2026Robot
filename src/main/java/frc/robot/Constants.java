@@ -218,11 +218,13 @@ public final class Constants {
   // Populates a HashMap to assign to cameras
   private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
-    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
-    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    //                                                                Coords of important point on mount + mount to camera translation
+    camerasTemp.put("ArducamA", new Transform3d(new Translation3d((-2.5 - 1.859)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(90))));
+    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
+    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
     return camerasTemp;
   }
 
-  public static final double M_TO_IN = 0.0254;
+  public static final double IN_TO_M = 0.0254;
   public static final double LIMELIGHT_X_OFFSET = 0.13;
 }

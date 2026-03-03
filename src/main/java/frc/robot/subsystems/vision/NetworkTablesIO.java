@@ -37,8 +37,8 @@ public class NetworkTablesIO {
         // System.out.println(pieceData[0] + ", " + pieceData[1]);
 
         Translation2d closestPiece = new Translation2d(
-            pieceData[1] * Constants.M_TO_IN + Constants.LIMELIGHT_X_OFFSET,
-            (pieceData[0]) * Constants.M_TO_IN
+            pieceData[1] * Constants.IN_TO_M + Constants.LIMELIGHT_X_OFFSET,
+            (pieceData[0]) * Constants.IN_TO_M
         );
         return Optional.of(closestPiece);
     }
