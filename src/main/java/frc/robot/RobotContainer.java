@@ -31,7 +31,6 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
@@ -58,6 +57,7 @@ public class RobotContainer {
   private final Hood hood;
   private final Climb climb;
   private final Vision vision;
+
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -142,7 +142,7 @@ public class RobotContainer {
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
               {
-                System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
+                //System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
                 return drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                   .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                   .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
@@ -157,7 +157,7 @@ public class RobotContainer {
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
               {
-                System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
+                //System.out.println(m_driverController.getLeftY() * MaxSpeed + "   " + m_driverController.getLeftX() * MaxSpeed);
                 return drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                   .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                   .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
@@ -216,7 +216,7 @@ public class RobotContainer {
     hood.atZero.onTrue(hood.zeroHoodCommand());
     acquisition.setDefaultCommand(Commands.run(() ->
     {
-      System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());
+      //System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());
       SmartDashboard.putNumber("Controller x", m_driverController.getLeftX());
       SmartDashboard.putNumber("Controller y", m_driverController.getLeftY());
     }
