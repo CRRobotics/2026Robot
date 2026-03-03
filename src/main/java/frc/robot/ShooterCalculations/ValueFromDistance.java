@@ -6,9 +6,24 @@ import frc.robot.Constants.ShooterConstants;
 
 public class ValueFromDistance {
 
-    public static TreeMap<Double, AngleSpeedTime> shootMap = new TreeMap<>();
+    public static TreeMap<Double, AngleSpeedTime> shootMap0 = new TreeMap<>();
     static {
         //put values here
+        shootMap0.put(33.0, new AngleSpeedTime(5,3000,1));
+        shootMap0.put(116.0, new AngleSpeedTime(20,3200,1));
+        shootMap0.put(151.0, new AngleSpeedTime(20,3650,1));
+        shootMap0.put(181.0, new AngleSpeedTime(23,3900,1));
+        }
+
+     public static TreeMap<Double, AngleSpeedTime> shootMap90 = new TreeMap<>();
+    static {
+        //put values here
+        shootMap90.put(24.0, new AngleSpeedTime(4,2900,1));
+        shootMap90.put(39.5, new AngleSpeedTime(7,3000,1));
+        shootMap90.put(51.5, new AngleSpeedTime(10,3150,1));
+        shootMap90.put(79.0, new AngleSpeedTime(10,3180,1));
+        shootMap90.put(109.75, new AngleSpeedTime(12,3370,1));
+
     }
 
     /**
@@ -17,7 +32,7 @@ public class ValueFromDistance {
      * @param distance
      * @return AngleSpeedTime
      */
-    public static AngleSpeedTime getAngleSpeedTime(double distance) {
+    public static AngleSpeedTime getAngleSpeedTime(double distance, TreeMap<Double,AngleSpeedTime> shootMap) {
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
             double floorDistance = shootMap.floorKey(distance);
             double ceilingDistance = shootMap.ceilingKey(distance);
