@@ -235,10 +235,15 @@ public class Turret extends SubsystemBase {
             :
                 () -> FieldConstants.blueLowerTarget
             ,
-            (pose.get().getY() > FieldConstants.lowerEquator == true) ?
+            (pose.get().getY() < FieldConstants.lowerEquator == true) ?
                 () -> FieldConstants.redUpperTarget
             :
                 () -> FieldConstants.redLowerTarget
+            // #todo edge case,
+            // (pose.get().getY() < FieldConstants.lowerEquator == true && pose.get().getY() > FieldConstants.upperEquator == true) ?
+            //     () -> new Pose2d(null, null)
+            // :
+
             )
         );
     }
