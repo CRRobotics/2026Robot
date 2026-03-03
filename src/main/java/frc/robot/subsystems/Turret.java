@@ -16,6 +16,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -222,18 +224,21 @@ public class Turret extends SubsystemBase {
      */
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
-        Pose2d curPose = pose.get();
         CheckAlliance();
-        //#todo NOT DONE
-        // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        // turn to angle alpha = 180 degrees - theta, clockwise negitive
-        // 180 degrees becuase turret needs to point 180 degrees, field relative
-        if (IsRed == false){
-            return this.runOnce(() -> this.turnTo(180 - curPose.getRotation().getDegrees()));
-        }
-        else {
-            return this.runOnce(() -> this.turnTo(-(180 - curPose.getRotation().getDegrees())));
-        }
+        return this.run(() -> 
+        this.turnToPoint(
+            () -> pose.get(),
+            (pose.get().getY() > 10 == true) ?
+                () -> FieldConstants.blueUpperTarget
+            :
+                () -> FieldConstants.blueLowerTarget
+            ,
+            (pose.get().getY() > 10 == true) ?
+                () -> FieldConstants.redUpperTarget
+            :
+                () -> FieldConstants.redLowerTarget
+            )
+        );
     }
 
     /**
@@ -248,22 +253,49 @@ public class Turret extends SubsystemBase {
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
         // TODO make isRed included in the command is returned
-        if (IsRed == true){
-            return this.run(() -> 
-                {
-                    //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
-                    double hubTargetAngle = -Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
-                                            + pose.get().getRotation().getDegrees();
-                    SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
-                    SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
-                    this.turnTo(hubTargetAngle);
-                }
-            );
-        }
-        else {
-            return this.run(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - pose.get().getY())/(FieldConstants.bluehubX - pose.get().getX()))*(180/Math.PI) - pose.get().getRotation().getDegrees()));
+        return this.run(() -> 
+            {
+                //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                double hubTargetAngle = 
+                    (IsRed == true) ?
+                    -Math.atan2(
+                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTranslation).getY()),
+                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTranslation).getX())
+                    )*(180/Math.PI)
+                    :
+                    -Math.atan2(
+                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTranslation).getY()),
+                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTranslation).getX())
+                    )*(180/Math.PI) 
+                    + pose.get().getRotation().getDegrees();
+                SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+                this.turnTo(hubTargetAngle);
+            }
+        );
+    }
 
-        }
+    public Command turnToPoint(Supplier<Pose2d> myPose, Supplier<Pose2d> targetPoseBlue, Supplier<Pose2d> targetPoseRed){
+        return this.run(() -> 
+            {
+                //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                double hubTargetAngle = 
+                    (IsRed == true) ?
+                    -Math.atan2(
+                    (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getY()),
+                    (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTranslation).getX())
+                    )*(180/Math.PI)
+                    :
+                    -Math.atan2(
+                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getY()),
+                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getX())
+                    )*(180/Math.PI) 
+                    + myPose.get().getRotation().getDegrees();
+                SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                SmartDashboard.putNumber("cur pose degrees", myPose.get().getRotation().getDegrees());
+                this.turnTo(hubTargetAngle);
+            }
+        );
     }
 
 }
