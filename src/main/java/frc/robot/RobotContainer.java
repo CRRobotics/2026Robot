@@ -190,7 +190,12 @@ public class RobotContainer {
     // m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
 
-    m_driverController.x().whileTrue((hood.turnToCommandAsDouble((ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle())).alongWith(shooter.shootAsDoubleCommand((ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed())));
+    m_driverController.x().whileTrue((hood.turnToCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle()))
+      .alongWith(shooter.shootCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed()))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+    m_driverController.x().onFalse(shooter.shootFinished());
+
     
     //#TODO Test this
      //m_driverController.x()
