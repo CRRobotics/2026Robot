@@ -199,6 +199,12 @@ public class Shooter extends SubsystemBase {
     public Command shootFinished(){
         return this.runOnce(() -> this.stop());
     }
+    public Command shootAsDoubleCommand(double speed){
+        return this.startEnd(
+            () -> this.setSpeedRPM(speed),
+            () -> this.stop()
+            );
+    }
 
     /**
      * Returns a command that will execute a quasistatic test in the given direction.
