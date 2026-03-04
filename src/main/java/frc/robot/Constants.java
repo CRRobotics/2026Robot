@@ -231,9 +231,9 @@ public final class Constants {
   private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
     //                                                                Coords of important point on mount + mount to camera translation
-    camerasTemp.put("ArducamA", new Transform3d(new Translation3d((-2.5 - 1.859)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-90))));
-    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-30))));
-    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    camerasTemp.put("ArducamA", new Transform3d(new Translation3d((-2.5 - 1.859)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(90))));
+    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
     return camerasTemp;
   }
 
