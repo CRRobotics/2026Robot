@@ -189,6 +189,10 @@ public class Turret extends SubsystemBase {
         return this.runOnce(
             () -> this.turnTo(angle.getAsDouble()));
     }
+    public Command turnToCommandAsDouble(double angle){
+        return this.runOnce(
+            () -> this.turnTo(angle));
+    }
 
     /**
      * @return creates command that turns turret in reverse

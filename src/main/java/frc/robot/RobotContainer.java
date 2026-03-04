@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Value;
 
 import java.util.Map;
 
@@ -32,7 +33,9 @@ import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
+import frc.robot.ShooterCalculations.*;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -186,15 +189,17 @@ public class RobotContainer {
     // m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
     // m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
     //TODO: add command to drive forward until rung switch is activated
+
+    m_driverController.x().whileTrue(turret.turnToCommandAsDouble((ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle()));
     
     //#TODO Test this
-    // m_operatorController.back()
-    //   .whileTrue(turret.turnToHub(() -> m_robotDrive.getPose())
-    //   .alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getAngle()))
-    //   .andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
-    //   .andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(m_robotDrive.getPose(), null)).getSpeed()))
-    //   .alongWith(feeder.runFeederCommand())
-    //   .alongWith(hopper.runHopperCommand()));
+     //m_driverController.x()
+       //.whileTrue(turret.turnToHub(() -> CommandSwerveDrivetrain.getState().Pose)
+       //.alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(CommandSwerveDrivetrain.getState().Pose(), null)).getAngle()))
+       //.andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
+       //.andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(getState().Pose(), null)).getSpeed()))
+       //.alongWith(feeder.runFeederCommand())
+       //.alongWith(hopper.runHopperCommand()));
     
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());

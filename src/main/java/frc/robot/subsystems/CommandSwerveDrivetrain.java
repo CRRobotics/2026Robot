@@ -210,7 +210,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         field = new Field2d();
         SmartDashboard.putData("Field",field); 
     }
-
     private void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();
