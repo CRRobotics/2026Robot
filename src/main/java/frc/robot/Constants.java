@@ -131,7 +131,8 @@ public final class Constants {
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
     // -6.25, -5.75 inches
-    public static final Transform2d turretTranslation = new Transform2d(-0.159,-0.146,null);
+    public static final Transform2d turretTransform = new Transform2d(-0.159,-0.146,null);
+    public static final Translation2d turretTranslation = new Translation2d(-0.159,-0.146);
   }
 
   public static final class HoodConstants {
@@ -210,6 +211,8 @@ public final class Constants {
     public static final Pose2d redLowerTarget = new Pose2d(0,0,new Rotation2d(0));
     public static final double upperEquator = 4.763;
     public static final double lowerEquator = 3.279;
+    public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
+    public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
 
   }
 

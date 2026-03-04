@@ -97,6 +97,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Input Hood Angle", 30);
     SmartDashboard.putNumber("Input Shoot Speed", 0);
     SmartDashboard.putNumber("Input Turret Angle", 0);
+    SmartDashboard.putNumber("Distance to Hub", 1);
 
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
     
@@ -191,10 +192,14 @@ public class RobotContainer {
     m_operatorController.back().whileTrue(hopper.runHopperCommand());
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
 
-    m_driverController.x().whileTrue((hood.turnToCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle()))
-      .alongWith(shooter.shootCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed()))
+    m_driverController.x().whileTrue((hood.turnToCommand(
+      () -> (ValueFromDistance.getAngleSpeedTime(
+          turret.distanceToHub(drivetrain.getState().Pose), ValueFromDistance.shootMap0)).getAngle())
+      .alongWith(shooter.shootCommand(
+        () -> (ValueFromDistance.getAngleSpeedTime(
+          turret.distanceToHub(drivetrain.getState().Pose), ValueFromDistance.shootMap0).getSpeed()))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
     m_driverController.x().onFalse(shooter.shootFinished());
 
     

@@ -43,7 +43,7 @@ public class ValueFromDistance {
             double speed = shootMap.get(floorDistance).getSpeed() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getSpeed() - shootMap.get(floorDistance).getSpeed()));
             double angle = shootMap.get(floorDistance).getAngle() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getAngle() - shootMap.get(floorDistance).getAngle()));
             double time = shootMap.get(floorDistance).getTime() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getTime() - shootMap.get(floorDistance).getTime()));
-            System.out.println("WORKING!");
+            //System.out.println("WORKING!");
             return new AngleSpeedTime(angle, speed, time);
         }
         else if (distance > shootMap.lastKey() && distance < ShooterConstants.ShooterSpeedTopLimit){

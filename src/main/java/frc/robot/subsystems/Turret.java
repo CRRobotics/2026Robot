@@ -143,6 +143,15 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("TurretAngle", this.getAngle());
     }
 
+    public double distanceToHub(Pose2d curPose){
+        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
+            IsRed == true?
+            FieldConstants.redHubTranslation
+            :
+            FieldConstants.blueHubTranslation
+        );
+    }
+
     /**
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */
@@ -267,13 +276,13 @@ public class Turret extends SubsystemBase {
                 double hubTargetAngle = 
                     (IsRed == true) ?
                     -Math.atan2(
-                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTranslation).getY()),
-                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTranslation).getX())
+                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
+                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI)
                     :
                     -Math.atan2(
-                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTranslation).getY()),
-                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTranslation).getX())
+                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
+                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI) 
                     + pose.get().getRotation().getDegrees();
                 SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
@@ -290,13 +299,13 @@ public class Turret extends SubsystemBase {
                 double hubTargetAngle = 
                     (IsRed == true) ?
                     -Math.atan2(
-                    (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getY()),
-                    (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTranslation).getX())
+                    (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+                    (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI)
                     :
                     -Math.atan2(
-                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getY()),
-                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTranslation).getX())
+                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI) 
                     + myPose.get().getRotation().getDegrees();
                 SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);

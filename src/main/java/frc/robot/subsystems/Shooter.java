@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.ShooterCalculations.ValueFromDistance;
 
 public class Shooter extends SubsystemBase {
     private final SparkMax shooterLeader;
@@ -120,6 +121,7 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         //System.out.println(this.getSpeed());
         SmartDashboard.putNumber("ShooterSpeed", this.getSpeed());
+        //System.out.println((ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle() + "_____" + (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed());
     }
 
     /**
