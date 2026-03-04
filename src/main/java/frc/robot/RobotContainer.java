@@ -152,6 +152,11 @@ public class RobotContainer {
               } 
             )
         );
+    m_driverController.start().onTrue(climb.climbExtendCommand());
+    m_driverController.back().onTrue(climb.climbRetractCommand());
+    m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
+    m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
+    
   }
 
   private void configureTestBindings() {
@@ -185,10 +190,6 @@ public class RobotContainer {
     //m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
     m_operatorController.back().whileTrue(hopper.runHopperCommand());
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
-
-    // m_operatorController.rightTrigger().whileTrue(climb.climbExtend().until(climb.topLimitSwitch));
-    // m_operatorController.leftTrigger().whileTrue(climb.climbRetract().until(climb.bottomLimitSwitch));
-    //TODO: add command to drive forward until rung switch is activated
 
     m_driverController.x().whileTrue((hood.turnToCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle()))
       .alongWith(shooter.shootCommand(() -> (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed()))
