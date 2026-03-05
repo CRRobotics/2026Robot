@@ -157,6 +157,8 @@ public class RobotContainer {
     m_driverController.back().onTrue(climb.climbRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
+    m_driverController.x().whileTrue(hood.turnCommand());
+    m_driverController.a().whileTrue(hood.reverseTurnCommand());
     
   }
 

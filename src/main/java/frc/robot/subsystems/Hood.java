@@ -100,12 +100,6 @@ public class Hood extends SubsystemBase {
         hoodMotor.set(0);
     }
 
-    
-    public Command turnToCommandAsDouble(double angle){
-        return this.startEnd(
-            () -> this.turnTo(angle),
-            () -> this.stop());
-    }
 
     /**
      * sets current hood position to zero
