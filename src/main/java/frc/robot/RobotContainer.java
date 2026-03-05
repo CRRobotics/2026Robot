@@ -218,6 +218,8 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.a().whileTrue(turret.turnToCommand(()-> SmartDashboard.getNumber("Input Turret Angle", 0)));
     m_driverController.b().whileTrue(hood.turnToCommand(()-> SmartDashboard.getNumber("Input Hood Angle", 0)));
+    m_driverController.start().whileTrue(climb.climbExtendCommand());
+    m_driverController.back().whileTrue(climb.climbRetractCommand());
 
 
     // Pre-Match Checklist functions
