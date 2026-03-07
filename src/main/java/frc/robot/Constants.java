@@ -85,8 +85,8 @@ public final class Constants {
     public static final int servoChannel = 1;
     public static final int servoLength = 1;
     public static final int servoSpeed = 1;
-    public static final double servoOpen = 1;
-    public static final double servoClosed = 2;
+    public static final double servoOpen = 25;
+    public static final double servoClosed = 0;
     public static final int aqSpinID = 62;
     public static final double aqIntakeSpeed = 0.75;
     public static final double armP = 1;
