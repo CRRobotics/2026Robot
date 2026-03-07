@@ -15,7 +15,7 @@ public static TreeMap<Double, TreeMap<Double,AngleSpeedTime>> chooserMap = new T
         chooserMap.put(360.0, ValueFromDistance.shootMap360);
     }
 
-public static AngleSpeedTime getChooserMap(double rAngle, double distance){
+public static AngleSpeedTime getChooserMap(double distance, double rAngle){
     if((rAngle >= chooserMap.floorKey(rAngle)) && (rAngle <= chooserMap.ceilingKey(rAngle))){
          //Might not need the next 3 lines 
     if (rAngle < 0 ){

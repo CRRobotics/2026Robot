@@ -185,10 +185,10 @@ public class RobotContainer {
     m_operatorController.y().onFalse(shooter.shootFinished());
 
     m_operatorController.a()
-      .whileTrue((hood.turnToCommand(() -> ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 0), ValueFromDistance.shootMap0).getAngle())
-      .alongWith(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 0), ValueFromDistance.shootMap0).getSpeed())
+      .whileTrue((hood.turnToCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getAngle()))
+      .alongWith(shooter.shootCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getSpeed())
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))));
     m_operatorController.a().onFalse(shooter.shootFinished());
     //m_operatorController.b().whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
     //m_operatorController.x().whileTrue(turret.reverseTurnCommand());
@@ -200,11 +200,11 @@ public class RobotContainer {
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
     
     m_driverController.x().whileTrue((hood.turnToCommand(
-      () -> (ValueFromDistance.getAngleSpeedTime(
-          turret.distanceToHub(drivetrain.getState().Pose), ValueFromDistance.shootMap0)).getAngle())
+      () -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle())).getAngle())
       .alongWith(shooter.shootCommand(
-        () -> (ValueFromDistance.getAngleSpeedTime(
-          turret.distanceToHub(drivetrain.getState().Pose), ValueFromDistance.shootMap0).getSpeed()))
+        () -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
     m_driverController.x().onFalse(shooter.shootFinished());
