@@ -42,10 +42,7 @@ public class ValueFromDistance {
         shootMap270.put(104.0, new AngleSpeedTime(16, 3400, 0));
     }
 
-     public static TreeMap<Double, AngleSpeedTime> shootMap270 = new TreeMap<>();
-    static{
-        //put values here
-    }
+
 
 
       public static TreeMap<Double, AngleSpeedTime> shootMap360 = new TreeMap<>();
