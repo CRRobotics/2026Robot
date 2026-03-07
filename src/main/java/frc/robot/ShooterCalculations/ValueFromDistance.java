@@ -42,6 +42,22 @@ public class ValueFromDistance {
         shootMap270.put(104.0, new AngleSpeedTime(16, 3400, 0));
     }
 
+     public static TreeMap<Double, AngleSpeedTime> shootMap270 = new TreeMap<>();
+    static{
+        //put values here
+    }
+
+
+      public static TreeMap<Double, AngleSpeedTime> shootMap360 = new TreeMap<>();
+    static{
+        //put values here
+        shootMap0.put(33.0, new AngleSpeedTime(5,3000,1));
+        shootMap0.put(116.0, new AngleSpeedTime(20,3200,1));
+        shootMap0.put(151.0, new AngleSpeedTime(20,3650,1));
+        shootMap0.put(181.0, new AngleSpeedTime(23,3900,1));
+    }
+    
+
     /**
      * Calculates the speed and angle at which we should shoot based on how far we are
      * @author Kai Kwee-Hallem (with lots of help from Zach & the template of the 2024 code)
@@ -50,12 +66,13 @@ public class ValueFromDistance {
      */
     public static AngleSpeedTime getAngleSpeedTime(double distance, TreeMap<Double,AngleSpeedTime> shootMap) {
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
+             if (distance<0){
+            distance=0;
+        }
             double floorDistance = shootMap.floorKey(distance);
             double ceilingDistance = shootMap.ceilingKey(distance);
             double remainderFrac = (distance - floorDistance) / (ceilingDistance - floorDistance);
-        if (distance<0){
-            distance=0;
-        }
+            
             double speed = shootMap.get(floorDistance).getSpeed() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getSpeed() - shootMap.get(floorDistance).getSpeed()));
             double angle = shootMap.get(floorDistance).getAngle() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getAngle() - shootMap.get(floorDistance).getAngle()));
             double time = shootMap.get(floorDistance).getTime() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getTime() - shootMap.get(floorDistance).getTime()));
