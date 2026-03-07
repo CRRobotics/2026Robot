@@ -103,12 +103,12 @@ public final class Constants {
 
   public static final class ClimbConstants {
     //change all values
-    public static final int climbMotorID = 0;
-    public static final int TopLimitSwitchID = 0;
+    public static final int climbMotorID = 15;
+    //public static final int TopLimitSwitchID = 0;
     public static final int BottomLimitSwitchID = 1;
-    public static final int RungSwitchID = 2;
-    public static final int lidarSensorID = 3;
-    public static final int barLimitID = 4;
+    //public static final int RungSwitchID = 2;
+    //public static final int lidarSensorID = 3;
+    //public static final int barLimitID = 4;
 
     public static final double climbSpeed = 0;
 
