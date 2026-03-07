@@ -28,7 +28,18 @@ public class ValueFromDistance {
     
     public static TreeMap<Double, AngleSpeedTime> shootMap180 = new TreeMap<>();
     static{
-        //put values here
+        shootMap180.put(31.0, new AngleSpeedTime(8, 3100, 0));
+        shootMap180.put(80.0, new AngleSpeedTime(13, 3000, 0));
+        shootMap180.put(130.0, new AngleSpeedTime(24, 3600, 0));
+    }
+
+    public static TreeMap<Double, AngleSpeedTime> shootMap270 = new TreeMap<>();
+    static{
+        shootMap270.put(122.0, new AngleSpeedTime(18, 3800, 0));
+        shootMap270.put(81.0, new AngleSpeedTime(14, 3400, 0));
+        shootMap270.put(32.0, new AngleSpeedTime(5, 3200, 0));
+        shootMap270.put(70.0, new AngleSpeedTime(10, 3300, 0));
+        shootMap270.put(104.0, new AngleSpeedTime(16, 3400, 0));
     }
 
     /**
