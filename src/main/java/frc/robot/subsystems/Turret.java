@@ -57,7 +57,7 @@ public class Turret extends SubsystemBase {
     /**
      * Configures the pid as well as the feedbackSensor
      */
-        turretConfig.idleMode(IdleMode.kBrake);
+        turretConfig.idleMode(IdleMode.kCoast);
     /**
      * Configures how the turret comes to a stop
      * Engages full break rather than letting it coast

@@ -184,7 +184,12 @@ public class RobotContainer {
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
     m_operatorController.y().onFalse(shooter.shootFinished());
 
-    m_operatorController.a().whileTrue(feeder.runFeederCommand());
+    m_operatorController.a()
+      .whileTrue((hood.turnToCommand(() -> ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 0), ValueFromDistance.shootMap0).getAngle())
+      .alongWith(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 0), ValueFromDistance.shootMap0).getSpeed())
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
+    m_operatorController.a().onFalse(shooter.shootFinished());
     //m_operatorController.b().whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
     //m_operatorController.x().whileTrue(turret.reverseTurnCommand());
     m_operatorController.leftBumper().whileTrue(hood.turnCommand());
@@ -193,7 +198,7 @@ public class RobotContainer {
     //m_operatorController.rightTrigger().whileTrue(acquisition.RetractAcquisitionArmCommand());
     m_operatorController.back().whileTrue(hopper.runHopperCommand());
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
-
+    
     m_driverController.x().whileTrue((hood.turnToCommand(
       () -> (ValueFromDistance.getAngleSpeedTime(
           turret.distanceToHub(drivetrain.getState().Pose), ValueFromDistance.shootMap0)).getAngle())

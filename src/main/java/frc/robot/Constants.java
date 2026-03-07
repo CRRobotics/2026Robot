@@ -110,7 +110,7 @@ public final class Constants {
     //public static final int lidarSensorID = 3;
     //public static final int barLimitID = 4;
 
-    public static final double climbSpeed = 0;
+    public static final double climbSpeed = 0.3;
 
     public static final double p = 0;
     public static final double i = 0;
@@ -218,7 +218,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final double ShooterTolerance = 100;
-    public static final double ShooterSpeedTopLimit = 100;
+    public static final double ShooterSpeedTopLimit = 500;
     public static double ShooterP = 0.0005;
     public static double ShooterI = 0.000000005;
     public static double ShooterD = 0.0;

@@ -35,9 +35,9 @@ public class Climb extends SubsystemBase {
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
 
         m_climbConfigurator = m_climb.getConfigurator();
-        m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
+        //m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
         m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
-        m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
+        //m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
 
         // lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
@@ -63,7 +63,8 @@ public class Climb extends SubsystemBase {
      * Starts climbing up if in range
      */
     public void climbExtend() {
-        m_climb.setControl(m_climbRequest.withPosition(ClimbConstants.climbHeight));
+        m_climb.set(ClimbConstants.climbSpeed);
+        //m_climb.setControl(m_climbRequest.withPosition(ClimbConstants.climbHeight));
     }
 
     /**
@@ -94,7 +95,7 @@ public class Climb extends SubsystemBase {
     // public Trigger rungLimitSwitch = new Trigger (this::RungSwitchTrigger);
 
     public void climbRetract() {
-        m_climb.set(ClimbConstants.climbSpeed);
+        m_climb.set(-ClimbConstants.climbSpeed);
     }
 
     /**
@@ -126,7 +127,11 @@ public class Climb extends SubsystemBase {
     }
 
     public Command climbRetractCommand(){
-        return this.run(() -> this.climbRetract()).until(bottomLimitSwitch);
+        return this.startEnd(
+            () -> this.climbRetract(), 
+            () -> this.stop()
+            );
+        //return this.run(() -> this.climbRetract()).until(bottomLimitSwitch);
     }
 
     //public Command turnCommand(){
