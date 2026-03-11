@@ -33,7 +33,8 @@ import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
-import frc.robot.ShooterCalculations.*;
+import frc.robot.util.Telemetry;
+import frc.robot.util.ShooterCalculations.*;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hopper;
@@ -224,7 +225,7 @@ public class RobotContainer {
     m_driverController.a().whileTrue(turret.turnToCommand(()-> SmartDashboard.getNumber("Input Turret Angle", 0)));
     m_driverController.b().whileTrue(hood.turnToCommand(()-> SmartDashboard.getNumber("Input Hood Angle", 0)));
     m_driverController.start().whileTrue(acquisition.Deploy());
-    m_driverController.back().whileTrue(acquisition.Undeploy());
+    m_driverController.back().whileTrue(acquisition.Prepare());
 
 
     // Pre-Match Checklist functions
@@ -238,7 +239,6 @@ public class RobotContainer {
   }
 
   public void configureDefaults(){
-    hood.atZero.onTrue(hood.zeroHoodCommand());
     acquisition.setDefaultCommand(Commands.run(() ->
     {
       //System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());

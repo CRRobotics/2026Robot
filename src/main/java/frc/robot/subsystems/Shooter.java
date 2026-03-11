@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.ShooterCalculations.ValueFromDistance;
+import frc.robot.util.ShooterCalculations.ValueFromDistance;
 
 public class Shooter extends SubsystemBase {
     private final SparkMax shooterLeader;

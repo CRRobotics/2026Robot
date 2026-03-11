@@ -1,4 +1,4 @@
-package frc.robot.ShooterCalculations;
+package frc.robot.util.ShooterCalculations;
 
 /**
  * Wrapper class. I still don't know why this is necessary, but VScode gives me errors if I don't add it, so whatever.

@@ -1,4 +1,4 @@
-package frc.robot.ShooterCalculations;
+package frc.robot.util.ShooterCalculations;
 
 import java.util.TreeMap;
 

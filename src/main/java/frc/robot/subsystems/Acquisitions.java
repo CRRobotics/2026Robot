@@ -9,8 +9,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import frc.robot.Constants.AcquisitionsConstants;
-import frc.robot.LinearServo;
+import frc.robot.util.LinearServo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -81,12 +82,17 @@ public class Acquisitions extends SubsystemBase {
         spinMotor.set(AcquisitionsConstants.EjectSpeed);
     }
 
-    /**Commands for opening and closing servo */
-    public void dock(){
+    /**
+     * Run once at the beginning of match
+     */
+    public void release(){
         servo.setPosition(AcquisitionsConstants.servoOpen);
     }
 
-    public void undock(){
+    /**
+     * Should only be run in pit/before inside arena
+     */
+    public void store(){
         servo.setPosition(AcquisitionsConstants.servoClosed);
     }
 
@@ -177,7 +183,7 @@ public class Acquisitions extends SubsystemBase {
      */
     public Command Deploy(){
         return this.runOnce(
-            () -> this.dock()
+            () -> this.release()
         );
     }
 
@@ -185,14 +191,10 @@ public class Acquisitions extends SubsystemBase {
      * re-inserts linear actuator
      * @return
      */
-    public Command Undeploy(){
+    public Command Prepare(){
         return this.runOnce(
-            () -> this.undock()
+            () -> this.store()
         );
     }
-
-    /**
-     * @return creates command that retracts AQ arm
-     */
 
 }
