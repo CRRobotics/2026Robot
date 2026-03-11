@@ -101,10 +101,14 @@ public class RobotContainer {
     SmartDashboard.putNumber("Distance to Hub", 1);
 
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
+    NamedCommands.registerCommand("shootFromAny", hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
+      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
     
     // Configure the button bindings
-    configureTestBindings();
     //configureTestBindings();
+    configureRealBindings();
     configureDefaults();
     
     // Run at the beginning of match?
@@ -158,8 +162,33 @@ public class RobotContainer {
     m_driverController.back().onTrue(climb.climbRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
-    m_driverController.x().whileTrue(hood.turnCommand());
-    m_driverController.a().whileTrue(hood.reverseTurnCommand());
+    m_driverController.a().whileTrue(hood.underTrenchCommand());
+
+    m_operatorController.y()
+      .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
+      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+    m_operatorController.y().onFalse(shooter.shootFinished());
+
+    m_operatorController.a()
+      .whileTrue((hood.turnToCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getAngle()))
+      .alongWith(shooter.shootCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getSpeed())
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))));
+    m_operatorController.a().onFalse(shooter.shootFinished());
+
+    m_driverController.x().whileTrue((hood.turnToCommand(
+      () -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle())).getAngle())
+      .alongWith(shooter.shootCommand(
+        () -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
+    m_driverController.x().onFalse(shooter.shootFinished());
+
+    m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
     
   }
 

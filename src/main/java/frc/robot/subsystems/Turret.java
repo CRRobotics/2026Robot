@@ -236,25 +236,27 @@ public class Turret extends SubsystemBase {
      */
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
-        CheckAlliance();
         return this.run(() -> 
-        this.turnToPoint(
-            () -> pose.get(),
-            (pose.get().getY() > FieldConstants.upperEquator == true) ?
-                () -> FieldConstants.blueUpperTarget
-            :
-                () -> FieldConstants.blueLowerTarget
-            ,
-            (pose.get().getY() < FieldConstants.lowerEquator == true) ?
-                () -> FieldConstants.redUpperTarget
-            :
-                () -> FieldConstants.redLowerTarget
-            // #todo edge case,
-            // (pose.get().getY() < FieldConstants.lowerEquator == true && pose.get().getY() > FieldConstants.upperEquator == true) ?
-            //     () -> new Pose2d(null, null)
-            // :
+            {
+                CheckAlliance();
+                this.turnToPoint(
+                    () -> pose.get(),
+                    (pose.get().getY() > FieldConstants.upperEquator == true) ?
+                        () -> FieldConstants.blueUpperTarget
+                    :
+                        () -> FieldConstants.blueLowerTarget
+                    ,
+                    (pose.get().getY() < FieldConstants.lowerEquator == true) ?
+                        () -> FieldConstants.redUpperTarget
+                    :
+                        () -> FieldConstants.redLowerTarget
+                );
+                // #todo edge case,
+                // (pose.get().getY() < FieldConstants.lowerEquator == true && pose.get().getY() > FieldConstants.upperEquator == true) ?
+                //     () -> new Pose2d(null, null)
+                // :
 
-            )
+            }
         );
     }
 
@@ -264,15 +266,14 @@ public class Turret extends SubsystemBase {
      */
 
     public Command turnToHub(Supplier<Pose2d> pose){
-        CheckAlliance();
         // Blue alliance angle calculations
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        // TODO make isRed included in the command is returned
         return this.run(() -> 
             {
                 //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                CheckAlliance();
                 double hubTargetAngle = 
                     (IsRed == true) ?
                     -Math.atan2(
@@ -281,8 +282,8 @@ public class Turret extends SubsystemBase {
                     )*(180/Math.PI)
                     :
                     -Math.atan2(
-                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
-                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
+                    (FieldConstants.bluehubY - pose.get().plus(TurretConstants.turretTransform).getY()),
+                    (FieldConstants.bluehubX - pose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI) 
                     + pose.get().getRotation().getDegrees();
                 SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
