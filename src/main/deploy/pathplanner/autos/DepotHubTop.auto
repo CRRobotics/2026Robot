@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "DriveToDepot"
+                  "pathName": "DepotFromTop"
                 }
               }
             ]
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MoveTowardsHub"
+            "pathName": "DepotToHub"
           }
         }
       ]
