@@ -9,6 +9,12 @@
           "data": {
             "pathName": "HubFromBot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootFromAny"
+          }
         }
       ]
     }

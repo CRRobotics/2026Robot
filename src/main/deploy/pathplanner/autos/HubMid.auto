@@ -9,6 +9,12 @@
           "data": {
             "pathName": "HubFromMid"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootFromAny"
+          }
         }
       ]
     }

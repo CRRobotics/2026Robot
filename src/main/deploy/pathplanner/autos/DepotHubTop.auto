@@ -13,6 +13,12 @@
                 "data": {
                   "pathName": "DepotFromTop"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runAcquisition"
+                }
               }
             ]
           }
@@ -21,6 +27,12 @@
           "type": "path",
           "data": {
             "pathName": "DepotToHub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootFromAny"
           }
         }
       ]
