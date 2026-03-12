@@ -164,29 +164,27 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.a().whileTrue(hood.underTrenchCommand());
 
-    m_operatorController.y()
+    m_operatorController.b()
       .whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
 
     m_operatorController.a()
       .whileTrue(turret.turnToAlliance(() -> drivetrain.getState().Pose));
     
-    m_operatorController.b()
+    m_operatorController.leftBumper()
       .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle())).getAngle())
       .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
-    m_driverController.x().onFalse(shooter.shootFinished());
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))))));
 
-    m_driverController.x()
+    m_operatorController.rightBumper()
       .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle())).getAngle())
       .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
-    m_driverController.x().onFalse(shooter.shootFinished());
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))))));
 
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
     
@@ -268,13 +266,6 @@ public class RobotContainer {
   }
 
   public void configureDefaults(){
-    acquisition.setDefaultCommand(Commands.run(() ->
-    {
-      //System.out.println(m_driverController.getLeftX() + "   " + m_driverController.getLeftY());
-      SmartDashboard.putNumber("Controller x", m_driverController.getLeftX());
-      SmartDashboard.putNumber("Controller y", m_driverController.getLeftY());
-    }
-    , acquisition).ignoringDisable(true));
   }
 
   public Command getAutonomousCommand(){
