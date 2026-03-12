@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Value;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -22,7 +23,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -48,6 +51,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.NetworkTablesIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 
@@ -204,21 +208,25 @@ public class RobotContainer {
     );
 
     m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
-          Pose2d tp = new Pose2d(0,0,new Rotation2d(0));
-          ProfiledPIDController xController =
-          new ProfiledPIDController(
+          Pose2d tp;
+          Optional<Translation2d> report = NetworkTablesIO.getLimelightPoseReport();
+          if(!report.isEmpty()){
+            tp = drivetrain.getState().Pose.plus(new Transform2d(report.get(),new Rotation2d(0)));
+          }
+          else{
+            tp = drivetrain.getState().Pose;
+          }
+          ProfiledPIDController xController = new ProfiledPIDController(
             Constants.DriveConstants.autoMoveK.kP,
             Constants.DriveConstants.autoMoveK.kI,
             Constants.DriveConstants.autoMoveK.kD,
             Constants.DriveConstants.autoMoveConstraints);
-          ProfiledPIDController yController =
-          new ProfiledPIDController(
+          ProfiledPIDController yController = new ProfiledPIDController(
             Constants.DriveConstants.autoMoveK.kP,
             Constants.DriveConstants.autoMoveK.kI,
             Constants.DriveConstants.autoMoveK.kD,
             Constants.DriveConstants.autoMoveConstraints);
-          ProfiledPIDController rotationController =
-          new ProfiledPIDController(
+          ProfiledPIDController rotationController = new ProfiledPIDController(
             Constants.DriveConstants.autoTurnK.kP,
             Constants.DriveConstants.autoTurnK.kI,
             Constants.DriveConstants.autoTurnK.kD,
@@ -226,30 +234,30 @@ public class RobotContainer {
           rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
           rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
-        Pose2d cp = drivetrain.getState().Pose;
+          Pose2d cp = drivetrain.getState().Pose;
 
-        double xFeedback = xController.calculate(cp.getX(), tp.getX());
-        double yFeedback = yController.calculate(cp.getY(), tp.getY());
-        double rotFeedback = rotationController.calculate(
-                cp.getRotation().getRadians(), tp.getRotation().getRadians());
+          double xFeedback = xController.calculate(cp.getX(), tp.getX());
+          double yFeedback = yController.calculate(cp.getY(), tp.getY());
+          double rotFeedback = rotationController.calculate(
+            cp.getRotation().getRadians(), tp.getRotation().getRadians());
 
-        double xFF = xController.getSetpoint().velocity;
-        double yFF = yController.getSetpoint().velocity;
-        double rotFF = rotationController.getSetpoint().velocity;
+          double xFF = xController.getSetpoint().velocity;
+          double yFF = yController.getSetpoint().velocity;
+          double rotFF = rotationController.getSetpoint().velocity;
 
-        double xVel = xFF + xFeedback;
-        double yVel = yFF + yFeedback;
-        double rotVel = rotFF + rotFeedback;
- 
-        if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
-            xVel = 0;
-        }
-        if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
-            yVel = 0;
-        }
-        if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
-            rotVel = 0;
-        }
+          double xVel = xFF + xFeedback;
+          double yVel = yFF + yFeedback;
+          double rotVel = rotFF + rotFeedback;
+  
+          if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
+              xVel = 0;
+          }
+          if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
+              yVel = 0;
+          }
+          if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
+              rotVel = 0;
+          }
 
           return drive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
         }
