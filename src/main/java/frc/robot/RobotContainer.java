@@ -115,6 +115,7 @@ public class RobotContainer {
       .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+    NamedCommands.registerCommand("deployAcqisition", acquisition.Deploy());
     
     // Configure the button bindings
     //configureTestBindings();
