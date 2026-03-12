@@ -270,6 +270,9 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.a().whileTrue(hood.underTrenchCommand());
 
+    m_operatorController.x().onTrue(acquisition.Deploy());
+    m_operatorController.y().onTrue(acquisition.Prepare());
+
     m_operatorController.b()
       .whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
 

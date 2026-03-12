@@ -58,10 +58,11 @@ public class ValueFromDistance {
     /**
      * Calculates the speed and angle at which we should shoot based on how far we are
      * @author Kai Kwee-Hallem (with lots of help from Zach & the template of the 2024 code)
-     * @param distance
+     * @param distance in meters
      * @return AngleSpeedTime
      */
-    public static AngleSpeedTime getAngleSpeedTime(double distance, TreeMap<Double,AngleSpeedTime> shootMap) {
+    public static AngleSpeedTime getAngleSpeedTime(double distanceMeters, TreeMap<Double,AngleSpeedTime> shootMap) {
+        double distance = 39.37 * distanceMeters;
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
              if (distance<0){
             distance=0;
