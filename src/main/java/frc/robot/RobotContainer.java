@@ -297,6 +297,9 @@ public class RobotContainer {
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))))));
 
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
+
+    SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
+    SmartDashboard.putData("Zero Turret", turret.zeroTurretCommand());
     
   }
 

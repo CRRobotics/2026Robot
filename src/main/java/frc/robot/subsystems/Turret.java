@@ -289,6 +289,7 @@ public class Turret extends SubsystemBase {
                     (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
                     (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
                     )*(180/Math.PI)
+                    + pose.get().getRotation().getDegrees()
                     :
                     -Math.atan2(
                     (FieldConstants.bluehubY - pose.get().plus(TurretConstants.turretTransform).getY()),
@@ -310,6 +311,7 @@ public class Turret extends SubsystemBase {
             (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
             (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTransform).getX())
             )*(180/Math.PI)
+            + myPose.get().getRotation().getDegrees()
             :
             -Math.atan2(
             (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
