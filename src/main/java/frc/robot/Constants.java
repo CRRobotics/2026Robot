@@ -8,6 +8,8 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -48,6 +50,18 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+    
+    public static final PIDConstants autoMoveK = new PIDConstants(1.2,0,0,0);
+    public static final PIDConstants autoTurnK = new PIDConstants(1.1,0,0,20);
+
+    public static final TrapezoidProfile.Constraints autoMoveConstraints =
+        new TrapezoidProfile.Constraints(2.0, 2.0);
+
+    public static final TrapezoidProfile.Constraints autoTurnConstraints =
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+
+    public static final double TOL_TRANSLATION = 0.055; // 2.5cm target accuracy on auto
+    public static final double TOL_ROTATION = 2.5; // 10 degree rotation accuracy on auto
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
@@ -121,7 +135,7 @@ public final class Constants {
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
     // -6.25, -5.75 inches
-    public static final Transform2d turretTransform = new Transform2d(-0.159,-0.146,null);
+    public static final Transform2d turretTransform = new Transform2d(-0.159,-0.146,new Rotation2d(0));
     public static final Translation2d turretTranslation = new Translation2d(-0.159,-0.146);
   }
 
@@ -226,8 +240,11 @@ public final class Constants {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
     //                                                                Coords of important point on mount + mount to camera translation
     camerasTemp.put("ArducamA", new Transform3d(new Translation3d((-2.5 - 1.859)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(90))));
-    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
-    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
+    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
+    camerasTemp.put("ElpC", new Transform3d(new Translation3d((-13.75)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-90))));
+    camerasTemp.put("ElpB", new Transform3d(new Translation3d((-13.75 - 1.594)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-150))));
+    camerasTemp.put("ElpA", new Transform3d(new Translation3d((-13.75 + 1.594)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-30))));
     return camerasTemp;
   }
 
