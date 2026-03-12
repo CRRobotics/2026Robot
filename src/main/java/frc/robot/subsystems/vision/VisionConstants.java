@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 public class VisionConstants {
   // AprilTag layout
-  public static AprilTagFieldLayout aprilTagLayout = getTheRightLayout(false);
+  public static AprilTagFieldLayout aprilTagLayout = getTheRightLayout(true);
 
   // Camera names, must match names configured on coprocessor
   public static String camera0Name = "camera_0";
