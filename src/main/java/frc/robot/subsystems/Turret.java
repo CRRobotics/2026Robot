@@ -250,12 +250,12 @@ public class Turret extends SubsystemBase {
                 CheckAlliance();
                 this.turnToPoint(
                     () -> pose.get(),
-                    (pose.get().getY() > FieldConstants.upperEquator == true) ?
+                    (pose.get().getY() > FieldConstants.equator == true) ?
                         () -> FieldConstants.blueUpperTarget
                     :
                         () -> FieldConstants.blueLowerTarget
                     ,
-                    (pose.get().getY() < FieldConstants.lowerEquator == true) ?
+                    (pose.get().getY() < FieldConstants.equator == true) ?
                         () -> FieldConstants.redUpperTarget
                     :
                         () -> FieldConstants.redLowerTarget
@@ -302,27 +302,23 @@ public class Turret extends SubsystemBase {
         );
     }
 
-    public Command turnToPoint(Supplier<Pose2d> myPose, Supplier<Pose2d> targetPoseBlue, Supplier<Pose2d> targetPoseRed){
-        return this.run(() -> 
-            {
-                //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
-                double hubTargetAngle = 
-                    (IsRed == true) ?
-                    -Math.atan2(
-                    (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
-                    (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTransform).getX())
-                    )*(180/Math.PI)
-                    :
-                    -Math.atan2(
-                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
-                    (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getX())
-                    )*(180/Math.PI) 
-                    + myPose.get().getRotation().getDegrees();
-                SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
-                SmartDashboard.putNumber("cur pose degrees", myPose.get().getRotation().getDegrees());
-                this.turnTo(hubTargetAngle);
-            }
-        );
+    public void turnToPoint(Supplier<Pose2d> myPose, Supplier<Pose2d> targetPoseBlue, Supplier<Pose2d> targetPoseRed){
+        //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+        double targetAngle = 
+            (IsRed == true) ?
+            -Math.atan2(
+            (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+            (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTransform).getX())
+            )*(180/Math.PI)
+            :
+            -Math.atan2(
+            (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+            (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getX())
+            )*(180/Math.PI) 
+            + myPose.get().getRotation().getDegrees();
+        SmartDashboard.putNumber("autoaim target angle", targetAngle);
+        SmartDashboard.putNumber("cur pose degrees", myPose.get().getRotation().getDegrees());
+        this.turnTo(targetAngle);
     }
 
 }

@@ -199,8 +199,7 @@ public final class Constants {
     public static final Pose2d blueLowerTarget = new Pose2d(2.3,2.1,new Rotation2d(0));
     public static final Pose2d redUpperTarget = new Pose2d(14.3,0,new Rotation2d(0));
     public static final Pose2d redLowerTarget = new Pose2d(14.3,0,new Rotation2d(0));
-    public static final double upperEquator = 4.763;
-    public static final double lowerEquator = 3.279;
+    public static final double equator = 4.021;
     public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
     public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
     public static final Translation2d redAllianceLine = new Translation2d(13,0);
