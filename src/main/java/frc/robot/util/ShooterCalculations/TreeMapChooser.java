@@ -16,11 +16,12 @@ public static TreeMap<Double, TreeMap<Double,AngleSpeedTime>> chooserMap = new T
     }
 
 public static AngleSpeedTime getChooserMap(double distance, double rAngle){
-    if((rAngle >= chooserMap.floorKey(rAngle)) && (rAngle <= chooserMap.ceilingKey(rAngle))){
-         //Might not need the next 3 lines 
     if (rAngle < 0 ){
         rAngle = 360 + rAngle;
     }
+    if((rAngle >= chooserMap.floorKey(rAngle)) && (rAngle <= chooserMap.ceilingKey(rAngle))) {
+         //Might not need the next 3 lines 
+
         double floorAngle = chooserMap.floorKey(rAngle);
         double ceilingAngle = chooserMap.ceilingKey(rAngle);
         TreeMap<Double, AngleSpeedTime> floorMap = chooserMap.get(floorAngle);
