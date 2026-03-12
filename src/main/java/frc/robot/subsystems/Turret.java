@@ -109,10 +109,14 @@ public class Turret extends SubsystemBase {
     }
     /**
      * Turns the turret to a given angle
-     * @param angle the angle to turn to
+     * @param angle the angle to turn to in degrees
      */
     private void turnTo (double angle) {
         System.out.println("turning");
+        //0 - 360
+        if(angle < 0){
+            angle = angle+360;
+        }
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
         target=angle;
     }
@@ -288,14 +292,14 @@ public class Turret extends SubsystemBase {
                     -Math.atan2(
                     (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
                     (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
-                    )*(180/Math.PI)
-                    + pose.get().getRotation().getDegrees()
+                    )*(180/Math.PI) //-180 to 180
+                    + pose.get().getRotation().getDegrees() // -180 to 180
                     :
                     -Math.atan2(
                     (FieldConstants.bluehubY - pose.get().plus(TurretConstants.turretTransform).getY()),
                     (FieldConstants.bluehubX - pose.get().plus(TurretConstants.turretTransform).getX())
-                    )*(180/Math.PI) 
-                    + pose.get().getRotation().getDegrees();
+                    )*(180/Math.PI) // -180 to 180
+                    + pose.get().getRotation().getDegrees(); // -180 to 180
                 SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
                 SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
                 this.turnTo(hubTargetAngle);
