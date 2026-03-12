@@ -86,7 +86,7 @@ public class Hood extends SubsystemBase {
      */
     public void turnTo (double angle) {
         if (!safeForTrench){
-            System.out.println("Running Hood to " + angle + " in degrees");
+            SmartDashboard.putNumber("hood going to", angle);
             hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
             target = angle;
         }

@@ -223,7 +223,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final double ShooterTolerance = 100;
-    public static final double ShooterSpeedTopLimit = 500;
+    public static final double ShooterDistanceTopLimit = 200;
     public static double ShooterP = 0.0005;
     public static double ShooterI = 0.000000005;
     public static double ShooterD = 0.0;
