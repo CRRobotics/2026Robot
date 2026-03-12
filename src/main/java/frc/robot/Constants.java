@@ -76,11 +76,8 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
-    public static final double ArmUpSpeed = -0.1;
-    public static final double ArmDownSpeed = 0.1;
     public static final double EjectSpeed = 0.5;
     public static final double IntakeSpeed = -0.5;
-    public static final double ArmFeedForward = 1;
     public static final double SpinFeedForward = 1;
     public static final int servoChannel = 1;
     public static final int servoLength = 1;
@@ -89,16 +86,9 @@ public final class Constants {
     public static final double servoClosed = 0;
     public static final int aqSpinID = 62;
     public static final double aqIntakeSpeed = 0.75;
-    public static final double armP = 1;
-    public static final double armI = 0;
-    public static final double armD = 0;
-    public static final double armGearRatio = 81;
     public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
-    public static final double armMotorDownAngle = 90;
-    public static final double armMotorUpAngle = 0;
-    
   }
 
   public static final class ClimbConstants {
@@ -205,14 +195,16 @@ public final class Constants {
     public static final double redhubY = 4.021;
     public static final double bluehubX = 4.612;
     public static final double bluehubY = 4.021;
-    public static final Pose2d blueUpperTarget = new Pose2d(0,0,new Rotation2d(0));
-    public static final Pose2d blueLowerTarget = new Pose2d(0,0,new Rotation2d(0));
-    public static final Pose2d redUpperTarget = new Pose2d(0,0,new Rotation2d(0));
-    public static final Pose2d redLowerTarget = new Pose2d(0,0,new Rotation2d(0));
+    public static final Pose2d blueUpperTarget = new Pose2d(2.3,5.96,new Rotation2d(0));
+    public static final Pose2d blueLowerTarget = new Pose2d(2.3,2.1,new Rotation2d(0));
+    public static final Pose2d redUpperTarget = new Pose2d(14.3,0,new Rotation2d(0));
+    public static final Pose2d redLowerTarget = new Pose2d(14.3,0,new Rotation2d(0));
     public static final double upperEquator = 4.763;
     public static final double lowerEquator = 3.279;
     public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
     public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
+    public static final Translation2d redAllianceLine = new Translation2d(13,0);
+    public static final Translation2d blueAllianceLine = new Translation2d(3.6,0);
 
   }
 

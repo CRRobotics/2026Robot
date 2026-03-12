@@ -152,6 +152,15 @@ public class Turret extends SubsystemBase {
         );
     }
 
+    public double distanceToAlliance(Pose2d curPose){
+        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
+            IsRed == true?
+            FieldConstants.redAllianceLine
+            :
+            FieldConstants.blueAllianceLine
+        );
+    }
+
     /**
      * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
      */

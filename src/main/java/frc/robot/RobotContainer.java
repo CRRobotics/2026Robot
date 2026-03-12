@@ -165,24 +165,24 @@ public class RobotContainer {
     m_driverController.a().whileTrue(hood.underTrenchCommand());
 
     m_operatorController.y()
-      .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
-      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
-    m_operatorController.y().onFalse(shooter.shootFinished());
+      .whileTrue(turret.turnToHub(() -> drivetrain.getState().Pose));
 
     m_operatorController.a()
-      .whileTrue((hood.turnToCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getAngle()))
-      .alongWith(shooter.shootCommand(() -> TreeMapChooser.getChooserMap(SmartDashboard.getNumber("Distance to Hub", 0), turret.getAngle()).getSpeed())
+      .whileTrue(turret.turnToAlliance(() -> drivetrain.getState().Pose));
+    
+    m_operatorController.b()
+      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle())).getAngle())
+      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))));
-    m_operatorController.a().onFalse(shooter.shootFinished());
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
+    m_driverController.x().onFalse(shooter.shootFinished());
 
-    m_driverController.x().whileTrue((hood.turnToCommand(
-      () -> (TreeMapChooser.getChooserMap(
+    m_driverController.x()
+      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle())).getAngle())
-      .alongWith(shooter.shootCommand(
-        () -> (TreeMapChooser.getChooserMap(
+      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));

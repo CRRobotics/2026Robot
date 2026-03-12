@@ -96,31 +96,6 @@ public class Acquisitions extends SubsystemBase {
         servo.setPosition(AcquisitionsConstants.servoClosed);
     }
 
-    // #todo angle has intended units of degrees, unsure what kind of units position control uses
-    /**
-     * Sets the arm to turn to a certain angle (defined by angle)
-     * @param angle
-     */
-
-    /**
-     * @param angle desired angle in degrees
-     * turns arm to desired angle
-     */
-
-
-
-    /**
-     * Returns the speed of the intake motors, which is equal to the aqIntakeSpeed set in constants
-     * NOTE: the aqIntakeSpeed is set to 0 at the time of writing!
-     * @return
-     * Removed at 2/23/26 due to being unnecessary.
-     */
-    /**
-     * Returns the angle of the arm from the encoder
-     * @return
-     */
-
-
     /**
      * Runs the eject command to cause the acquisition to eject fuel
      * @return
