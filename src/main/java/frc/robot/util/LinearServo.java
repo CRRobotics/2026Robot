@@ -17,10 +17,10 @@ public class LinearServo extends Servo{
  * @param speed max speed of the servo [mm/second]
  */
  public LinearServo(int channel, int length, int speed) {
- super(channel);
- setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
- m_length = length;
- m_speed = speed;
+   super(channel);
+   setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+   m_length = length;
+   m_speed = speed;
  }
  /**
  * Run this method in any periodic function to update the position estimation of your
