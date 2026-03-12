@@ -42,6 +42,7 @@ import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
+import frc.robot.util.ProfiledPID;
 import frc.robot.util.Telemetry;
 import frc.robot.util.ShooterCalculations.*;
 import frc.robot.subsystems.Hood;
@@ -217,34 +218,19 @@ public class RobotContainer {
           else{
             tp = drivetrain.getState().Pose;
           }
-          ProfiledPIDController xController = new ProfiledPIDController(
-            Constants.DriveConstants.autoMoveK.kP,
-            Constants.DriveConstants.autoMoveK.kI,
-            Constants.DriveConstants.autoMoveK.kD,
-            Constants.DriveConstants.autoMoveConstraints);
-          ProfiledPIDController yController = new ProfiledPIDController(
-            Constants.DriveConstants.autoMoveK.kP,
-            Constants.DriveConstants.autoMoveK.kI,
-            Constants.DriveConstants.autoMoveK.kD,
-            Constants.DriveConstants.autoMoveConstraints);
-          ProfiledPIDController rotationController = new ProfiledPIDController(
-            Constants.DriveConstants.autoTurnK.kP,
-            Constants.DriveConstants.autoTurnK.kI,
-            Constants.DriveConstants.autoTurnK.kD,
-            Constants.DriveConstants.autoTurnConstraints);
-          rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
-          rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
           Pose2d cp = drivetrain.getState().Pose;
 
-          double xFeedback = xController.calculate(cp.getX(), tp.getX());
-          double yFeedback = yController.calculate(cp.getY(), tp.getY());
-          double rotFeedback = rotationController.calculate(
+          ProfiledPID relativePID = new ProfiledPID();
+
+          double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
+          double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
+          double rotFeedback = relativePID.rotationController.calculate(
             cp.getRotation().getRadians(), tp.getRotation().getRadians());
 
-          double xFF = xController.getSetpoint().velocity;
-          double yFF = yController.getSetpoint().velocity;
-          double rotFF = rotationController.getSetpoint().velocity;
+          double xFF = relativePID.xController.getSetpoint().velocity;
+          double yFF = relativePID.yController.getSetpoint().velocity;
+          double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
           double xVel = xFF + xFeedback;
           double yVel = yFF + yFeedback;
