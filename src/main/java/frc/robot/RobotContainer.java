@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Value;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -17,9 +18,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
@@ -158,6 +164,98 @@ public class RobotContainer {
               } 
             )
         );
+    
+    m_driverController.b().whileTrue(drivetrain.applyRequest(() ->
+        {
+          ProfiledPIDController rotationController =
+          new ProfiledPIDController(
+            Constants.DriveConstants.autoTurnK.kP,
+            Constants.DriveConstants.autoTurnK.kI,
+            Constants.DriveConstants.autoTurnK.kD,
+            Constants.DriveConstants.autoTurnConstraints);
+          rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
+          rotationController.enableContinuousInput(-Math.PI, Math.PI);
+
+          Pose2d cp = drivetrain.getState().Pose;
+          double angle = 0;
+          // angle in degrees
+          if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            angle = Math.atan((FieldConstants.redhubY - cp.getY())/(FieldConstants.redhubX - cp.getX()));
+          }
+          else {
+            angle = Math.atan((FieldConstants.bluehubY - cp.getY())/(FieldConstants.bluehubX - cp.getX()));
+          }
+
+
+          double rotFeedback = rotationController.calculate(
+                  cp.getRotation().getRadians(),angle + Math.PI);
+
+          double rotFF = rotationController.getSetpoint().velocity;
+
+          double rotVel = rotFF + rotFeedback;
+
+          if (Math.abs(cp.getRotation().getDegrees() - (angle  * (180/Math.PI)) + 180) < Constants.DriveConstants.TOL_ROTATION) {
+              rotVel = 0;
+          }
+
+          return drive.withVelocityX(0).withVelocityY(0).withRotationalRate(rotVel);
+        }
+      )
+    );
+
+    m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
+          Pose2d tp = new Pose2d(0,0,new Rotation2d(0));
+          ProfiledPIDController xController =
+          new ProfiledPIDController(
+            Constants.DriveConstants.autoMoveK.kP,
+            Constants.DriveConstants.autoMoveK.kI,
+            Constants.DriveConstants.autoMoveK.kD,
+            Constants.DriveConstants.autoMoveConstraints);
+          ProfiledPIDController yController =
+          new ProfiledPIDController(
+            Constants.DriveConstants.autoMoveK.kP,
+            Constants.DriveConstants.autoMoveK.kI,
+            Constants.DriveConstants.autoMoveK.kD,
+            Constants.DriveConstants.autoMoveConstraints);
+          ProfiledPIDController rotationController =
+          new ProfiledPIDController(
+            Constants.DriveConstants.autoTurnK.kP,
+            Constants.DriveConstants.autoTurnK.kI,
+            Constants.DriveConstants.autoTurnK.kD,
+            Constants.DriveConstants.autoTurnConstraints);
+          rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
+          rotationController.enableContinuousInput(-Math.PI, Math.PI);
+
+        Pose2d cp = drivetrain.getState().Pose;
+
+        double xFeedback = xController.calculate(cp.getX(), tp.getX());
+        double yFeedback = yController.calculate(cp.getY(), tp.getY());
+        double rotFeedback = rotationController.calculate(
+                cp.getRotation().getRadians(), tp.getRotation().getRadians());
+
+        double xFF = xController.getSetpoint().velocity;
+        double yFF = yController.getSetpoint().velocity;
+        double rotFF = rotationController.getSetpoint().velocity;
+
+        double xVel = xFF + xFeedback;
+        double yVel = yFF + yFeedback;
+        double rotVel = rotFF + rotFeedback;
+ 
+        if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
+            xVel = 0;
+        }
+        if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
+            yVel = 0;
+        }
+        if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
+            rotVel = 0;
+        }
+
+          return drive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
+        }
+      )
+    );
+
     m_driverController.start().onTrue(climb.climbExtendCommand());
     m_driverController.back().onTrue(climb.climbRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
