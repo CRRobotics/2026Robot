@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -40,6 +41,7 @@ public class NetworkTablesIO {
             pieceData[1] * Constants.IN_TO_M + Constants.LIMELIGHT_X_OFFSET,
             (pieceData[0]) * Constants.IN_TO_M
         );
+        Logger.recordOutput("Vision/ObjectDetection/FuelTranslation", closestPiece);
         return Optional.of(closestPiece);
     }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -295,6 +297,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
         field.setRobotPose(this.getState().Pose);
+        Logger.recordOutput("Field/RobotPose", this.getState().Pose);
     }
 
     private void startSimThread() {
