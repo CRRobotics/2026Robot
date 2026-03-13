@@ -266,7 +266,7 @@ public class RobotContainer {
       .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))))));
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
     m_operatorController.rightBumper()
       .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
@@ -274,7 +274,7 @@ public class RobotContainer {
       .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))))));
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
     m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
 

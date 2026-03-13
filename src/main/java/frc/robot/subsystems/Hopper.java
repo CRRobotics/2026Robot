@@ -7,6 +7,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HopperConstants;
 
@@ -68,5 +69,15 @@ public class Hopper extends SubsystemBase {
                 () -> this.runReverseHopper(),
                 () -> this.stop()
             ));
+        }
+
+        public Command specialHopperCommand(){
+            return this.runOnce(() -> this.runHopper())
+                .andThen(Commands.waitSeconds(3))
+                .andThen(this.runOnce(() -> this.runReverseHopper()))
+                .andThen(Commands.waitSeconds(0.5))
+                .repeatedly()
+                .finallyDo(() -> this.stop())
+            ;
         }
 }
