@@ -187,7 +187,10 @@ public class Hood extends SubsystemBase {
      */
 
     public Command turnToCommand(DoubleSupplier angle){
-        return this.runOnce(() -> this.turnTo(angle.getAsDouble()));
+        return this.startEnd(
+            () -> this.turnTo(angle.getAsDouble()),
+            () -> this.turnTo(0)
+        );
     }
 }
 

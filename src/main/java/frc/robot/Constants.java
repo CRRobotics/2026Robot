@@ -145,7 +145,7 @@ public final class Constants {
     public static final double i = 0.000;
     public static final double d = 0;
     public static final double hoodGearRatio = 46/15 * 12;
-    public static final double hoodTolerance = 0.5;
+    public static final double hoodTolerance = 1;
     public static final int zeroID = 6;
   }
 
