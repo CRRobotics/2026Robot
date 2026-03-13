@@ -11,12 +11,12 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.robot.Constants.HoodConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.HoodConstants;
 
 public class Hood extends SubsystemBase {
 
@@ -24,15 +24,14 @@ public class Hood extends SubsystemBase {
     private final SparkClosedLoopController hoodPID;
     private SparkMaxConfig hoodConfig;
     private RelativeEncoder hoodEncoder;
-    private DigitalInput hoodZero;
     private double target;
+    private static boolean safeForTrench;
 
     public Hood() {
 
         hoodMotor = new SparkMax(HoodConstants.hoodID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         hoodEncoder = hoodMotor.getEncoder();
         hoodConfig = new SparkMaxConfig();
-        hoodZero = new DigitalInput(HoodConstants.zeroID);
 
     /**
      * Defines hoodEncoder, hoodMotor, hoodConfig, and hoodZero
@@ -65,7 +64,10 @@ public class Hood extends SubsystemBase {
      */
 
     private void turn(){
-        hoodMotor.set(0.2);
+        if(!safeForTrench){
+            hoodMotor.set(0.2);
+        }
+
     }
 
     /**
@@ -73,7 +75,9 @@ public class Hood extends SubsystemBase {
      */
 
     private void reverseTurn(){
-        hoodMotor.set(-0.2);
+        if(!safeForTrench){
+            hoodMotor.set(-0.2);
+        }
     }
 
     /**
@@ -81,9 +85,12 @@ public class Hood extends SubsystemBase {
      * @param angle the angle to turn to
      */
     public void turnTo (double angle) {
-        System.out.println("Running Hood");
-        hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
-        target = angle;
+        if (!safeForTrench){
+            SmartDashboard.putNumber("hood going to", angle);
+            hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
+            target = angle;
+        }
+        System.out.println("Not safe for trench");
     }
 
     /**
@@ -100,6 +107,7 @@ public class Hood extends SubsystemBase {
         hoodMotor.set(0);
     }
 
+
     /**
      * sets current hood position to zero
      */
@@ -110,27 +118,19 @@ public class Hood extends SubsystemBase {
     }
 
     private void underTrench(){
-         hoodPID.setSetpoint(0, ControlType.kPosition);
+        safeForTrench = true;
+        hoodPID.setSetpoint(0, ControlType.kPosition);
 
+    }
+
+    private void notTrench(){
+        safeForTrench = false;
     }
 
     @Override
     public void periodic(){
         SmartDashboard.putNumber("HoodAngle", this.getAngle());
     }
-
-    /**
-     * This resets the position the robot thinks its at to 0 when the resetEncoder is initiated
-     */
-    private boolean atLimit(){
-        return hoodZero.get();
-    }
-
-    /**
-     * creates trigger for zero position
-     */
-
-    public Trigger atZero = new Trigger(this::atLimit);
 
     /**
      * @return creates command that zeroes hood
@@ -173,7 +173,12 @@ public class Hood extends SubsystemBase {
     }
 
     public Command underTrenchCommand(){
+        
         return this.runOnce(() -> this.underTrench());
+    }
+
+    public Command notTrenchCommand(){
+        return this.runOnce(() -> this.notTrench());
     }
 
     /**

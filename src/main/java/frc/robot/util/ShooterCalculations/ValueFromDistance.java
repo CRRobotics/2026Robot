@@ -1,37 +1,92 @@
-package frc.robot.ShooterCalculations;
+package frc.robot.util.ShooterCalculations;
 import java.util.TreeMap;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ShooterConstants;
 
 public class ValueFromDistance {
 
-    public static TreeMap<Double, AngleSpeedTime> shootMap = new TreeMap<>();
+    public static TreeMap<Double, AngleSpeedTime> shootMap180 = new TreeMap<>();
     static {
         //put values here
+        shootMap180.put(33.0, new AngleSpeedTime(5,3000,1));
+        shootMap180.put(116.0, new AngleSpeedTime(20,3200,1));
+        shootMap180.put(151.0, new AngleSpeedTime(20,3650,1));
+        shootMap180.put(181.0, new AngleSpeedTime(23,3900,1));
+        }
+
+    public static TreeMap<Double, AngleSpeedTime> shootMap270 = new TreeMap<>();
+    static {
+        //put values here
+        shootMap270.put(24.0, new AngleSpeedTime(4,2900,1));
+        shootMap270.put(39.5, new AngleSpeedTime(7,3000,1));
+        shootMap270.put(51.5, new AngleSpeedTime(10,3150,1));
+        shootMap270.put(79.0, new AngleSpeedTime(10,3180,1));
+        shootMap270.put(109.75, new AngleSpeedTime(12,3370,1));
+
     }
+    
+    public static TreeMap<Double, AngleSpeedTime> shootMap0 = new TreeMap<>();
+    static{
+        shootMap0.put(31.0, new AngleSpeedTime(8, 3100, 0));
+        shootMap0.put(80.0, new AngleSpeedTime(13, 3000, 0));
+        shootMap0.put(130.0, new AngleSpeedTime(24, 3600, 0));
+    }
+
+    public static TreeMap<Double, AngleSpeedTime> shootMap90 = new TreeMap<>();
+    static{
+        shootMap90.put(122.0, new AngleSpeedTime(18, 3800, 0));
+        shootMap90.put(81.0, new AngleSpeedTime(14, 3400, 0));
+        shootMap90.put(32.0, new AngleSpeedTime(5, 3200, 0));
+        shootMap90.put(70.0, new AngleSpeedTime(10, 3300, 0));
+        shootMap90.put(104.0, new AngleSpeedTime(16, 3400, 0));
+    }
+
+
+
+
+    public static TreeMap<Double, AngleSpeedTime> shootMap360 = new TreeMap<>();
+    static{
+        //put values here
+        shootMap360.put(31.0, new AngleSpeedTime(8, 3100, 0));
+        shootMap360.put(80.0, new AngleSpeedTime(13, 3000, 0));
+        shootMap360.put(130.0, new AngleSpeedTime(24, 3600, 0));
+    }
+    
 
     /**
      * Calculates the speed and angle at which we should shoot based on how far we are
      * @author Kai Kwee-Hallem (with lots of help from Zach & the template of the 2024 code)
-     * @param distance
+     * @param distance in meters
      * @return AngleSpeedTime
      */
-    public static AngleSpeedTime getAngleSpeedTime(double distance) {
+    public static AngleSpeedTime getAngleSpeedTime(double distanceMeters, TreeMap<Double,AngleSpeedTime> shootMap) {
+        double distance = 39.37 * distanceMeters;
+        SmartDashboard.putNumber("DistanceForTree", distance);
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
-            double floorDistance = shootMap.floorKey(distance);
-            double ceilingDistance = shootMap.ceilingKey(distance);
-            double remainderFrac = (distance - floorDistance) / (ceilingDistance - floorDistance);
-        if (distance<0){
+             if (distance<0){
             distance=0;
         }
-            double speed = shootMap.get(floorDistance).getSpeed() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getSpeed() - shootMap.get(floorDistance).getSpeed()));
-            double angle = shootMap.get(floorDistance).getAngle() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getAngle() - shootMap.get(floorDistance).getAngle()));
-            double time = shootMap.get(floorDistance).getTime() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getTime() - shootMap.get(floorDistance).getTime()));
-            System.out.println("WORKING!");
+
+            double floorDistance = shootMap.floorKey(distance);
+            AngleSpeedTime floorValue = shootMap.get(floorDistance);
+            double ceilingDistance = shootMap.ceilingKey(distance);
+            AngleSpeedTime ceilingValue = shootMap.get(ceilingDistance);
+            double remainderFrac = (distance - floorDistance) / (ceilingDistance - floorDistance);
+            
+            
+            if(floorDistance == ceilingDistance){
+                return new AngleSpeedTime(floorValue.getAngle(), floorValue.getSpeed(), floorValue.getTime());
+            }
+            double speed = floorValue.getSpeed() + remainderFrac * (Math.abs(ceilingValue.getSpeed() - floorValue.getSpeed()));
+            double angle = floorValue.getAngle() + remainderFrac * (Math.abs(ceilingValue.getAngle() - floorValue.getAngle()));
+            double time = floorValue.getTime() + remainderFrac * (Math.abs(ceilingValue.getTime() - floorValue.getTime()));
+            //System.out.println("WORKING!");
             return new AngleSpeedTime(angle, speed, time);
         }
-        else if (distance > shootMap.lastKey() && distance < ShooterConstants.ShooterSpeedTopLimit){
+        else if (distance > shootMap.lastKey() && distance < ShooterConstants.ShooterDistanceTopLimit){
             /**
              * What this math does: exterpolates the speed and angle at which to fire if the distance we are shooting from is higher than the highest value in the treemap
              * a--Finds the porportion between the difference of the farthest entry in the treemap and the current distance, and the difference of the farthest entry in the treemap and the second farthest one

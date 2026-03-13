@@ -13,15 +13,19 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.TurretConstants;
 
 public class Turret extends SubsystemBase {
 
@@ -53,7 +57,7 @@ public class Turret extends SubsystemBase {
     /**
      * Configures the pid as well as the feedbackSensor
      */
-        turretConfig.idleMode(IdleMode.kBrake);
+        turretConfig.idleMode(IdleMode.kCoast);
     /**
      * Configures how the turret comes to a stop
      * Engages full break rather than letting it coast
@@ -105,10 +109,14 @@ public class Turret extends SubsystemBase {
     }
     /**
      * Turns the turret to a given angle
-     * @param angle the angle to turn to
+     * @param angle the angle to turn to in degrees
      */
     private void turnTo (double angle) {
         System.out.println("turning");
+        //0 - 360
+        if(angle < 0){
+            angle = angle+360;
+        }
         turretPID.setSetpoint(angle/360 * TurretConstants.turretGearRatio,ControlType.kPosition);
         target=angle;
     }
@@ -137,6 +145,24 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("TurretAngle", this.getAngle());
+    }
+
+    public double distanceToHub(Pose2d curPose){
+        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
+            IsRed == true?
+            FieldConstants.redHubTranslation
+            :
+            FieldConstants.blueHubTranslation
+        );
+    }
+
+    public double distanceToAlliance(Pose2d curPose){
+        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
+            IsRed == true?
+            FieldConstants.redAllianceLine
+            :
+            FieldConstants.blueAllianceLine
+        );
     }
 
     /**
@@ -186,6 +212,7 @@ public class Turret extends SubsystemBase {
             () -> this.turnTo(angle.getAsDouble()));
     }
 
+
     /**
      * @return creates command that turns turret in reverse
      */
@@ -222,18 +249,28 @@ public class Turret extends SubsystemBase {
      */
 
     public Command turnToAlliance(Supplier<Pose2d> pose){
-        Pose2d curPose = pose.get();
-        CheckAlliance();
-        //#todo NOT DONE
-        // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        // turn to angle alpha = 180 degrees - theta, clockwise negitive
-        // 180 degrees becuase turret needs to point 180 degrees, field relative
-        if (IsRed == false){
-            return this.runOnce(() -> this.turnTo(180 - curPose.getRotation().getDegrees()));
-        }
-        else {
-            return this.runOnce(() -> this.turnTo(-(180 - curPose.getRotation().getDegrees())));
-        }
+        return this.run(() -> 
+            {
+                CheckAlliance();
+                this.turnToPoint(
+                    () -> pose.get(),
+                    (pose.get().getY() > FieldConstants.equator == true) ?
+                        () -> FieldConstants.blueUpperTarget
+                    :
+                        () -> FieldConstants.blueLowerTarget
+                    ,
+                    (pose.get().getY() < FieldConstants.equator == true) ?
+                        () -> FieldConstants.redUpperTarget
+                    :
+                        () -> FieldConstants.redLowerTarget
+                );
+                // #TODO edge case,
+                // (pose.get().getY() < FieldConstants.lowerEquator == true && pose.get().getY() > FieldConstants.upperEquator == true) ?
+                //     () -> new Pose2d(null, null)
+                // :
+
+            }
+        );
     }
 
     /**
@@ -242,28 +279,52 @@ public class Turret extends SubsystemBase {
      */
 
     public Command turnToHub(Supplier<Pose2d> pose){
-        CheckAlliance();
         // Blue alliance angle calculations
         // turnto angle alpha, realtive to robot = beta - theta, clockwise negative
         // beta, relative to field = arctan((Huby - Roboty)/(Hubx - Robotx)), clockwise negative
         // theta, relative to field = heading of robot assuming 0 degrees points toward hub, clockwise negative
-        // TODO make isRed included in the command is returned
-        if (IsRed == true){
-            return this.run(() -> 
-                {
-                    //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
-                    double hubTargetAngle = -Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) 
-                                            + pose.get().getRotation().getDegrees();
-                    SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
-                    SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
-                    this.turnTo(hubTargetAngle);
-                }
-            );
-        }
-        else {
-            return this.run(() -> this.turnTo(Math.atan((FieldConstants.bluehubY - pose.get().getY())/(FieldConstants.bluehubX - pose.get().getX()))*(180/Math.PI) - pose.get().getRotation().getDegrees()));
+        return this.run(() -> 
+            {
+                //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+                CheckAlliance();
+                double hubTargetAngle = 
+                    (IsRed == true) ?
+                    -Math.atan2(
+                    (FieldConstants.redhubY - pose.get().plus(TurretConstants.turretTransform).getY()),
+                    (FieldConstants.redhubX - pose.get().plus(TurretConstants.turretTransform).getX())
+                    )*(180/Math.PI) //-180 to 180
+                    + pose.get().getRotation().getDegrees() // -180 to 180
+                    :
+                    -Math.atan2(
+                    (FieldConstants.bluehubY - pose.get().plus(TurretConstants.turretTransform).getY()),
+                    (FieldConstants.bluehubX - pose.get().plus(TurretConstants.turretTransform).getX())
+                    )*(180/Math.PI) // -180 to 180
+                    + pose.get().getRotation().getDegrees(); // -180 to 180
+                SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
+                SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+                this.turnTo(hubTargetAngle);
+            }
+        );
+    }
 
-        }
+    public void turnToPoint(Supplier<Pose2d> myPose, Supplier<Pose2d> targetPoseBlue, Supplier<Pose2d> targetPoseRed){
+        //System.out.println(-Math.atan((FieldConstants.redhubY - pose.get().getY())/(FieldConstants.redhubX - pose.get().getX()))*(180/Math.PI) + pose.get().getRotation().getDegrees());
+        double targetAngle = 
+            (IsRed == true) ?
+            -Math.atan2(
+            (targetPoseRed.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+            (targetPoseRed.get().getX() - myPose.get().plus(TurretConstants.turretTransform).getX())
+            )*(180/Math.PI)
+            + myPose.get().getRotation().getDegrees()
+            :
+            -Math.atan2(
+            (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getY()),
+            (targetPoseBlue.get().getY() - myPose.get().plus(TurretConstants.turretTransform).getX())
+            )*(180/Math.PI) 
+            + myPose.get().getRotation().getDegrees();
+        SmartDashboard.putNumber("autoaim target angle", targetAngle);
+        SmartDashboard.putNumber("cur pose degrees", myPose.get().getRotation().getDegrees());
+        this.turnTo(targetAngle);
     }
 
 }

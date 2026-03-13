@@ -8,9 +8,14 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -45,6 +50,18 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+    
+    public static final PIDConstants autoMoveK = new PIDConstants(1.2,0,0,0);
+    public static final PIDConstants autoTurnK = new PIDConstants(1.1,0,0,20);
+
+    public static final TrapezoidProfile.Constraints autoMoveConstraints =
+        new TrapezoidProfile.Constraints(2.0, 2.0);
+
+    public static final TrapezoidProfile.Constraints autoTurnConstraints =
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+
+    public static final double TOL_TRANSLATION = 0.055; // 2.5cm target accuracy on auto
+    public static final double TOL_ROTATION = 2.5; // 10 degree rotation accuracy on auto
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
@@ -73,41 +90,31 @@ public final class Constants {
   }
 
   public static final class AcquisitionsConstants {
-    public static final double ArmUpSpeed = -0.1;
-    public static final double ArmDownSpeed = 0.1;
     public static final double EjectSpeed = 0.5;
     public static final double IntakeSpeed = -0.5;
-    public static final double ArmFeedForward = 1;
     public static final double SpinFeedForward = 1;
     public static final int servoChannel = 1;
     public static final int servoLength = 1;
     public static final int servoSpeed = 1;
-    public static final double servoOpen = 1;
-    public static final double servoClosed = 2;
+    public static final double servoOpen = 0;
+    public static final double servoClosed = 25;
     public static final int aqSpinID = 62;
     public static final double aqIntakeSpeed = 0.75;
-    public static final double armP = 1;
-    public static final double armI = 0;
-    public static final double armD = 0;
-    public static final double armGearRatio = 81;
     public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
-    public static final double armMotorDownAngle = 90;
-    public static final double armMotorUpAngle = 0;
-    
   }
 
   public static final class ClimbConstants {
     //change all values
-    public static final int climbMotorID = 0;
-    public static final int TopLimitSwitchID = 0;
+    public static final int climbMotorID = 15;
+    //public static final int TopLimitSwitchID = 0;
     public static final int BottomLimitSwitchID = 1;
-    public static final int RungSwitchID = 2;
-    public static final int lidarSensorID = 3;
-    public static final int barLimitID = 4;
+    //public static final int RungSwitchID = 2;
+    //public static final int lidarSensorID = 3;
+    //public static final int barLimitID = 4;
 
-    public static final double climbSpeed = 0;
+    public static final double climbSpeed = 0.3;
 
     public static final double p = 0;
     public static final double i = 0;
@@ -127,6 +134,9 @@ public final class Constants {
     public static final double turretGearRatio = 52.29;
     public static final int limitID = 5;
     public static final double turretTolerance = 0.5;
+    // -6.25, -5.75 inches
+    public static final Transform2d turretTransform = new Transform2d(-0.159,-0.146,new Rotation2d(0));
+    public static final Translation2d turretTranslation = new Translation2d(-0.159,-0.146);
   }
 
   public static final class HoodConstants {
@@ -195,15 +205,25 @@ public final class Constants {
   }
 
   public static final class FieldConstants {
-    public static final double redhubX = 0;
-    public static final double redhubY = 0;
-    public static final double bluehubX = 0;
-    public static final double bluehubY = 0;
+    public static final double redhubX = 11.901;
+    public static final double redhubY = 4.021;
+    public static final double bluehubX = 4.612;
+    public static final double bluehubY = 4.021;
+    public static final Pose2d blueUpperTarget = new Pose2d(2.3,5.96,new Rotation2d(0));
+    public static final Pose2d blueLowerTarget = new Pose2d(2.3,2.1,new Rotation2d(0));
+    public static final Pose2d redUpperTarget = new Pose2d(14.3,5.91,new Rotation2d(0));
+    public static final Pose2d redLowerTarget = new Pose2d(14.3,2.1,new Rotation2d(0));
+    public static final double equator = 4.021;
+    public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
+    public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
+    public static final Translation2d redAllianceLine = new Translation2d(13,0);
+    public static final Translation2d blueAllianceLine = new Translation2d(3.6,0);
+
   }
 
   public static final class ShooterConstants {
     public static final double ShooterTolerance = 100;
-    public static final double ShooterSpeedTopLimit = 100;
+    public static final double ShooterDistanceTopLimit = 200;
     public static double ShooterP = 0.0005;
     public static double ShooterI = 0.000000005;
     public static double ShooterD = 0.0;
@@ -218,11 +238,17 @@ public final class Constants {
   // Populates a HashMap to assign to cameras
   private static Map<String, Transform3d> getCameraMap() {
     Map<String, Transform3d> camerasTemp = new HashMap<String, Transform3d>();
-    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 0.335)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
-    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 3.453)*M_TO_IN, (12.75 + 0.253)*M_TO_IN, 16*M_TO_IN), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    //                                                                Coords of important point on mount + mount to camera translation
+    camerasTemp.put("ArducamA", new Transform3d(new Translation3d((-2.5 - 1.859)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(90))));
+    camerasTemp.put("ArducamC", new Transform3d(new Translation3d((-2.5 - 3.453)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(150))));
+    camerasTemp.put("ArducamD", new Transform3d(new Translation3d((-2.5 - 0.335)*IN_TO_M, (12.75 + 0.253)*IN_TO_M, 16*IN_TO_M), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(30))));
+    camerasTemp.put("ElpC", new Transform3d(new Translation3d((-13.75)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-90))));
+    camerasTemp.put("ElpB", new Transform3d(new Translation3d((-13.75 - 1.594)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-150))));
+    camerasTemp.put("ElpA", new Transform3d(new Translation3d((-13.75 + 1.594)*IN_TO_M + 0.135, (-13.75 + 0.624)*IN_TO_M, 0.315), new Rotation3d(0, Math.toRadians(-18), Math.toRadians(-30))));
     return camerasTemp;
   }
 
-  public static final double M_TO_IN = 0.0254;
-  public static final double LIMELIGHT_X_OFFSET = 0.13;
+  public static final double IN_TO_M = 0.0254;
+  public static final double LIMELIGHT_X_OFFSET = -0.0254;
+  public static final double LIMELIGHT_Y_OFFSET = 0.1143;
 }

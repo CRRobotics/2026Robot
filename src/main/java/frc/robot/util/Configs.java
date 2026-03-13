@@ -1,7 +1,7 @@
 /**
  * Other than the MAXSwerveModule, this file is currently NOT USED so changing parameters in here will do nothing. :)
  */
-package frc.robot;
+package frc.robot.util;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.FeedbackSensor;

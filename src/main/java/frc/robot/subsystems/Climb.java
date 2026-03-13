@@ -2,13 +2,16 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ClimbConstants;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import frc.robot.Constants.ClimbConstants;
+import com.ctre.phoenix6.controls.PositionVoltage;
 
 public class Climb extends SubsystemBase {
 
@@ -24,15 +27,16 @@ public class Climb extends SubsystemBase {
     DigitalInput m_rungSwitch;
     private Slot0Configs m_climbConfig;
     private TalonFXConfigurator m_climbConfigurator;
+    PositionVoltage m_climbRequest;
 
     public Climb() {
 
         m_climb = new TalonFX(ClimbConstants.climbMotorID);
 
         m_climbConfigurator = m_climb.getConfigurator();
-        m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
+        //m_toplimitSwitch = new DigitalInput(ClimbConstants.TopLimitSwitchID);
         m_bottomlimitSwitch = new DigitalInput(ClimbConstants.BottomLimitSwitchID);
-        m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
+        //m_rungSwitch = new DigitalInput(ClimbConstants.RungSwitchID);
 
         // lidarSensor = new AnalogInput(ClimbConstants.lidarSensorID);
 
@@ -49,19 +53,18 @@ public class Climb extends SubsystemBase {
         m_climbConfig.kD = ClimbConstants.d;
         m_climb.setNeutralMode(NeutralModeValue.Brake);
         m_climbConfigurator.apply(m_climbConfig);
+        m_climbRequest = new PositionVoltage(0).withSlot(0);
+        
     }  
 
 
     /**
      * Starts climbing up if in range
      */
-    // public void climbUp() {
-    //     if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
-    //         m_climb.set(ClimbConstants.climbSpeed);
-    //     } else {
-    //         m_climb.set(0);
-    //     }
-    // }
+    public void climbExtend() {
+        m_climb.set(ClimbConstants.climbSpeed);
+        //m_climb.setControl(m_climbRequest.withPosition(ClimbConstants.climbHeight));
+    }
 
     /**
      * resets encoder position to 0
@@ -78,25 +81,21 @@ public class Climb extends SubsystemBase {
     //     return m_toplimitSwitch.get();
     // }
 
-    // private boolean BottomSwitchTrigger(){
-    //     return m_bottomlimitSwitch.get();
-    // }
+    private boolean BottomSwitchTrigger(){
+        return m_bottomlimitSwitch.get();
+    }
 
     // private boolean RungSwitchTrigger(){
     //     return m_rungSwitch.get();
     // }
 
     // public Trigger topLimitSwitch = new Trigger (this::TopSwitchTrigger);
-    // public Trigger bottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
+    public Trigger bottomLimitSwitch = new Trigger (this::BottomSwitchTrigger);
     // public Trigger rungLimitSwitch = new Trigger (this::RungSwitchTrigger);
 
-    // public void climbDown() {
-    //     if (lidarSensor.getVoltage() >= ClimbConstants.lowerBoundVoltage) {
-    //         m_climb.set(-ClimbConstants.climbSpeed);
-    //     } else {
-    //         m_climb.set(0);
-    //     }
-    // }
+    public void climbRetract() {
+        m_climb.set(-ClimbConstants.climbSpeed);
+    }
 
     /**
      * Turns off motor
@@ -119,19 +118,20 @@ public class Climb extends SubsystemBase {
     //     return barLimit.get();  
     // }
 
-    // public Command climbExtend(){
-    //     return this.startEnd(
-    //         () -> this.climbUp(),
-    //         () -> this.stop()
-    //     );
-    // }
+    public Command climbExtendCommand(){
+        return this.startEnd(
+            () -> this.climbExtend(),
+            () -> this.stop()
+        );
+    }
 
-    // public Command climbRetract(){
-    //     return this.startEnd(
-    //         () -> this.climbDown(),
-    //         () -> this.stop()
-    //     );
-    // }
+    public Command climbRetractCommand(){
+        return this.startEnd(
+            () -> this.climbRetract(), 
+            () -> this.stop()
+            );
+        //return this.run(() -> this.climbRetract()).until(bottomLimitSwitch);
+    }
 
     //public Command turnCommand(){
         //return this.startEnd(
@@ -139,6 +139,7 @@ public class Climb extends SubsystemBase {
             //() -> this.stop()
         //);
     //}
+    
 
 
 }
