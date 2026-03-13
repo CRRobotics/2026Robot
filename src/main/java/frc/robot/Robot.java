@@ -94,9 +94,18 @@ public class Robot extends LoggedRobot {
     }
   }
 
+  private void logFieldRelativeTurretAngle()
+  {
+    double tfangle = m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() +
+      m_robotContainer.getTurret().getAngle();
+    Logger.recordOutput("Turret/FieldRelativeAngle", tfangle);
+  }
+
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    this.logFieldRelativeTurretAngle();
+  }
 
   @Override
   public void teleopInit() {
@@ -111,7 +120,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    this.logFieldRelativeTurretAngle();
+  }
 
   @Override
   public void testInit() {

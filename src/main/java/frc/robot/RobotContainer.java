@@ -371,4 +371,8 @@ public class RobotContainer {
   public Command getAutonomousCommand(){
     return autoChooser.getSelected();
   }
+
+  public Turret getTurret() {
+    return this.turret;
+  }
 }
