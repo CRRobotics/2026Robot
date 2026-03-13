@@ -123,6 +123,10 @@ public class Hood extends SubsystemBase {
 
     }
 
+    private void notTrench(){
+        safeForTrench = false;
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("HoodAngle", this.getAngle());
@@ -170,9 +174,11 @@ public class Hood extends SubsystemBase {
 
     public Command underTrenchCommand(){
         
-        return this.startEnd(
-            () -> this.underTrench(),
-            () -> safeForTrench = false);
+        return this.runOnce(() -> this.underTrench());
+    }
+
+    public Command notTrenchCommand(){
+        return this.runOnce(() -> this.notTrench());
     }
 
     /**
