@@ -216,8 +216,8 @@ public final class Constants {
     public static final double equator = 4.021;
     public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
     public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
-    public static final Translation2d redAllianceLine = new Translation2d(13,0);
-    public static final Translation2d blueAllianceLine = new Translation2d(3.6,0);
+    public static final Translation2d redAllianceLine = new Translation2d(13,4.021);
+    public static final Translation2d blueAllianceLine = new Translation2d(3.6,4.021);
 
   }
 
