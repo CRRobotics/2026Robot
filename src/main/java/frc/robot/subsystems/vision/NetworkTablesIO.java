@@ -31,7 +31,7 @@ public class NetworkTablesIO {
      */
     public static Optional<Translation2d> getLimelightPoseReport() {
         double[] pieceData = getArray("limelight","llpython");
-        if (pieceData.length == 0){
+        if (pieceData.length == 0 || (pieceData[0] == 0 && pieceData[1] == 0)){
             // System.out.println("Empty Array");
             return Optional.empty();
         }
