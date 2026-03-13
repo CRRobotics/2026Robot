@@ -11,37 +11,37 @@ public class ValueFromDistance {
     public static TreeMap<Double, AngleSpeedTime> shootMap180 = new TreeMap<>();
     static {
         //put values here
-        shootMap180.put(33.0, new AngleSpeedTime(5,3000,1));
-        shootMap180.put(116.0, new AngleSpeedTime(20,3200,1));
-        shootMap180.put(151.0, new AngleSpeedTime(20,3650,1));
-        shootMap180.put(181.0, new AngleSpeedTime(23,3900,1));
+        shootMap180.put(33.0+ 23.5, new AngleSpeedTime(5,3000,1));
+        shootMap180.put(116.0+ 23.5, new AngleSpeedTime(20,3200,1));
+        shootMap180.put(151.0+ 23.5, new AngleSpeedTime(20,3650,1));
+        shootMap180.put(181.0+ 23.5, new AngleSpeedTime(23,3900,1));
         }
 
     public static TreeMap<Double, AngleSpeedTime> shootMap270 = new TreeMap<>();
     static {
         //put values here
-        shootMap270.put(24.0, new AngleSpeedTime(4,2900,1));
-        shootMap270.put(39.5, new AngleSpeedTime(7,3000,1));
-        shootMap270.put(51.5, new AngleSpeedTime(10,3150,1));
-        shootMap270.put(79.0, new AngleSpeedTime(10,3180,1));
-        shootMap270.put(109.75, new AngleSpeedTime(12,3370,1));
+        shootMap270.put(24.0+ 23.5, new AngleSpeedTime(4,2900,1));
+        shootMap270.put(39.5+ 23.5, new AngleSpeedTime(7,3000,1));
+        shootMap270.put(51.5+ 23.5, new AngleSpeedTime(10,3150,1));
+        shootMap270.put(79.0+ 23.5, new AngleSpeedTime(10,3180,1));
+        shootMap270.put(109.75+ 23.5, new AngleSpeedTime(12,3370,1));
 
     }
     
     public static TreeMap<Double, AngleSpeedTime> shootMap0 = new TreeMap<>();
     static{
-        shootMap0.put(31.0, new AngleSpeedTime(8, 3100, 0));
-        shootMap0.put(80.0, new AngleSpeedTime(13, 3000, 0));
-        shootMap0.put(130.0, new AngleSpeedTime(24, 3600, 0));
+        shootMap0.put(31.0+ 23.5, new AngleSpeedTime(8, 3100, 0));
+        shootMap0.put(80.0+ 23.5, new AngleSpeedTime(13, 3000, 0));
+        shootMap0.put(130.0+ 23.5, new AngleSpeedTime(24, 3600, 0));
     }
 
     public static TreeMap<Double, AngleSpeedTime> shootMap90 = new TreeMap<>();
     static{
-        shootMap90.put(122.0, new AngleSpeedTime(18, 3800, 0));
-        shootMap90.put(81.0, new AngleSpeedTime(14, 3400, 0));
-        shootMap90.put(32.0, new AngleSpeedTime(5, 3200, 0));
-        shootMap90.put(70.0, new AngleSpeedTime(10, 3300, 0));
-        shootMap90.put(104.0, new AngleSpeedTime(16, 3400, 0));
+        shootMap90.put(122.0+ 23.5, new AngleSpeedTime(18, 3800, 0));
+        shootMap90.put(81.0+ 23.5, new AngleSpeedTime(14, 3400, 0));
+        shootMap90.put(32.0+ 23.5, new AngleSpeedTime(5, 3200, 0));
+        shootMap90.put(70.0+ 23.5, new AngleSpeedTime(10, 3300, 0));
+        shootMap90.put(104.0+ 23.5, new AngleSpeedTime(16, 3400, 0));
     }
 
 
@@ -50,9 +50,9 @@ public class ValueFromDistance {
     public static TreeMap<Double, AngleSpeedTime> shootMap360 = new TreeMap<>();
     static{
         //put values here
-        shootMap360.put(31.0, new AngleSpeedTime(8, 3100, 0));
-        shootMap360.put(80.0, new AngleSpeedTime(13, 3000, 0));
-        shootMap360.put(130.0, new AngleSpeedTime(24, 3600, 0));
+        shootMap360.put(31.0+ 23.5, new AngleSpeedTime(8, 3100, 0));
+        shootMap360.put(80.0+ 23.5, new AngleSpeedTime(13, 3000, 0));
+        shootMap360.put(130.0+ 23.5, new AngleSpeedTime(24, 3600, 0));
     }
     
 
@@ -63,7 +63,7 @@ public class ValueFromDistance {
      * @return AngleSpeedTime
      */
     public static AngleSpeedTime getAngleSpeedTime(double distanceMeters, TreeMap<Double,AngleSpeedTime> shootMap) {
-        double distance = 39.37 * distanceMeters;
+        double distance = (39.37 * distanceMeters);
         SmartDashboard.putNumber("DistanceForTree", distance);
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
              if (distance<0){
