@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -89,8 +91,11 @@ public class Hood extends SubsystemBase {
             SmartDashboard.putNumber("hood going to", angle);
             hoodPID.setSetpoint(angle / 360 * HoodConstants.hoodGearRatio,ControlType.kPosition);
             target = angle;
+
+            Logger.recordOutput("Hood/TurnTo", angle);
+        } else {
+            System.out.println("Not safe for trench");
         }
-        System.out.println("Not safe for trench");
     }
 
     /**
@@ -130,6 +135,8 @@ public class Hood extends SubsystemBase {
     @Override
     public void periodic(){
         SmartDashboard.putNumber("HoodAngle", this.getAngle());
+        Logger.recordOutput("Hood/AngleActual", this.getAngle());
+        Logger.recordOutput("Hood/SafeForTrench", safeForTrench);
     }
 
     /**

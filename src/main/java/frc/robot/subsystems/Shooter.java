@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -14,6 +16,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -121,6 +124,7 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         //System.out.println(this.getSpeed());
         SmartDashboard.putNumber("ShooterSpeed", this.getSpeed());
+        Logger.recordOutput("Shooter/ActualSpeed", this.getSpeed());
         //System.out.println((ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getAngle() + "_____" + (ValueFromDistance.getAngleSpeedTime(SmartDashboard.getNumber("Distance to Hub", 1), ValueFromDistance.shootMap0)).getSpeed());
     }
 
@@ -131,6 +135,7 @@ public class Shooter extends SubsystemBase {
     private void setSpeed(double speed) {
         shooterLeader.set(speed);
         target = speed;
+        Logger.recordOutput("Shooter/SetSpeedPct", this.getSpeed());
     }
 
     /**
@@ -148,7 +153,7 @@ public class Shooter extends SubsystemBase {
     
     private void setSpeedRPM(double speed) {
         shooterPID.setSetpoint(speed,ControlType.kVelocity);
-
+        Logger.recordOutput("Shooter/SetSpeedRPM", speed);
     }
     
     /**
