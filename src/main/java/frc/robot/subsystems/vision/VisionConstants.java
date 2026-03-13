@@ -33,6 +33,8 @@ public class VisionConstants {
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
+
+  // perhaps a smaller z error here? Robot can be 3/4m off the ground?
   public static double maxZError = 0.75;
 
   // Standard deviation baselines, for 1 meter distance and 1 tag
