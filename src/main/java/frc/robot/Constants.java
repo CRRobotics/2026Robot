@@ -96,8 +96,8 @@ public final class Constants {
     public static final int servoChannel = 1;
     public static final int servoLength = 1;
     public static final int servoSpeed = 1;
-    public static final double servoOpen = 25;
-    public static final double servoClosed = 0;
+    public static final double servoOpen = 0;
+    public static final double servoClosed = 25;
     public static final int aqSpinID = 62;
     public static final double aqIntakeSpeed = 0.75;
     public static final double spinP = 9;
@@ -211,8 +211,8 @@ public final class Constants {
     public static final double bluehubY = 4.021;
     public static final Pose2d blueUpperTarget = new Pose2d(2.3,5.96,new Rotation2d(0));
     public static final Pose2d blueLowerTarget = new Pose2d(2.3,2.1,new Rotation2d(0));
-    public static final Pose2d redUpperTarget = new Pose2d(14.3,0,new Rotation2d(0));
-    public static final Pose2d redLowerTarget = new Pose2d(14.3,0,new Rotation2d(0));
+    public static final Pose2d redUpperTarget = new Pose2d(14.3,5.91,new Rotation2d(0));
+    public static final Pose2d redLowerTarget = new Pose2d(14.3,2.1,new Rotation2d(0));
     public static final double equator = 4.021;
     public static final Translation2d redHubTranslation = new Translation2d(11.901,4.021);
     public static final Translation2d blueHubTranslation = new Translation2d(4.612,4.021);
@@ -249,5 +249,6 @@ public final class Constants {
   }
 
   public static final double IN_TO_M = 0.0254;
-  public static final double LIMELIGHT_X_OFFSET = 0.13;
+  public static final double LIMELIGHT_X_OFFSET = -0.0254;
+  public static final double LIMELIGHT_Y_OFFSET = 0.1143;
 }

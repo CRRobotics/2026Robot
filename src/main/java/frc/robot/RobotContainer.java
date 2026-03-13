@@ -116,7 +116,7 @@ public class RobotContainer {
       .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
-    NamedCommands.registerCommand("deployAcqisition", acquisition.Deploy());
+    NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy());
     
     // Configure the button bindings
     //configureTestBindings();
@@ -171,91 +171,92 @@ public class RobotContainer {
             )
         );
     
-    m_driverController.b().whileTrue(drivetrain.applyRequest(() ->
-        {
-          ProfiledPIDController rotationController =
-          new ProfiledPIDController(
-            Constants.DriveConstants.autoTurnK.kP,
-            Constants.DriveConstants.autoTurnK.kI,
-            Constants.DriveConstants.autoTurnK.kD,
-            Constants.DriveConstants.autoTurnConstraints);
-          rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
-          rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    // m_driverController.y().whileTrue(drivetrain.applyRequest(() ->
+    //     {
+    //       ProfiledPIDController rotationController =
+    //       new ProfiledPIDController(
+    //         Constants.DriveConstants.autoTurnK.kP,
+    //         Constants.DriveConstants.autoTurnK.kI,
+    //         Constants.DriveConstants.autoTurnK.kD,
+    //         Constants.DriveConstants.autoTurnConstraints);
+    //       rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
+    //       rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
-          Pose2d cp = drivetrain.getState().Pose;
-          double angle = 0;
-          // angle in degrees
-          if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-            angle = Math.atan((FieldConstants.redhubY - cp.getY())/(FieldConstants.redhubX - cp.getX()));
-          }
-          else {
-            angle = Math.atan((FieldConstants.bluehubY - cp.getY())/(FieldConstants.bluehubX - cp.getX()));
-          }
+    //       Pose2d cp = drivetrain.getState().Pose;
+    //       double angle = 0;
+    //       // angle in degrees
+    //       if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+    //         angle = Math.atan((FieldConstants.redhubY - cp.getY())/(FieldConstants.redhubX - cp.getX()));
+    //       }
+    //       else {
+    //         angle = Math.atan((FieldConstants.bluehubY - cp.getY())/(FieldConstants.bluehubX - cp.getX()));
+    //       }
 
 
-          double rotFeedback = rotationController.calculate(
-                  cp.getRotation().getRadians(),angle + Math.PI);
+    //       double rotFeedback = rotationController.calculate(
+    //               cp.getRotation().getRadians(),angle + Math.PI);
 
-          double rotFF = rotationController.getSetpoint().velocity;
+    //       double rotFF = rotationController.getSetpoint().velocity;
 
-          double rotVel = rotFF + rotFeedback;
+    //       double rotVel = rotFF + rotFeedback;
 
-          if (Math.abs(cp.getRotation().getDegrees() - (angle  * (180/Math.PI)) + 180) < Constants.DriveConstants.TOL_ROTATION) {
-              rotVel = 0;
-          }
+    //       if (Math.abs(cp.getRotation().getDegrees() - (angle  * (180/Math.PI)) + 180) < Constants.DriveConstants.TOL_ROTATION) {
+    //           rotVel = 0;
+    //       }
 
-          return drive.withVelocityX(0).withVelocityY(0).withRotationalRate(rotVel);
-        }
-      )
-    );
+    //       return drive.withVelocityX(0).withVelocityY(0).withRotationalRate(rotVel);
+    //     }
+    //   )
+    // );
 
-    m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
-          Pose2d tp;
-          Optional<Translation2d> report = NetworkTablesIO.getLimelightPoseReport();
-          if(!report.isEmpty()){
-            tp = drivetrain.getState().Pose.plus(new Transform2d(report.get(),new Rotation2d(0)));
-          }
-          else{
-            tp = drivetrain.getState().Pose;
-          }
+    // m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
+    //       Pose2d tp;
+    //       Optional<Translation2d> report = NetworkTablesIO.getLimelightPoseReport();
+    //       if(!report.isEmpty()){
+    //         tp = drivetrain.getState().Pose.plus(new Transform2d(report.get(),new Rotation2d(0)));
+    //       }
+    //       else{
+    //         tp = drivetrain.getState().Pose;
+    //       }
 
-          Pose2d cp = drivetrain.getState().Pose;
+    //       Pose2d cp = drivetrain.getState().Pose;
 
-          ProfiledPID relativePID = new ProfiledPID();
+    //       ProfiledPID relativePID = new ProfiledPID();
 
-          double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
-          double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
-          double rotFeedback = relativePID.rotationController.calculate(
-            cp.getRotation().getRadians(), tp.getRotation().getRadians());
+    //       double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
+    //       double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
+    //       double rotFeedback = relativePID.rotationController.calculate(
+    //         cp.getRotation().getRadians(), tp.getRotation().getRadians());
 
-          double xFF = relativePID.xController.getSetpoint().velocity;
-          double yFF = relativePID.yController.getSetpoint().velocity;
-          double rotFF = relativePID.rotationController.getSetpoint().velocity;
+    //       double xFF = relativePID.xController.getSetpoint().velocity;
+    //       double yFF = relativePID.yController.getSetpoint().velocity;
+    //       double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
-          double xVel = xFF + xFeedback;
-          double yVel = yFF + yFeedback;
-          double rotVel = rotFF + rotFeedback;
+    //       double xVel = xFF + xFeedback;
+    //       double yVel = yFF + yFeedback;
+    //       double rotVel = rotFF + rotFeedback;
   
-          if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
-              xVel = 0;
-          }
-          if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
-              yVel = 0;
-          }
-          if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
-              rotVel = 0;
-          }
+    //       if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           xVel = 0;
+    //       }
+    //       if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           yVel = 0;
+    //       }
+    //       if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
+    //           rotVel = 0;
+    //       }
 
-          return drive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
-        }
-      )
-    );
+    //       return drive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
+    //     }
+    //   )
+    // );
 
     m_driverController.start().onTrue(climb.climbExtendCommand());
     m_driverController.back().onTrue(climb.climbRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
-    m_driverController.a().whileTrue(hood.underTrenchCommand());
+    m_driverController.a().onTrue(hood.underTrenchCommand());
+    m_driverController.b().onTrue(hood.notTrenchCommand());
 
     m_operatorController.x().onTrue(acquisition.Deploy());
     m_operatorController.y().onTrue(acquisition.Prepare());
