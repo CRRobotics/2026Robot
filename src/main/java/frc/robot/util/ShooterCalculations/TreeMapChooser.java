@@ -17,15 +17,15 @@ public static TreeMap<Double, TreeMap<Double,AngleSpeedTime>> chooserMap = new T
         chooserMap.put(360.0, ValueFromDistance.shootMap360);
     }
 
-public static AngleSpeedTime getChooserMap(double distance, double rAngle){
-    if (rAngle < 0 ){
-        rAngle = 360 + rAngle;
+public static AngleSpeedTime getChooserMap(double distance, double tAngle){
+    if (tAngle < 0 ){
+        tAngle = 360 + tAngle;
     }
-    SmartDashboard.putNumber("mapRAngle", rAngle);
-    if((rAngle >= chooserMap.firstKey()) && (rAngle <= chooserMap.lastKey())){
+    SmartDashboard.putNumber("mapRAngle", tAngle);
+    if((tAngle >= chooserMap.firstKey()) && (tAngle <= chooserMap.lastKey())){
          //Might not need the next 3 lines 
-        double floorAngle = chooserMap.floorKey(rAngle);
-        double ceilingAngle = chooserMap.ceilingKey(rAngle);
+        double floorAngle = chooserMap.floorKey(tAngle);
+        double ceilingAngle = chooserMap.ceilingKey(tAngle);
         TreeMap<Double, AngleSpeedTime> floorMap = chooserMap.get(floorAngle);
         TreeMap<Double, AngleSpeedTime> ceilingMap = chooserMap.get(ceilingAngle);
         AngleSpeedTime floorValue = ValueFromDistance.getAngleSpeedTime(distance, floorMap);
@@ -35,7 +35,7 @@ public static AngleSpeedTime getChooserMap(double distance, double rAngle){
             return new AngleSpeedTime(floorValue.getAngle(), floorValue.getSpeed(), floorValue.getTime());
         }
 
-        double remainderFrac= (rAngle - floorAngle)/(ceilingAngle- floorAngle);
+        double remainderFrac= (tAngle - floorAngle)/(ceilingAngle- floorAngle);
 
 
         double angle = floorValue.getAngle() + remainderFrac * (Math.abs(ceilingValue.getAngle() - floorValue.getAngle()));
