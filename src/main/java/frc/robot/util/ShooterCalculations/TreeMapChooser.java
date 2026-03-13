@@ -2,6 +2,8 @@ package frc.robot.util.ShooterCalculations;
 
 import java.util.TreeMap;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TreeMapChooser{
@@ -17,10 +19,14 @@ public static TreeMap<Double, TreeMap<Double,AngleSpeedTime>> chooserMap = new T
         chooserMap.put(360.0, ValueFromDistance.shootMap360);
     }
 
-public static AngleSpeedTime getChooserMap(double distance, double tAngle){
+public static AngleSpeedTime getChooserMap(double distance, double inputAngle){
+    double tAngle = inputAngle;
     if (tAngle < 0 ){
         tAngle = 360 + tAngle;
     }
+
+    AngleSpeedTime ret = new AngleSpeedTime(0,0,0);
+
     SmartDashboard.putNumber("mapRAngle", tAngle);
     if((tAngle >= chooserMap.firstKey()) && (tAngle <= chooserMap.lastKey())){
          //Might not need the next 3 lines 
@@ -32,21 +38,26 @@ public static AngleSpeedTime getChooserMap(double distance, double tAngle){
         AngleSpeedTime ceilingValue = ValueFromDistance.getAngleSpeedTime(distance, ceilingMap);
 
         if(floorAngle == ceilingAngle){
-            return new AngleSpeedTime(floorValue.getAngle(), floorValue.getSpeed(), floorValue.getTime());
+            ret = new AngleSpeedTime(floorValue.getAngle(), floorValue.getSpeed(), floorValue.getTime());
+        } else {
+            double remainderFrac= (tAngle - floorAngle)/(ceilingAngle- floorAngle);
+
+            double angle = floorValue.getAngle() + remainderFrac * (Math.abs(ceilingValue.getAngle() - floorValue.getAngle()));
+            double speed = floorValue.getSpeed() + remainderFrac * (Math.abs(ceilingValue.getSpeed() - floorValue.getSpeed()));
+            double time =  floorValue.getTime() + remainderFrac * (Math.abs(ceilingValue.getTime() - floorValue.getTime()));
+
+            ret = new AngleSpeedTime(angle,speed,time);
         }
-
-        double remainderFrac= (tAngle - floorAngle)/(ceilingAngle- floorAngle);
-
-
-        double angle = floorValue.getAngle() + remainderFrac * (Math.abs(ceilingValue.getAngle() - floorValue.getAngle()));
-        double speed = floorValue.getSpeed() + remainderFrac * (Math.abs(ceilingValue.getSpeed() - floorValue.getSpeed()));
-        double time =  floorValue.getTime() + remainderFrac * (Math.abs(ceilingValue.getTime() - floorValue.getTime()));
-
-        return new AngleSpeedTime(angle,speed,time);
     }
-    else{
-        return new AngleSpeedTime(0,0,0);
-    }
+
+    Logger.recordOutput("AngleSpeedTime/Input/Distance", distance);
+    Logger.recordOutput("AngleSpeedTime/Input/Angle", inputAngle);
+    Logger.recordOutput("AngleSpeedTime/Input/ClampedAngle", tAngle);
+    Logger.recordOutput("AngleSpeedTime/Output/Angle", ret.getAngle());
+    Logger.recordOutput("AngleSpeedTime/Output/Speed", ret.getSpeed());
+    Logger.recordOutput("AngleSpeedTime/Output/Time", ret.getTime());
+
+    return ret;
 }
 
 
