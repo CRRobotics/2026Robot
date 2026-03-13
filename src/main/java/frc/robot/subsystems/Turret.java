@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -145,24 +147,24 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("TurretAngle", this.getAngle());
+        Logger.recordOutput("Turret/CurrentAngle", this.getAngle());
+
     }
 
     public double distanceToHub(Pose2d curPose){
-        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
-            IsRed == true?
-            FieldConstants.redHubTranslation
-            :
-            FieldConstants.blueHubTranslation
-        );
+        Translation2d tgtHub = IsRed ? FieldConstants.redHubTranslation : FieldConstants.blueHubTranslation;
+        double dist = curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(tgtHub);
+        Logger.recordOutput("Turret/DistanceToHub", dist);
+        
+        return dist;
     }
 
     public double distanceToAlliance(Pose2d curPose){
-        return curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(
-            IsRed == true?
-            FieldConstants.redAllianceLine
-            :
-            FieldConstants.blueAllianceLine
-        );
+        Translation2d tgtAlliance = IsRed ? FieldConstants.redAllianceLine : FieldConstants.blueAllianceLine;
+        double dist = curPose.getTranslation().plus(TurretConstants.turretTranslation).getDistance(tgtAlliance);
+        Logger.recordOutput("Turret/DistanceToAlliance", dist);
+
+        return dist;
     }
 
     /**
@@ -302,6 +304,10 @@ public class Turret extends SubsystemBase {
                     + pose.get().getRotation().getDegrees(); // -180 to 180
                 SmartDashboard.putNumber("autoaim target angle", hubTargetAngle);
                 SmartDashboard.putNumber("cur pose degrees", pose.get().getRotation().getDegrees());
+
+                Logger.recordOutput("Turret/TTH/AutoAimAngle", hubTargetAngle);
+                Logger.recordOutput("Turret/TTH/CurrentPoseAngle", pose.get().getRotation().getDegrees());
+
                 this.turnTo(hubTargetAngle);
             }
         );
@@ -324,6 +330,10 @@ public class Turret extends SubsystemBase {
             + myPose.get().getRotation().getDegrees();
         SmartDashboard.putNumber("autoaim target angle", targetAngle);
         SmartDashboard.putNumber("cur pose degrees", myPose.get().getRotation().getDegrees());
+
+        Logger.recordOutput("Turret/TTP/AutoAimAngle", targetAngle);
+        Logger.recordOutput("Turret/TTP/CurrentPoseAngle", myPose.get().getRotation().getDegrees());
+
         this.turnTo(targetAngle);
     }
 
