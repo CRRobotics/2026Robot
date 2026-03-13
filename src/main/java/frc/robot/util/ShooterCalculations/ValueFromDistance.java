@@ -80,9 +80,9 @@ public class ValueFromDistance {
             if(floorDistance == ceilingDistance){
                 return new AngleSpeedTime(floorValue.getAngle(), floorValue.getSpeed(), floorValue.getTime());
             }
-            double speed = shootMap.get(floorDistance).getSpeed() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getSpeed() - shootMap.get(floorDistance).getSpeed()));
-            double angle = shootMap.get(floorDistance).getAngle() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getAngle() - shootMap.get(floorDistance).getAngle()));
-            double time = shootMap.get(floorDistance).getTime() + remainderFrac * (Math.abs(shootMap.get(ceilingDistance).getTime() - shootMap.get(floorDistance).getTime()));
+            double speed = floorValue.getSpeed() + remainderFrac * (Math.abs(ceilingValue.getSpeed() - floorValue.getSpeed()));
+            double angle = floorValue.getAngle() + remainderFrac * (Math.abs(ceilingValue.getAngle() - floorValue.getAngle()));
+            double time = floorValue.getTime() + remainderFrac * (Math.abs(ceilingValue.getTime() - floorValue.getTime()));
             //System.out.println("WORKING!");
             return new AngleSpeedTime(angle, speed, time);
         }
