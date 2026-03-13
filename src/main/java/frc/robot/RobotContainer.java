@@ -173,14 +173,7 @@ public class RobotContainer {
     
     m_driverController.y().whileTrue(drivetrain.applyRequest(() ->
         {
-          ProfiledPIDController rotationController =
-          new ProfiledPIDController(
-            Constants.DriveConstants.autoTurnK.kP,
-            Constants.DriveConstants.autoTurnK.kI,
-            Constants.DriveConstants.autoTurnK.kD,
-            Constants.DriveConstants.autoTurnConstraints);
-          rotationController.setIZone(Constants.DriveConstants.autoTurnK.iZone);
-          rotationController.enableContinuousInput(-Math.PI, Math.PI);
+          ProfiledPID relativePID = new ProfiledPID();
 
           Pose2d cp = drivetrain.getState().Pose;
           double angle = 0;
@@ -193,10 +186,10 @@ public class RobotContainer {
           }
 
 
-          double rotFeedback = rotationController.calculate(
+          double rotFeedback = relativePID.rotationController.calculate(
                   cp.getRotation().getRadians(),angle + Math.PI);
 
-          double rotFF = rotationController.getSetpoint().velocity;
+          double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
           double rotVel = rotFF + rotFeedback;
 
