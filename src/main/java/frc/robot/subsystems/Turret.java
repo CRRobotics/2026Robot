@@ -16,9 +16,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.util.ShooterCalculations.MoveShoot;
 
 public class Turret extends SubsystemBase {
 
@@ -165,6 +163,14 @@ public class Turret extends SubsystemBase {
         Logger.recordOutput("Turret/DistanceToAlliance", dist);
 
         return dist;
+    }
+
+    public double moveDistance(Pose2d curPose, Translation2d curVel){
+        return MoveShoot.getHubFinalDisplacement(
+            curPose.getTranslation(),
+            curVel, 
+            IsRed? FieldConstants.redHubTranslation: FieldConstants.blueHubTranslation, 
+            1.25).plus(TurretConstants.turretTranslation).getNorm();
     }
 
     /**
@@ -330,6 +336,23 @@ public class Turret extends SubsystemBase {
         Logger.recordOutput("Turret/TTP/CurrentPoseAngle", myPose.get().getRotation().getDegrees());
 
         this.turnTo(targetAngle);
+    }
+
+    public Command movingTurn(Supplier<Pose2d> myPose, Supplier<Translation2d> myVel){
+        return this.run(() ->
+            {
+                CheckAlliance();
+                double targetAngle = 
+                    -MoveShoot.getHubFinalDisplacement(
+                        myPose.get().getTranslation(),
+                        myVel.get(),
+                        (IsRed == true) ? FieldConstants.redHubTranslation:FieldConstants.blueHubTranslation,
+                        1.25
+                    ).plus(TurretConstants.turretTranslation).getAngle().getDegrees()
+                    + myPose.get().getRotation().getDegrees(); // -180 to 180
+                this.turnTo(targetAngle);
+            }
+        );
     }
 
 }

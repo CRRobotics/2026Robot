@@ -297,6 +297,14 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
+    m_operatorController.axisGreaterThan(0,0.5)
+      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.moveDistance(drivetrain.getState().Pose, drivetrain.getState().Speeds), turret.getAngle())).getAngle())
+      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.moveDistance(drivetrain.getState().Pose, drivetrain.getState().Speeds), turret.getAngle()).getSpeed()))
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
+
     SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
     SmartDashboard.putData("Zero Turret", turret.zeroTurretCommand());
     
