@@ -114,10 +114,17 @@ public class RobotContainer {
     SmartDashboard.putNumber("Distance to Hub", 1);
 
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
-    NamedCommands.registerCommand("shootFromAny", hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
-      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+    NamedCommands.registerCommand("turnToHub", turret.turnToHub(() -> drivetrain.getState().Pose).alongWith(Commands.waitSeconds(1)));
+    NamedCommands.registerCommand("shootFromAny",
+      (hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle())).getAngle())
+      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand())))))
+    );
+ 
+  
     NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy().alongWith(Commands.waitSeconds(3.5)));
     
     // Configure the button bindings
