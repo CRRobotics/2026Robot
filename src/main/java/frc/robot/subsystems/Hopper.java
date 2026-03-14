@@ -73,9 +73,9 @@ public class Hopper extends SubsystemBase {
 
         public Command specialHopperCommand(){
             return this.runOnce(() -> this.runHopper())
-                .andThen(Commands.waitSeconds(3))
+                .andThen(Commands.waitSeconds(2.5))
                 .andThen(this.runOnce(() -> this.runReverseHopper()))
-                .andThen(Commands.waitSeconds(0.5))
+                .andThen(Commands.waitSeconds(1))
                 .repeatedly()
                 .finallyDo(() -> this.stop())
             ;
