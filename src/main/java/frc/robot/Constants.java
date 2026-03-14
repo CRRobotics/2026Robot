@@ -144,20 +144,20 @@ public final class Constants {
     public static final double p = 0.5;
     public static final double i = 0.000;
     public static final double d = 0;
-    public static final double hoodGearRatio = 46/15 * 12;
+    public static final double hoodGearRatio = 46/15 * 5 * 5;
     public static final double hoodTolerance = 1;
     public static final int zeroID = 6;
   }
 
   public static final class FeederConstants {
     public static final int feederID = 24;
-    public static final double feederSpeed = -1;
+    public static final double feederSpeed = -0.25;
     public static final int feederMotorCANID = 24;
   }
   
   public static final class HopperConstants {
     public static final int hopperID = 23;
-    public static final double hopperSpeed = 0.5;
+    public static final double hopperSpeed = 0.3;
     public static final int hopperMotorCANID = 23;
   }
 

@@ -289,10 +289,10 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
-    //m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
+    m_operatorController.start().whileTrue(hopper.specialHopperCommand());
 
     m_operatorController.back()
-      .whileTrue((hood.turnToCommand(() -> 5)
+      .whileTrue((hood.turnToCommand(() -> 0)
       .alongWith(shooter.shootCommand(() -> 3000)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
