@@ -88,6 +88,8 @@ public class RobotContainer {
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final SwerveRequest.FieldCentric autoDrive = new SwerveRequest.FieldCentric()
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -176,28 +178,32 @@ public class RobotContainer {
           ProfiledPID relativePID = new ProfiledPID();
 
           Pose2d cp = drivetrain.getState().Pose;
-          double angle = 0;
-          // angle in degrees
+          double angle = 0; //Radians
           if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-            angle = Math.atan((FieldConstants.redhubY - cp.getY())/(FieldConstants.redhubX - cp.getX()));
+            angle = -Math.atan2(
+              (FieldConstants.redhubY - cp.getY()),
+              (FieldConstants.redhubX - cp.getX())
+              ) * (180/Math.PI);
           }
           else {
-            angle = Math.atan((FieldConstants.bluehubY - cp.getY())/(FieldConstants.bluehubX - cp.getX()));
+            angle = -Math.atan2(
+              (FieldConstants.bluehubY - cp.getY()),
+              (FieldConstants.bluehubX - cp.getX())
+              ) * (180/Math.PI);
           }
-
+          System.out.println("Target angle: " + angle);
 
           double rotFeedback = relativePID.rotationController.calculate(
-                  cp.getRotation().getRadians(),angle + Math.PI);
+                  cp.getRotation().getDegrees(),angle + 90);
 
           double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
           double rotVel = rotFF + rotFeedback;
-
-          if (Math.abs(cp.getRotation().getDegrees() - (angle  * (180/Math.PI)) + 180) < Constants.DriveConstants.TOL_ROTATION) {
+          if (Math.abs(cp.getRotation().getDegrees() - (angle + 90)) < Constants.DriveConstants.TOL_ROTATION) {
               rotVel = 0;
           }
 
-          return drive.withVelocityX(0).withVelocityY(0).withRotationalRate(rotVel);
+          return autoDrive.withVelocityX(0).withVelocityY(0).withRotationalRate(rotVel);
         }
       )
     );
@@ -239,7 +245,7 @@ public class RobotContainer {
               rotVel = 0;
           }
 
-          return drive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
+          return autoDrive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
         }
       )
     );
@@ -276,7 +282,13 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
-    m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
+    //m_operatorController.start().whileTrue(hopper.runReverseHopperCommand());
+
+    m_operatorController.back()
+      .whileTrue((hood.turnToCommand(() -> 5)
+      .alongWith(shooter.shootCommand(() -> 3000)
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
     SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
     SmartDashboard.putData("Zero Turret", turret.zeroTurretCommand());

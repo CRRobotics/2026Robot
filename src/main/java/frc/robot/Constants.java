@@ -52,7 +52,7 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
     public static final PIDConstants autoMoveK = new PIDConstants(1.2,0,0,0);
-    public static final PIDConstants autoTurnK = new PIDConstants(1.1,0,0,20);
+    public static final PIDConstants autoTurnK = new PIDConstants(0.025,0,0,20);
 
     public static final TrapezoidProfile.Constraints autoMoveConstraints =
         new TrapezoidProfile.Constraints(2.0, 2.0);
@@ -61,7 +61,7 @@ public final class Constants {
         new TrapezoidProfile.Constraints(Math.PI, Math.PI);
 
     public static final double TOL_TRANSLATION = 0.055; // 2.5cm target accuracy on auto
-    public static final double TOL_ROTATION = 2.5; // 10 degree rotation accuracy on auto
+    public static final double TOL_ROTATION = 1;
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
