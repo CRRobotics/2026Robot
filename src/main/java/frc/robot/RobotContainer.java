@@ -267,10 +267,8 @@ public class RobotContainer {
       .whileTrue(turret.turnToAlliance(() -> drivetrain.getState().Pose));
     
     m_operatorController.leftBumper()
-      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
-          turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle())).getAngle())
-      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
-          turret.distanceToAlliance(drivetrain.getState().Pose), turret.getAngle()).getSpeed()))
+      .whileTrue((hood.turnToCommand(() -> 24)
+      .alongWith(shooter.shootCommand(() -> 3500)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
