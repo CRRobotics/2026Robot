@@ -198,10 +198,12 @@ public class RobotContainer {
               (FieldConstants.bluehubX - cp.getX())
               ) * (180/Math.PI);
           }
-          System.out.println("Target angle: " + angle);
 
           double rotFeedback = relativePID.rotationController.calculate(
                   cp.getRotation().getDegrees(),angle + 90);
+
+          SmartDashboard.putNumber("angForTurnToPoint", angle);
+          SmartDashboard.putNumber("rotFeedback", rotFeedback);
 
           double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
