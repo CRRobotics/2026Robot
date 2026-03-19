@@ -93,7 +93,7 @@ public final class Constants {
     public static final double IntakeSpeed = -0.5;
     public static final double SpinFeedForward = 1;
     public static final int servoChannel = 1;
-    public static final int servoLength = 1;
+    public static final int servoLength = 50;
     public static final int servoSpeed = 1;
     public static final double servoOpen = 0;
     public static final double servoClosed = 25;
