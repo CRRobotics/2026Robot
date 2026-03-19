@@ -7,7 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Value;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,15 +17,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -131,11 +126,6 @@ public class RobotContainer {
     //configureTestBindings();
     configureRealBindings();
     configureDefaults();
-    
-    // Run at the beginning of match?
-    // turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
-    // aquisition.ExtendAcquisitionArmCommand().andThen(aquisition.ChangeAqState());
-
     
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -393,16 +383,6 @@ public class RobotContainer {
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
     m_driverController.x().onFalse(shooter.shootFinished());
-
-    
-    //#TODO Test this
-     //m_driverController.x()
-       //.whileTrue(turret.turnToHub(() -> CommandSwerveDrivetrain.getState().Pose)
-       //.alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(CommandSwerveDrivetrain.getState().Pose(), null)).getAngle()))
-       //.andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
-       //.andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(getState().Pose(), null)).getSpeed()))
-       //.alongWith(feeder.runFeederCommand())
-       //.alongWith(hopper.runHopperCommand()));
     
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
