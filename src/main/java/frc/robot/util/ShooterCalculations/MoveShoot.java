@@ -1,9 +1,12 @@
 package frc.robot.util.ShooterCalculations;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class MoveShoot{
     /**
@@ -22,5 +25,9 @@ public class MoveShoot{
         Translation2d curToFinal = velRelativeXf.plus(velRelativeY); // Final pose of target relative to the robot's initial reference frame
         return curToFinal;
     }
-
-}
+    public static Pose2d GetRobotDisplacement(Pose2d curPos, ChassisSpeeds chassisspeeds, Translation2d targetPos, Double timeToTarget) {
+        Transform2d VelocityTransform = new Transform2d(timeToTarget*chassisspeeds.vxMetersPerSecond, timeToTarget*chassisspeeds.vyMetersPerSecond, new Rotation2d(0));
+        Pose2d TargetTranslation = (curPos.plus(VelocityTransform));
+        return TargetTranslation;
+    }
+} 
