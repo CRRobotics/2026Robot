@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
 import frc.robot.subsystems.Climb;
@@ -333,6 +334,16 @@ public class RobotContainer {
       .alongWith(shooter.shootCommand(() -> 3000)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
+
+    m_operatorController.rightTrigger()
+      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle())).getAngle())
+      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
+          turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle()).getSpeed()))
+      .alongWith(turret.turnToHub(() -> MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)))
+      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone).and(turret.turretDone))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
+
 
     SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
     SmartDashboard.putData("Zero Turret", turret.zeroTurretCommand());
