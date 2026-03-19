@@ -9,6 +9,9 @@ public class AngleSpeedTime {
     private double time;
     
     public AngleSpeedTime(double angle, double speed, double time) {
+        if (angle<0){
+            angle = 0;
+        }
         this.angle = angle;
         this.speed = speed;
         this.time = time;

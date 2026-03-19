@@ -67,8 +67,8 @@ public class ValueFromDistance {
         SmartDashboard.putNumber("DistanceForTree", distance);
         if(distance > shootMap.firstKey() && distance < shootMap.lastKey()) {
              if (distance<0){
-            distance=0;
-        }
+                distance=0;
+            }
 
             double floorDistance = shootMap.floorKey(distance);
             AngleSpeedTime floorValue = shootMap.get(floorDistance);
@@ -112,7 +112,8 @@ public class ValueFromDistance {
              * The same thing, but for the case where we're closer than the smallest value in the treemap.
              */
             double firstKey = shootMap.firstKey();
-            double Speeda = (firstKey - distance)/(firstKey - shootMap.higherKey(firstKey));
+            // OLD: double Speeda = (firstKey - distance)/(firstKey - shootMap.higherKey(firstKey));
+            double Speeda = (distance - firstKey)/(firstKey - shootMap.higherKey(firstKey));
             double Speedb = (shootMap.get(firstKey).getSpeed() - shootMap.get(shootMap.higherKey(firstKey)).getSpeed());
             double Speedc = (Speeda*Speedb) + shootMap.get(firstKey).getSpeed();
             /**Same thing for the angle here */
