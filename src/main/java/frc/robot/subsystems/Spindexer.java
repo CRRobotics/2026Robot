@@ -19,7 +19,7 @@ public class Spindexer extends SubsystemBase{
     public Spindexer() {
         configFeeder = new SparkMaxConfig();
         configFeeder.idleMode(IdleMode.kCoast);
-        spindexerMotor = new SparkMax(SpindexerConstants.spindexerID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+        spindexerMotor = new SparkMax(SpindexerConstants.spindexerCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         spindexerMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         spindexerEncoder = spindexerMotor.getEncoder();
     }
