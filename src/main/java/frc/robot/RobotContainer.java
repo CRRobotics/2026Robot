@@ -122,7 +122,8 @@ public class RobotContainer {
  
   
     NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy().alongWith(Commands.waitSeconds(3.5)));
-    
+    NamedCommands.registerCommand("HoodUp", hood.notTrenchCommand());
+
     // Configure the button bindings
     //configureTestBindings();
     configureRealBindings();
@@ -312,8 +313,8 @@ public class RobotContainer {
       .whileTrue(turret.turnToAlliance(() -> drivetrain.getState().Pose));
     
     m_operatorController.leftBumper()
-      .whileTrue((hood.turnToCommand(() -> 24)
-      .alongWith(shooter.shootCommand(() -> 3500)
+      .whileTrue((hood.turnToCommand(() -> 10)
+      .alongWith(shooter.shootCommand(() -> 500)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
