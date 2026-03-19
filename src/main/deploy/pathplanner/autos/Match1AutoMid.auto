@@ -49,6 +49,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "turnToHub"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [

@@ -7,7 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Value;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,15 +17,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -124,19 +119,16 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand())))))
     );
+    NamedCommands.registerCommand("HoodDown", hood.underTrenchCommand());
  
   
     NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy().alongWith(Commands.waitSeconds(3.5)));
-    
+    NamedCommands.registerCommand("HoodUp", hood.notTrenchCommand());
+
     // Configure the button bindings
     //configureTestBindings();
     configureRealBindings();
     configureDefaults();
-    
-    // Run at the beginning of match?
-    // turret.turnCommand().until(turret.atZero).andThen(turret.zeroCommand());
-    // aquisition.ExtendAcquisitionArmCommand().andThen(aquisition.ChangeAqState());
-
     
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -218,15 +210,60 @@ public class RobotContainer {
       )
     );
 
+    // This is drive to fuel using visions, uncomment if you want to use it
+    // m_driverController.x().whileTrue(drivetrain.applyRequest(() -> { 
+    //       Pose2d tp;
+    //       Optional<Translation2d> report = NetworkTablesIO.getLimelightPoseReport();
+    //       if(!report.isEmpty()){
+    //         tp = drivetrain.getState().Pose.plus(new Transform2d(report.get(),new Rotation2d(0)));
+    //       }
+    //       else{
+    //         tp = drivetrain.getState().Pose;
+    //       }
+
+    //       Pose2d cp = drivetrain.getState().Pose;
+
+    //       ProfiledPID relativePID = new ProfiledPID();
+
+    //       double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
+    //       double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
+    //       double rotFeedback = relativePID.rotationController.calculate(
+    //         cp.getRotation().getRadians(), tp.getRotation().getRadians());
+
+    //       double xFF = relativePID.xController.getSetpoint().velocity;
+    //       double yFF = relativePID.yController.getSetpoint().velocity;
+    //       double rotFF = relativePID.rotationController.getSetpoint().velocity;
+
+    //       double xVel = xFF + xFeedback;
+    //       double yVel = yFF + yFeedback;
+    //       double rotVel = rotFF + rotFeedback;
+  
+    //       if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           xVel = 0;
+    //       }
+    //       if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           yVel = 0;
+    //       }
+    //       if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
+    //           rotVel = 0;
+    //       }
+
+    //       return autoDrive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
+    //     }
+    //   )
+    // );
+
+    // #TODO Enter target poses here
     m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
           Pose2d tp;
-          Optional<Translation2d> report = NetworkTablesIO.getLimelightPoseReport();
-          if(!report.isEmpty()){
-            tp = drivetrain.getState().Pose.plus(new Transform2d(report.get(),new Rotation2d(0)));
+
+          if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            tp = new Pose2d(0,0,new Rotation2d(0));
           }
-          else{
-            tp = drivetrain.getState().Pose;
+          else {
+            tp = new Pose2d(0,0,new Rotation2d(0));
           }
+          
 
           Pose2d cp = drivetrain.getState().Pose;
 
@@ -277,8 +314,8 @@ public class RobotContainer {
       .whileTrue(turret.turnToAlliance(() -> drivetrain.getState().Pose));
     
     m_operatorController.leftBumper()
-      .whileTrue((hood.turnToCommand(() -> 24)
-      .alongWith(shooter.shootCommand(() -> 3500)
+      .whileTrue((hood.turnToCommand(() -> 10)
+      .alongWith(shooter.shootCommand(() -> 500)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
@@ -359,16 +396,6 @@ public class RobotContainer {
       .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
       .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())))));
     m_driverController.x().onFalse(shooter.shootFinished());
-
-    
-    //#TODO Test this
-     //m_driverController.x()
-       //.whileTrue(turret.turnToHub(() -> CommandSwerveDrivetrain.getState().Pose)
-       //.alongWith(hood.turnToCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(CommandSwerveDrivetrain.getState().Pose(), null)).getAngle()))
-       //.andThen(Commands.waitUntil(turret.turretDone.and(hood.hoodDone)))
-       //.andThen(shooter.shootCommand(() -> ValueFromDistance.getAngleSpeed(ValueFromDistance.getDistanceToTarget(getState().Pose(), null)).getSpeed()))
-       //.alongWith(feeder.runFeederCommand())
-       //.alongWith(hopper.runHopperCommand()));
     
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
