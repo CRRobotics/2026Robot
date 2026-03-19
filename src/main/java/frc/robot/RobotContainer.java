@@ -336,9 +336,9 @@ public class RobotContainer {
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
     m_operatorController.rightTrigger()
-      .whileTrue((hood.turnToCommand(() -> (TreeMapChooser.getChooserMap(
+      .whileTrue((hood.turnToCommandContinuous(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle())).getAngle())
-      .alongWith(shooter.shootCommand(() -> (TreeMapChooser.getChooserMap(
+      .alongWith(shooter.shootCommandContinuous(() -> (TreeMapChooser.getChooserMap(
           turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle()).getSpeed()))
       .alongWith(turret.turnToHub(() -> MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)))
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone).and(turret.turretDone))
