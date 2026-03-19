@@ -112,7 +112,7 @@ public class ValueFromDistance {
              * The same thing, but for the case where we're closer than the smallest value in the treemap.
              */
             double firstKey = shootMap.firstKey();
-            // OLD: double Speeda = (firstKey - distance)/(firstKey - shootMap.higherKey(firstKey));
+            // Old speeda calculation (I don't think it works): double Speeda = (firstKey - distance)/(firstKey - shootMap.higherKey(firstKey));
             double Speeda = (distance - firstKey)/(firstKey - shootMap.higherKey(firstKey));
             double Speedb = (shootMap.get(firstKey).getSpeed() - shootMap.get(shootMap.higherKey(firstKey)).getSpeed());
             double Speedc = (Speeda*Speedb) + shootMap.get(firstKey).getSpeed();

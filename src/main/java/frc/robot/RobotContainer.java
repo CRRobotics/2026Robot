@@ -123,6 +123,7 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand())))))
     );
+    NamedCommands.registerCommand("HoodDown", hood.underTrenchCommand());
  
   
     NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy().alongWith(Commands.waitSeconds(3.5)));
