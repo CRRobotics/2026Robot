@@ -159,7 +159,7 @@ public final class Constants {
   }
   
   public static final class HopperConstants {
-    public static final double hopperSpeed = 0.3;
+    public static final double hopperSpeed = 0.5;
     public static final int hopperMotorCANID = 23;
   }
 
