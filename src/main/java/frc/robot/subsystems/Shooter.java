@@ -197,7 +197,12 @@ public class Shooter extends SubsystemBase {
             () -> this.stop()
             );
     }
-
+    public Command shootCommandContinuous(DoubleSupplier speed){
+        return this.runEnd(
+            () -> this.setSpeedRPM(speed.getAsDouble()),
+            () -> this.stop()
+            );
+    }
     /**
      * @return creates command that ensures shooter is finished
      */
