@@ -96,7 +96,7 @@ public final class Constants {
     public static final int servoLength = 50;
     public static final int servoSpeed = 20;
     public static final double servoOpen = 0;
-    public static final double servoClosed = 25;
+    public static final double servoClosed = 32;
     public static final int aqSpinID = 62;
     public static final double aqIntakeSpeed = 0.75;
     public static final double spinP = 9;
