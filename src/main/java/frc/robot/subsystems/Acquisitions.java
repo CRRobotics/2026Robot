@@ -1,12 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.FeedbackSensor;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -23,7 +19,6 @@ public class Acquisitions extends SubsystemBase {
     private final SparkMax spinMotor;
     //private final SparkMax armMotorRight;
 
-    private final SparkClosedLoopController spinPID;
     private final LinearServo servo;
 
     private SparkMaxConfig spinConfig;
@@ -55,7 +50,6 @@ public class Acquisitions extends SubsystemBase {
         //armMotorRight.configure(armConfigRight, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         spinMotor.configure(spinConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-        spinPID = spinMotor.getClosedLoopController();
     }
 
     /**

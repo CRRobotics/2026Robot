@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,13 +149,16 @@ public final class Constants {
   }
 
   public static final class FeederConstants {
-    public static final int feederID = 24;
-    public static final double feederSpeed = -0.25;
+    public static final double feederSpeed = -1;
     public static final int feederMotorCANID = 24;
+  }
+
+  public static final class SpindexerConstants{
+    public static final int spindexerCANID = 25;
+    public static final double spindexerSpeed = -0.25;
   }
   
   public static final class HopperConstants {
-    public static final int hopperID = 23;
     public static final double hopperSpeed = 0.3;
     public static final int hopperMotorCANID = 23;
   }
