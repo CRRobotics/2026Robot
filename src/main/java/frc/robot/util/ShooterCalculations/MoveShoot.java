@@ -25,7 +25,7 @@ public class MoveShoot{
         Translation2d curToFinal = velRelativeXf.plus(velRelativeY); // Final pose of target relative to the robot's initial reference frame
         return curToFinal;
     }
-    public static Pose2d GetRobotDisplacement(Pose2d curPos, ChassisSpeeds chassisspeeds, Translation2d targetPos, Double timeToTarget) {
+    public static Pose2d GetRobotDisplacement(Pose2d curPos, ChassisSpeeds chassisspeeds, Double timeToTarget) {
         Transform2d VelocityTransform = new Transform2d(timeToTarget*chassisspeeds.vxMetersPerSecond, timeToTarget*chassisspeeds.vyMetersPerSecond, new Rotation2d(0));
         Pose2d TargetTranslation = (curPos.plus(VelocityTransform));
         return TargetTranslation;

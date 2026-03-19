@@ -133,7 +133,7 @@ public final class Constants {
     public static final double d = 0;
     public static final double turretGearRatio = 52.29;
     public static final int limitID = 5;
-    public static final double turretTolerance = 0.5;
+    public static final double turretTolerance = 1;
     // -6.25, -5.75 inches
     public static final Transform2d turretTransform = new Transform2d(-0.159,-0.146,new Rotation2d(0));
     public static final Translation2d turretTranslation = new Translation2d(-0.159,-0.146);
@@ -222,6 +222,7 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
+    public static final double BallTime = 1.25;
     public static final double ShooterTolerance = 100;
     public static final double ShooterDistanceTopLimit = 200;
     public static double ShooterP = 0.0005;
