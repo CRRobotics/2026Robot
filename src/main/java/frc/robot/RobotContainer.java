@@ -35,7 +35,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Acquisitions;
-import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.AcquisitionArma;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.util.ProfiledPID;
@@ -66,7 +66,7 @@ public class RobotContainer {
   private final Acquisitions acquisition;
   private final Feeder feeder;
   private final Hood hood;
-  private final Climb climb;
+  private final AcquisitionArma acquisitionarma;
   private final Vision vision;
 
   // The driver's controller
@@ -107,7 +107,7 @@ public class RobotContainer {
     acquisition = new Acquisitions();
     feeder = new Feeder();
     hood = new Hood();
-    climb = new Climb();
+    acquisitionarma = new AcquisitionArma();
     SmartDashboard.putNumber("Input Hood Angle", 30);
     SmartDashboard.putNumber("Input Shoot Speed", 0);
     SmartDashboard.putNumber("Input Turret Angle", 0);
@@ -307,8 +307,8 @@ public class RobotContainer {
     //   )
     // );
     m_driverController.x().whileTrue(feeder.runFeederCommand());
-    m_driverController.start().onTrue(climb.climbExtendCommand());
-    m_driverController.back().onTrue(climb.climbRetractCommand());
+    m_driverController.start().onTrue(acquisitionarma.acqArmExtendCommand());
+    m_driverController.back().onTrue(acquisitionarma.acqArmRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.a().onTrue(hood.underTrenchCommand());
