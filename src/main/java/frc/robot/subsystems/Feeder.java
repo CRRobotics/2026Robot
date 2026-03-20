@@ -41,7 +41,7 @@ public class Feeder extends SubsystemBase {
         public void periodic () {
             SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
             Logger.recordOutput("Feeder Speed Constant", FeederConstants.feederSpeed);
-            Logger.recordOutput("AngleSpeedTime/Input/Distance", feederEncoder.getVelocity());
+            Logger.recordOutput("Feeder Actual Velocity", feederEncoder.getVelocity());
         }
         /**
          * stops feeder
