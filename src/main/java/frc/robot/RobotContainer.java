@@ -253,50 +253,50 @@ public class RobotContainer {
     //   )
     // );
 
-    // #TODO Enter target poses here
-    m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
-          Pose2d tp;
+    // // #TODO Enter target poses here
+    // m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
+    //       Pose2d tp;
 
-          if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-            tp = new Pose2d(0,0,new Rotation2d(0));
-          }
-          else {
-            tp = new Pose2d(0,0,new Rotation2d(0));
-          }
+    //       if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+    //         tp = new Pose2d(0,0,new Rotation2d(0));
+    //       }
+    //       else {
+    //         tp = new Pose2d(0,0,new Rotation2d(0));
+    //       }
           
 
-          Pose2d cp = drivetrain.getState().Pose;
+    //       Pose2d cp = drivetrain.getState().Pose;
 
-          ProfiledPID relativePID = new ProfiledPID();
+    //       ProfiledPID relativePID = new ProfiledPID();
 
-          double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
-          double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
-          double rotFeedback = relativePID.rotationController.calculate(
-            cp.getRotation().getRadians(), tp.getRotation().getRadians());
+    //       double xFeedback = relativePID.xController.calculate(cp.getX(), tp.getX());
+    //       double yFeedback = relativePID.yController.calculate(cp.getY(), tp.getY());
+    //       double rotFeedback = relativePID.rotationController.calculate(
+    //         cp.getRotation().getRadians(), tp.getRotation().getRadians());
 
-          double xFF = relativePID.xController.getSetpoint().velocity;
-          double yFF = relativePID.yController.getSetpoint().velocity;
-          double rotFF = relativePID.rotationController.getSetpoint().velocity;
+    //       double xFF = relativePID.xController.getSetpoint().velocity;
+    //       double yFF = relativePID.yController.getSetpoint().velocity;
+    //       double rotFF = relativePID.rotationController.getSetpoint().velocity;
 
-          double xVel = xFF + xFeedback;
-          double yVel = yFF + yFeedback;
-          double rotVel = rotFF + rotFeedback;
+    //       double xVel = xFF + xFeedback;
+    //       double yVel = yFF + yFeedback;
+    //       double rotVel = rotFF + rotFeedback;
   
-          if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
-              xVel = 0;
-          }
-          if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
-              yVel = 0;
-          }
-          if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
-              rotVel = 0;
-          }
+    //       if (Math.abs(cp.getX() - tp.getX()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           xVel = 0;
+    //       }
+    //       if (Math.abs(cp.getY() - tp.getY()) < Constants.DriveConstants.TOL_TRANSLATION) {
+    //           yVel = 0;
+    //       }
+    //       if (Math.abs(cp.getRotation().minus(tp.getRotation()).getDegrees()) < Constants.DriveConstants.TOL_ROTATION) {
+    //           rotVel = 0;
+    //       }
 
-          return autoDrive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
-        }
-      )
-    );
-
+    //       return autoDrive.withVelocityX(xVel).withVelocityY(yVel).withRotationalRate(rotVel);
+    //     }
+    //   )
+    // );
+    m_driverController.x().whileTrue(feeder.runFeederCommand());
     m_driverController.start().onTrue(climb.climbExtendCommand());
     m_driverController.back().onTrue(climb.climbRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
