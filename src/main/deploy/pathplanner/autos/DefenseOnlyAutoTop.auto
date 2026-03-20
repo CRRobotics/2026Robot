@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "deployAcquisition"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "AwayFromTop"
