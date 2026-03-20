@@ -30,4 +30,4 @@ public class MoveShoot{
         Pose2d TargetTranslation = (curPos.plus(VelocityTransform));
         return TargetTranslation;
     }
-} 
+}
