@@ -77,7 +77,7 @@ public class Feeder extends SubsystemBase {
          */
         public Command runFeederCommand(){
             return (this.startEnd(
-                () -> this.runFeeder(SmartDashboard.getNumber("Input Feeder Speed", 0)),
+                () -> this.runFeeder(FeederConstants.FeederSpeedRPM),
                 () -> this.stop()
             ));
         }
