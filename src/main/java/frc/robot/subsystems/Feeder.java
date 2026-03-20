@@ -54,7 +54,7 @@ public class Feeder extends SubsystemBase {
          * Puts balls into feeder
          */
         private void runFeeder(double speed) {
-            FeederPID.setSetpoint(speed,ControlType.kVelocity);
+            FeederPID.setSetpoint(-speed,ControlType.kVelocity);
         }
 
         /**
