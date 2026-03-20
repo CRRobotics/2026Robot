@@ -86,6 +86,10 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final SwerveRequest.FieldCentric autoDrive = new SwerveRequest.FieldCentric()
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+  private final SwerveRequest.FieldCentricFacingAngle OverBump = new SwerveRequest.FieldCentricFacingAngle()
+  .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+  .withDeadband(MaxSpeed * 0.025)
+  .withTargetDirection(new Rotation2d(Math.PI/4));
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -173,7 +177,11 @@ public class RobotContainer {
               } 
             )
         );
-    
+    m_driverController.start().whileTrue(
+      drivetrain.applyRequest(() -> {
+        return OverBump;
+      })
+    );
     m_driverController.y().whileTrue(drivetrain.applyRequest(() ->
         {
           ProfiledPID relativePID = new ProfiledPID();
@@ -344,6 +352,12 @@ public class RobotContainer {
       .alongWith(turret.turnToHub(() -> MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)))
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone).and(turret.turretDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
+    m_operatorController.leftTrigger()
+      .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
+      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
+      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+    m_operatorController.leftTrigger().onFalse(shooter.shootFinished());
 
 
     SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
