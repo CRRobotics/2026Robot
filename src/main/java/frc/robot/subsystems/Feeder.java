@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+import org.littletonrobotics.junction.Logger;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -40,6 +40,8 @@ public class Feeder extends SubsystemBase {
 
         public void periodic () {
             SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
+            Logger.recordOutput("Feeder Speed Constant", FeederConstants.feederSpeed);
+            Logger.recordOutput("AngleSpeedTime/Input/Distance", feederEncoder.getVelocity());
         }
         /**
          * stops feeder
