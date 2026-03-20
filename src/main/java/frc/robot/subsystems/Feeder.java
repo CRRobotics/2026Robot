@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
-
+import org.littletonrobotics.junction.Logger;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -11,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeederConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.util.Configs.FeederConfig;
 
 public class Feeder extends SubsystemBase {
 
@@ -20,18 +24,24 @@ public class Feeder extends SubsystemBase {
 
     private final SparkMax feederMotor;
     private final RelativeEncoder feederEncoder;
+    private final SparkClosedLoopController FeederPID;
     private SparkMaxConfig configFeeder;
     
         public Feeder () {
             configFeeder = new SparkMaxConfig();
+            configFeeder.closedLoop.pid(FeederConstants.FeederP, FeederConstants.FeederI, FeederConstants.FeederD).feedForward.kV(FeederConstants.FeederFFW);
             configFeeder.idleMode(IdleMode.kCoast);
             feederMotor = new SparkMax(FeederConstants.feederMotorCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
             feederMotor.configure(configFeeder, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
             feederEncoder = feederMotor.getEncoder();
+            FeederPID = feederMotor.getClosedLoopController();
+
         }
 
         public void periodic () {
             SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
+            Logger.recordOutput("Feeder Speed Constant", FeederConstants.feederSpeed);
+            Logger.recordOutput("AngleSpeedTime/Input/Distance", feederEncoder.getVelocity());
         }
         /**
          * stops feeder
@@ -43,8 +53,8 @@ public class Feeder extends SubsystemBase {
         /**
          * Puts balls into feeder
          */
-        private void runFeeder() {
-            feederMotor.set(FeederConstants.feederSpeed);
+        private void runFeeder(double speed) {
+            FeederPID.setSetpoint(-speed,ControlType.kVelocity);
         }
 
         /**
@@ -67,7 +77,7 @@ public class Feeder extends SubsystemBase {
          */
         public Command runFeederCommand(){
             return (this.startEnd(
-                () -> this.runFeeder(),
+                () -> this.runFeeder(FeederConstants.FeederSpeedRPM),
                 () -> this.stop()
             ));
         }

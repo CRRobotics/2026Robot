@@ -108,6 +108,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Input Shoot Speed", 0);
     SmartDashboard.putNumber("Input Turret Angle", 0);
     SmartDashboard.putNumber("Distance to Hub", 1);
+    SmartDashboard.putNumber("Input Feeder Speed", 0);
 
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
     NamedCommands.registerCommand("turnToHub", turret.turnToHub(() -> drivetrain.getState().Pose).alongWith(Commands.waitSeconds(1)));
@@ -253,7 +254,7 @@ public class RobotContainer {
     //   )
     // );
 
-    // // #TODO Enter target poses here
+    // #TODO Enter target poses here
     // m_driverController.x().whileTrue(drivetrain.applyRequest(() -> {
     //       Pose2d tp;
 

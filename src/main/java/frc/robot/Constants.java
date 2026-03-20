@@ -150,7 +150,12 @@ public final class Constants {
 
   public static final class FeederConstants {
     public static final double feederSpeed = -1;
+    public static final double FeederSpeedRPM = 6700;
     public static final int feederMotorCANID = 24;
+    public static final double FeederP = 0.00018;
+    public static final double FeederI = 0;
+    public static final double FeederD = 0;
+    public static final double FeederFFW = 0.00015;
   }
 
   public static final class SpindexerConstants{
