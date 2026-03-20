@@ -179,7 +179,8 @@ public class RobotContainer {
         );
     m_driverController.start().whileTrue(
       drivetrain.applyRequest(() -> {
-        return OverBump;
+        return OverBump.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) 
+                 .withVelocityY(-m_driverController.getLeftX() * MaxSpeed);
       })
     );
     m_driverController.y().whileTrue(drivetrain.applyRequest(() ->
