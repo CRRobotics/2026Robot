@@ -102,27 +102,30 @@ public final class Constants {
     public static final double spinP = 9;
     public static final double spinI = 0;
     public static final double spinD = 0;
+    public static final int acqArmCANID = 60;
+    public static final double acqArmSpeed = 0.25;
+    public static final double acqArmSpeedUp = 0.5;
   }
 
-  public static final class ClimbConstants {
-    //change all values
-    public static final int climbMotorID = 15;
-    //public static final int TopLimitSwitchID = 0;
-    public static final int BottomLimitSwitchID = 1;
-    //public static final int RungSwitchID = 2;
-    //public static final int lidarSensorID = 3;
-    //public static final int barLimitID = 4;
+  // public static final class ClimbConstants {
+  //   //change all values
+  //   public static final int climbMotorID = 15;
+  //   //public static final int TopLimitSwitchID = 0;
+  //   public static final int BottomLimitSwitchID = 1;
+  //   //public static final int RungSwitchID = 2;
+  //   //public static final int lidarSensorID = 3;
+  //   //public static final int barLimitID = 4;
 
-    public static final double climbSpeed = 0.3;
+  //   public static final double climbSpeed = 0.3;
 
-    public static final double p = 0;
-    public static final double i = 0;
-    public static final double d = 0;
+  //   public static final double p = 0;
+  //   public static final double i = 0;
+  //   public static final double d = 0;
 
-    public static final double lowerBoundVoltage = 0;
+  //   public static final double lowerBoundVoltage = 0;
     
-    public static final double climbHeight = 0.0;
-  }
+  //   public static final double climbHeight = 0.0;
+  // }
 
   public static final class TurretConstants {
     public static final int turretLeaderID = 13;
