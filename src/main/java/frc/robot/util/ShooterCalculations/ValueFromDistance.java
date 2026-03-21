@@ -11,6 +11,7 @@ public class ValueFromDistance {
     static {
         //put values here
         shootMap180.put(33.0+ 23.5, new AngleSpeedTime(5,3000,1));
+        shootMap180.put(65.0+23.5, new AngleSpeedTime(6, 3100, 1));
         shootMap180.put(116.0+ 23.5, new AngleSpeedTime(20,3200,1));
         shootMap180.put(151.0+ 23.5, new AngleSpeedTime(20,3650,1));
         shootMap180.put(181.0+ 23.5, new AngleSpeedTime(23,3900,1));
