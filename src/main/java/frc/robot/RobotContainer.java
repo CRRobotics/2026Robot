@@ -313,8 +313,8 @@ public class RobotContainer {
     //   )
     // );
     m_driverController.x().whileTrue(feeder.runFeederCommand());
-    m_driverController.start().onTrue(acquisitionarma.acqArmExtendCommand());
-    m_driverController.back().onTrue(acquisitionarma.acqArmRetractCommand());
+    m_driverController.start().whileTrue(acquisitionarma.acqArmExtendCommand());
+    m_driverController.back().whileTrue(acquisitionarma.acqArmRetractCommand());
     m_driverController.leftBumper().whileTrue(acquisition.AcquisitionIntakeCommand());
     m_driverController.rightBumper().whileTrue(acquisition.AcquisitionEjectCommand());
     m_driverController.a().onTrue(hood.underTrenchCommand());

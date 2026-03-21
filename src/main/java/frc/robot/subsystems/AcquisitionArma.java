@@ -146,7 +146,7 @@ public class AcquisitionArma extends SubsystemBase {
 
           public Command acqArmRetractCommand(){
             return this.startEnd(
-                () -> this.acqArmRetract(AcquisitionsConstants.acqArmSpeed), 
+                () -> this.acqArmRetract(AcquisitionsConstants.acqArmSpeedUp), 
                 () -> this.stop()
                 );
         }

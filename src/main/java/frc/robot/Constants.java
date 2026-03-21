@@ -104,6 +104,7 @@ public final class Constants {
     public static final double spinD = 0;
     public static final int acqArmCANID = 60;
     public static final double acqArmSpeed = 0.25;
+    public static final double acqArmSpeedUp = 0.5;
   }
 
   // public static final class ClimbConstants {
