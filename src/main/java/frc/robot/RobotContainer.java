@@ -134,7 +134,7 @@ public class RobotContainer {
     //configureTestBindings();
     configureRealBindings();
     configureDefaults();
-    
+
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -356,8 +356,8 @@ public class RobotContainer {
     m_operatorController.leftTrigger()
       .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
       .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+      .alongWith((Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))));
     m_operatorController.leftTrigger().onFalse(shooter.shootFinished());
 
 
@@ -384,8 +384,8 @@ public class RobotContainer {
     m_operatorController.y()
       .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
       .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
-      .andThen(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand())));
+      .alongWith((Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+      .andThen(feeder.runFeederCommand().alongWith(hopper.runHopperCommand()))));
     m_operatorController.y().onFalse(shooter.shootFinished());
 
     m_operatorController.a()
