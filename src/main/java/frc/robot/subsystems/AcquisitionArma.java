@@ -1,22 +1,15 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AcquisitionsConstants;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.PositionVoltage;
 
 public class AcquisitionArma extends SubsystemBase {
 
@@ -41,7 +34,7 @@ public class AcquisitionArma extends SubsystemBase {
 
         armMotor = new SparkMax(AcquisitionsConstants.acqArmCANID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
         armConfig = new SparkMaxConfig();
-        armConfig.idleMode(IdleMode.kCoast);
+        armConfig.idleMode(IdleMode.kBrake);
         armConfig.smartCurrentLimit(105); //adjust this value for maximum current input--105 is ideal for NEO vortex
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 

@@ -114,6 +114,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Distance to Hub", 1);
     SmartDashboard.putNumber("Input Feeder Speed", 0);
 
+    NamedCommands.registerCommand("dropAcquisitionArm", acquisitionarma.acqArmExtendCommand());
     NamedCommands.registerCommand("runAcquisition", acquisition.AcquisitionIntakeCommand());
     NamedCommands.registerCommand("turnToHub", turret.turnToHub(() -> drivetrain.getState().Pose).alongWith(Commands.waitSeconds(1)));
     NamedCommands.registerCommand("shootFromAny",
@@ -177,12 +178,17 @@ public class RobotContainer {
               } 
             )
         );
-    m_driverController.start().whileTrue(
-      drivetrain.applyRequest(() -> {
-        return OverBump.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) 
-                 .withVelocityY(-m_driverController.getLeftX() * MaxSpeed);
-      })
-    );
+
+    /**
+     * TURNS TO 45 DEGREES for going over bump
+     * Useful but untested--TBD
+     */
+    // m_driverController.start().whileTrue(
+    //   drivetrain.applyRequest(() -> {
+    //     return OverBump.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) 
+    //              .withVelocityY(-m_driverController.getLeftX() * MaxSpeed);
+    //   })
+    // );
     m_driverController.y().whileTrue(drivetrain.applyRequest(() ->
         {
           ProfiledPID relativePID = new ProfiledPID();
