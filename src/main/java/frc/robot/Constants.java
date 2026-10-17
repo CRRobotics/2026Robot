@@ -104,6 +104,12 @@ public final class Constants {
     public static final int acqArmCANID = 60;
     public static final double acqArmSpeed = 0.25;
     public static final double acqArmSpeedUp = 0.5;
+    public static final double acqArmPosUp = 0;
+    public static final double armP = 8;
+    public static final double armI = 0;
+    public static final double armD = 0;
+    public static final double ArmGearRatio = 9;
+
   }
 
   // public static final class ClimbConstants {

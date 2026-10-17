@@ -51,6 +51,7 @@ public class Acquisitions extends SubsystemBase {
         spinMotor.configure(spinConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     }
+    
 
     /**
      *Sets the acquisition motor speed to 0
