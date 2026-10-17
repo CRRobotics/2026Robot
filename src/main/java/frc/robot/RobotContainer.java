@@ -43,13 +43,13 @@ import frc.robot.util.ProfiledPID;
 import frc.robot.util.Telemetry;
 import frc.robot.util.ShooterCalculations.*;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+//import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vision.NetworkTablesIO;
+//import frc.robot.subsystems.vision.NetworkTablesIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 
@@ -332,7 +332,7 @@ public class RobotContainer {
     
     m_operatorController.leftBumper()
       .whileTrue((hood.turnToCommand(() -> 24)
-      .alongWith(shooter.shootCommand(() -> 3500)
+      .alongWith(shooter.shootCommand(() -> 3000)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
