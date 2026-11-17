@@ -43,15 +43,16 @@ import frc.robot.util.ProfiledPID;
 import frc.robot.util.Telemetry;
 import frc.robot.util.ShooterCalculations.*;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+//import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vision.NetworkTablesIO;
+//import frc.robot.subsystems.vision.NetworkTablesIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.AcquisitionArma;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -126,8 +127,7 @@ public class RobotContainer {
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand())))))
     );
-    NamedCommands.registerCommand("HoodDown", hood.underTrenchCommand());
- 
+    NamedCommands.registerCommand("HoodDown", hood.underTrenchCommand()); 
   
     NamedCommands.registerCommand("deployAcquisition", acquisition.Deploy().alongWith(Commands.waitSeconds(3.5)));
     NamedCommands.registerCommand("HoodUp", hood.notTrenchCommand());
@@ -332,7 +332,7 @@ public class RobotContainer {
     
     m_operatorController.leftBumper()
       .whileTrue((hood.turnToCommand(() -> 24)
-      .alongWith(shooter.shootCommand(() -> 3500)
+      .alongWith(shooter.shootCommand(() -> 3000)
       .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
@@ -345,27 +345,23 @@ public class RobotContainer {
       .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
 
     m_operatorController.start().whileTrue(hopper.specialHopperCommand());
+    m_operatorController.rightTrigger().whileTrue(acquisitionarma.acqArmExtendCommand());
+    m_operatorController.leftTrigger().whileTrue(acquisitionarma.acqArmRetractCommand());
 
-    m_operatorController.back()
-      .whileTrue((hood.turnToCommand(() -> 24)
-      .alongWith(shooter.shootCommand(() -> 300)
-      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
-
-    m_operatorController.rightTrigger()
-      .whileTrue((hood.turnToCommandContinuous(() -> (TreeMapChooser.getChooserMap(
-          turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle())).getAngle())
-      .alongWith(shooter.shootCommandContinuous(() -> (TreeMapChooser.getChooserMap(
-          turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle()).getSpeed()))
-      .alongWith(turret.turnToHub(() -> MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)))
-      .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone).and(turret.turretDone))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
-    m_operatorController.leftTrigger()
-      .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
-      .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
-      .alongWith((Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
-      .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))));
-    m_operatorController.leftTrigger().onFalse(shooter.shootFinished());
+    // m_operatorController.rightTrigger()
+    //   .whileTrue((hood.turnToCommandContinuous(() -> (TreeMapChooser.getChooserMap(
+    //       turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle())).getAngle())
+    //   .alongWith(shooter.shootCommandContinuous(() -> (TreeMapChooser.getChooserMap(
+    //       turret.distanceToHub(MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)), turret.getAngle()).getSpeed()))
+    //   .alongWith(turret.turnToHub(() -> MoveShoot.GetRobotDisplacement(drivetrain.getState().Pose, drivetrain.getState().Speeds, ShooterConstants.BallTime)))
+    //   .alongWith(Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone).and(turret.turretDone))
+    //   .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))))));
+    // m_operatorController.leftTrigger()
+    //   .whileTrue(hood.turnToCommand(() -> SmartDashboard.getNumber("Input Hood Angle", 0))
+    //   .alongWith(shooter.shootCommand(() -> SmartDashboard.getNumber("Input Shoot Speed", 0)))
+    //   .alongWith((Commands.waitUntil(hood.hoodDone.and(shooter.shooterDone)))
+    //   .andThen(feeder.runFeederCommand().alongWith(hopper.specialHopperCommand()))));
+    // m_operatorController.leftTrigger().onFalse(shooter.shootFinished());
 
 
     SmartDashboard.putData("Zero Hood", hood.zeroHoodCommand());
